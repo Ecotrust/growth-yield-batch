@@ -1,4 +1,4 @@
-# grow-yield-batch
+# growth-yield-batch
 
 ### An automated batch process to predict of "growth and yield" for forest vegetation plots
 
