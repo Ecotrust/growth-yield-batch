@@ -85,3 +85,10 @@ file { '/var/celery/tasks.py':
 file { "/usr/local/apps/growth-yield-batch/fvsbin/FVSpn.exe":
     ensure => "present",
 }
+
+# preferred symlink syntax
+file { "/usr/local/bin/fvs":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/fvs',
+    mode   => 775,
+}

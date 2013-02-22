@@ -1,0 +1,35 @@
+#!/bin/bash
+VARIANT="$1"
+EXE="/usr/local/apps/growth-yield-batch/fvsbin/FVS$VARIANT.exe"
+
+if [[ -x ""$EXE"" ]]
+then
+    echo "Using $EXE..."
+else
+    echo "File '$EXE' is not executable or found"
+    exit 1
+fi
+
+shift 
+
+TEMPDIR=`mktemp -d`
+cd $TEMPDIR
+echo "Using temp directory $(pwd)"
+
+# TODO make path and prefix a parameter
+cp /usr/local/apps/growth-yield-batch/testdata/testsite/* .
+PREFIX="A4_1"
+
+touch input.rsp
+echo $PREFIX.key >  input.rsp
+echo $PREFIX.tre >> input.rsp
+echo $PREFIX.out >> input.rsp
+echo $PREFIX.trl >> input.rsp
+echo $PREFIX.sum >> input.rsp
+echo $PREFIX.chp >> input.rsp
+
+cat input.rsp | /usr/bin/wine $EXE "$@" 2> $PREFIX.error.log | stdbuf -oL tee $PREFIX.fvs.log
+
+# TODO 
+echo
+echo "Results in temp directory $(pwd)"
