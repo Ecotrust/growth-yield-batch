@@ -27,7 +27,8 @@ define pip::install($cwd="/",
     $timeout_opt = ""
   }
   exec { "pip-$name":
-    command => "/usr/bin/pip install --upgrade --use-mirrors $to_install $index_opt $extra_index_opt $timeout_opt",
+    # TODO --upgrade?
+    command => "/usr/bin/pip install --use-mirrors $to_install $index_opt $extra_index_opt $timeout_opt",
     cwd => $cwd,
     user => $run_as_user,
     timeout => 0,

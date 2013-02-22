@@ -47,28 +47,30 @@ package {'supervisor':
     ensure => "latest"
 }
 
-class { "postgresql::server": version => "9.1",
-    listen_addresses => 'localhost',
-    max_connections => 100,
-    shared_buffers => '24MB',
+package {'wine':
+    ensure => "latest",
+    # require => Package['xvfb'],
 }
 
-postgresql::database { "forestplanner":
-  owner => "vagrant",
-}
+# package {'xvfb':
+#     ensure => "latest"
+# }
 
-file { "go":
-  path => "/home/vagrant/go",
-  content => template("go"),
-  owner => "vagrant",
-  group => "vagrant",
-  mode => 0775
-}
+# exec { "winecfg":
+#   command => "/usr/bin/wineconsole --backend=curses",  # just run this to ensure ~/.wine cfg creation
+#   user => "vagrant",
+#   require => Package['wine'],
+# }
 
-file { "celeryd.conf":
-  path => "/etc/supervisor/conf.d/celeryd.conf",
-  content => template("celeryd.conf")
-}
+# class { "postgresql::server": version => "9.1",
+#     listen_addresses => 'localhost',
+#     max_connections => 100,
+#     shared_buffers => '24MB',
+# }
+
+# postgresql::database { "forestplanner":
+#   owner => "vagrant",
+# }
 
 class { "celery::server":
   requirements => "/vagrant/requirements.txt"
@@ -77,5 +79,9 @@ class { "celery::server":
 # preferred symlink syntax
 file { '/var/celery/tasks.py':
    ensure => 'link',
-   target => '/usr/local/apps/land_owner_tools/scripts/tasks.py',
+   target => '/usr/local/apps/growth-yield-batch/scripts/tasks.py',
+}
+
+file { "/usr/local/apps/growth-yield-batch/fvsbin/FVSpn.exe":
+    ensure => "present",
 }
