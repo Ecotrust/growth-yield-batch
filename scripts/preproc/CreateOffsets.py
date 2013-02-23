@@ -14,7 +14,7 @@ def create_offsets(baserxdir, outdir, num_offsets=10, period=5):
         raise Exception("Need at least one *_original.key file")
     for inkey in orig_keys:
         keyprefix = os.path.splitext(os.path.basename(inkey))[0]
-        keybase = keyprefix.split('_')[0]
+        keybase = keyprefix.replace('_original','')
         # GO = grow only = a special case
         # if keybase == "GO":
         #     continue

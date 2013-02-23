@@ -4,6 +4,10 @@
 #  fvs pn /path/to/data
 #################################################################
 
+function throw {
+    echo -e "\e[00;31mERROR :: $1\e[00m"
+}
+
 # 1st Arg: variant abbreviation
 VARIANT="$1"
 EXE="/usr/local/apps/growth-yield-batch/fvsbin/FVS$VARIANT.exe"
@@ -11,7 +15,7 @@ if [[ -x "$EXE" ]]
 then
     echo "Using $EXE..."
 else
-    echo "File '$EXE' is not executable or found"
+    throw "File '$EXE' is not executable or found"
     exit 1
 fi
 shift 
@@ -23,7 +27,7 @@ if [[ -d "$DATADIR" ]]
 then
     echo "Using data dir $DATADIR ..."
 else
-    echo "'$DATADIR' not found; please specify DATADIR"
+    throw "'$DATADIR' not found; please specify DATADIR"
     exit 1
 fi
 shift
@@ -35,8 +39,8 @@ echo "Working in temp directory $(pwd)"
 cp $DATADIR/* .
 
 # process the *_original.key files and create offsets 10 offsets at 5 yr intervals
-echo "Creating offsets in temp directory $(pwd)"
-python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 10 5
+echo "Creating offset keyfiles in temp directory"
+python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 10 5 > offsets.log
 mkdir -p alt_treelists
 
 # TODO 
@@ -57,20 +61,38 @@ do
 		echo alt_treelists/$PREFIX.sum >> $PREFIX.input.rsp
 		echo alt_treelists/$PREFIX.chp >> $PREFIX.input.rsp
 
-		cat $PREFIX.input.rsp | /usr/bin/wine $EXE "$@" 2> $PREFIX.error.log  # | tee $PREFIX.fvs.log
+		cat $PREFIX.input.rsp | /usr/bin/wine $EXE "$@" 2> $PREFIX.error.log > $PREFIX.fvs.log
+                if [ $? -ne 0 ]; then
+  		    throw "FVS failed" >> $PREFIX.error.log
+                    cat $PREFIX.error.log
+                    exit 1
+		fi
+                if [ ! -f alt_treelists/$PREFIX.out ] || [ ! -f alt_treelists/$PREFIX.trl ]; then
+		    throw "FVS failed to produce necessary output files" >> $PREFIX.error.log
+                    cat $PREFIX.error.log
+                    exit 1
+                fi
 	fi
 done
 
 # Postprocess with perl scripts
-cp /usr/local/apps/growth-yield-batch/scripts/postproc/* .
+ln -s /usr/local/apps/growth-yield-batch/scripts/postproc/* .
 
 echo "Postprocessing for harvest scheduler"
-perl gy_live_extract.pl alt &&\
-perl gy_carbon_extract.pl alt &&\
-perl gy_age_extract.pl alt &&\
-perl gy_cut_extract.pl alt &&\
-perl gy_carbon_extract_agl.pl alt &&\
-perl gy_cut_extract_cubic.pl alt
+# TODO perl scripts should error out (exit 1) on failures
+for f in *.pl; do
+        
+        echo "Running extract script $f..."
+	perl $f alt > $f.log
+
+	# Assert that alt_*.txt files exist and that they have lines
+	# TODO more stringent tests
+	OUT=`ls -t alt_treelists/alt_*.txt | head -n 1`
+	if [[ ! -s $OUT ]]; then
+	    throw "Extracted file $OUT does not exist or is invalid" | tee $f.log
+	    exit 1
+    	fi
+done
 
 
 # TODO 
