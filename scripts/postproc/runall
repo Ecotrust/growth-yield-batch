@@ -1,0 +1,7 @@
+#!/bin/bash
+perl gy_live_extract.pl alt &&\
+perl gy_carbon_extract.pl alt &&\
+perl gy_age_extract.pl alt &&\
+perl gy_cut_extract.pl alt &&\
+perl gy_carbon_extract_agl.pl alt &&\
+perl gy_cut_extract_cubic.pl alt
