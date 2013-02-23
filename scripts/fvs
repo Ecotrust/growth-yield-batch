@@ -2,6 +2,9 @@
 #################################################################
 # Usage:
 #  fvs /path/to/data
+#
+#  see https://github.com/Ecotrust/growth-yield-batch/wiki/FVS-directory-structure
+#  for more info on how to set up data directory
 #################################################################
 
 function throw {
