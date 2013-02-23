@@ -35,6 +35,10 @@ package { "python-virtualenv":
     ensure => "latest"
 }
 
+package { "python-pip":
+    ensure => "latest"
+}
+
 package { "python-dev":
     ensure => "latest"
 }
@@ -49,34 +53,13 @@ package {'supervisor':
 
 package {'wine':
     ensure => "latest",
-    # require => Package['xvfb'],
 }
-
-# package {'xvfb':
-#     ensure => "latest"
-# }
-
-# exec { "winecfg":
-#   command => "/usr/bin/wineconsole --backend=curses",  # just run this to ensure ~/.wine cfg creation
-#   user => "vagrant",
-#   require => Package['wine'],
-# }
-
-# class { "postgresql::server": version => "9.1",
-#     listen_addresses => 'localhost',
-#     max_connections => 100,
-#     shared_buffers => '24MB',
-# }
-
-# postgresql::database { "forestplanner":
-#   owner => "vagrant",
-# }
 
 class { "celery::server":
-  requirements => "/vagrant/requirements.txt"
+  requirements => "/vagrant/requirements.txt",
+  require => Package['python-pip']
 }
 
-# preferred symlink syntax
 file { '/var/celery/tasks.py':
    ensure => 'link',
    target => '/usr/local/apps/growth-yield-batch/scripts/tasks.py',
@@ -86,7 +69,11 @@ file { "/usr/local/apps/growth-yield-batch/fvsbin/FVSpn.exe":
     ensure => "present",
 }
 
-# preferred symlink syntax
+file { "/usr/local/apps/growth-yield-batch/scripts/fvs":
+    ensure => "present",
+    mode   => 775,
+}
+
 file { "/usr/local/bin/fvs":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/fvs',
