@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 """FVS Batch 
 
 Looks in a directory, 
@@ -33,6 +33,8 @@ if __name__ == "__main__":
     if len(datadirs) == 0:
         print "ERROR:: Batch directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
+
+    db.create_all()  # create tables if they don't exist
 
     # if --purge, cancel everything in the queue
     if args['--purge']:

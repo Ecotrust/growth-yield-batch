@@ -101,3 +101,15 @@ file { "/usr/local/bin/fvs":
     target => '/usr/local/apps/growth-yield-batch/scripts/fvs',
     mode   => 775,
 }
+
+file { "/usr/local/bin/fvsstatus":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/status.py',
+    mode   => 775,
+}
+
+file { "/usr/local/bin/fvsbatch":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/batch.py',
+    mode   => 775,
+}

@@ -37,10 +37,11 @@ Vagrant::Config.run do |config|
   # are contained in a directory path relative to this Vagrantfile.
   # You will need to create the manifests directory and a manifest in
   # the file precise32.pp in the manifests_path directory.
+  #
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "lot.pp"
     puppet.module_path = "puppet/modules"
-    puppet.options = ["--templatedir","/vagrant/puppet/manifests/files"]
+    puppet.options = ["--templatedir","/vagrant/puppet/manifests/files", "--verbose", "--debug"]
   end
 end
