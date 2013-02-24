@@ -18,3 +18,11 @@ def add(x, y):
 def square(z):
     time.sleep(random.randint(0, 4))
     return z ** 2
+
+
+@celery.task
+def fvs(datadir):
+    print "Starting 'fvs %s'" % datadir
+    time.sleep(random.randint(10, 25))
+    print "Stopping 'fvs %s'" % datadir
+    return True

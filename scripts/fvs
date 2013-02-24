@@ -24,10 +24,9 @@ fi
 shift
 
 TEMPDIR=`mktemp -d`
+cp -r $DATADIR/* $TEMPDIR
 cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
-
-cp $DATADIR/* .
 
 # set variant abbreviation
 VARIANT=`cat *.variant`

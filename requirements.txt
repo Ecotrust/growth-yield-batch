@@ -1,1 +1,4 @@
 django-celery-with-redis
+flask
+Flask-SQLAlchemy
+docopt

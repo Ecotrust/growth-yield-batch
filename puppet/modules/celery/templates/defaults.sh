@@ -8,7 +8,9 @@ CELERYD_NODES="w1"
 CELERYD_CHDIR="/var/celery/"
 
 # Extra arguments to celeryd
-CELERYD_OPTS="--time-limit=300 --concurrency=8"
+# CELERYD_OPTS="--time-limit=300 --concurrency=8"
+# TODO adjust for machine
+CELERYD_OPTS="--concurrency=1" 
 
 # Name of the celery config module.
 CELERY_CONFIG_MODULE="celeryconfig"
