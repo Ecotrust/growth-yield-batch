@@ -41,7 +41,11 @@ fi
 
 # process the *_original.key files and create offsets 10 offsets at 5 yr intervals
 echo "Creating offset keyfiles in temp directory"
-python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 10 5 > offsets.log
+python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 2 5 > offsets.log
+if [ $? -ne 0 ]; then
+    throw "CreateOffsets.py failed. Check $TEMPDIR/offsets.log" 
+    exit 1
+fi
 mkdir -p alt_treelists
 
 # Run all the keyfiles

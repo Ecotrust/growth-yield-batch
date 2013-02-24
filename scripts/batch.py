@@ -43,7 +43,7 @@ if __name__ == "__main__":
         for task_record in started:
             print "Revoking task ", task_record.id
             # stop the worker
-            c.control.revoke(task_record.id, terminate=True)
+            c.control.revoke(task_record.id, terminate=True, signal="SIGTERM")
             # delete the task record
             db.session.delete(task_record)
             db.session.commit()

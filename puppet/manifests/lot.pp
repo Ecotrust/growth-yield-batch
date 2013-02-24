@@ -74,6 +74,28 @@ file { "/usr/local/apps/growth-yield-batch/scripts/fvs":
     mode   => 775,
 }
 
+file { "/usr/local/data/tasks.db":
+    ensure => "present",
+    owner  => "vagrant",
+    group  => "celery",
+    require => File['/usr/local/data'],
+    mode   => 775,
+}
+
+file { "/usr/local/data":
+    ensure => "directory",
+    owner  => "celery",
+    group  => "vagrant",
+    mode   => 775,
+}
+
+file { "/home/celery":
+    ensure => "directory",
+    owner  => "celery",
+    group  => "celery",
+    mode   => 775,
+}
+
 file { "/usr/local/bin/fvs":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/fvs',

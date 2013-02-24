@@ -2,7 +2,7 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////usr/local/data/tasks.db'
 db = SQLAlchemy(app)
 
 
@@ -11,7 +11,6 @@ class Task(db.Model):
     batchdir = db.Column(db.String(256))
     datadir = db.Column(db.String(256))
     result = db.Column(db.String(256))
-    status = db.Column(db.String(16))
 
     def __init__(self, id, batchdir, datadir):
         self.id = id  
