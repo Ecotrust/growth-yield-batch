@@ -14,20 +14,20 @@ def create_offsets(baserxdir, outdir, num_offsets=10, period=5):
         raise Exception("Need at least one *_original.key file")
     for inkey in orig_keys:
         keyprefix = os.path.splitext(os.path.basename(inkey))[0]
-        keybase = keyprefix.replace('_original','')
+        keybase = keyprefix.replace('_original', '')
         # GO = grow only = a special case
         # if keybase == "GO":
         #     continue
         log("Processing %s keys" % keybase)
 
         # Create XX_01.key
-        outkey = os.path.join(outdir, keybase + "_01.key")
+        outkey = os.path.join(outdir, keybase + "_00.key")
         shutil.copy(inkey, outkey)
-        log("\tbase key %s_01.key" % keybase)
+        log("\tbase key %s_00.key" % keybase)
 
-        for offset in range(2, num_offsets):
-            log("\toffset key %s" % offset)
-            offset_years = (offset - 1) * period
+        for offset in range(1, num_offsets + 1):
+            log("\toffset key %s_%02d" % (keybase, offset))
+            offset_years = (offset) * period
             # Create the XX_YY.key offsets
             outkey = os.path.join(outdir, "%s_%02d.key" % (keybase, offset))
             ofh = open(outkey, 'w')

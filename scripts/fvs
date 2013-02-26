@@ -41,7 +41,7 @@ fi
 
 # process the *_original.key files and create offsets 10 offsets at 5 yr intervals
 echo "Creating offset keyfiles in temp directory"
-python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 2 5 > offsets.log
+python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 10 5 | tee offsets.log
 if [ $? -ne 0 ]; then
     throw "CreateOffsets.py failed. Check $TEMPDIR/offsets.log" 
     exit 1
@@ -65,7 +65,7 @@ do
 		echo alt_treelists/$PREFIX.sum >> $PREFIX.input.rsp
 		echo alt_treelists/$PREFIX.chp >> $PREFIX.input.rsp
 
-		cat $PREFIX.input.rsp | /usr/bin/wine $EXE "$@" 2> $PREFIX.error.log > $PREFIX.fvs.log
+		cat $PREFIX.input.rsp | /usr/bin/wine $EXE "$@" 2> $PREFIX.error.log | tee $PREFIX.fvs.log
         if [ $? -ne 0 ]; then
             throw "FVS failed" >> $PREFIX.error.log
             cat $PREFIX.error.log
@@ -93,7 +93,7 @@ for f in *.pl; do
 	# TODO more stringent tests
 	OUT=`ls -t alt_treelists/alt_*.txt | head -n 1`
 	if [[ ! -s $OUT ]]; then
-        throw "Extracted file $OUT does not exist or is invalid" | tee $f.log
+        throw "$f failed. Extracted file $OUT does not exist or is invalid" | tee $f.log
         exit 1
     fi
 done
