@@ -43,6 +43,7 @@ vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus
 ```
 
 * Run celery flower to check status via web interface
+
 ```
 vagrant@precise32:/var/celery$ celery flower
 [I 130418 12:13:58 command:43] Visit me at http://localhost:5555
