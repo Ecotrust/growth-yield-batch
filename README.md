@@ -36,6 +36,11 @@ Working in temp directory /tmp/tmp.bZdxkMyM3A
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/batch.py testdata/
 ```
 
+* Check status at command line
+
+```
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/status.py
+```
 
 
 ## Notes
