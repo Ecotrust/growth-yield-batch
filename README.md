@@ -24,22 +24,32 @@ Major goals include:
 * Run a single test site directly
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvs testdata/testsite
-Using data dir testdata/testsite ...
-Working in temp directory /tmp/tmp.bZdxkMyM3A
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvs testdata/7029_CT60/
+Using data dir testdata/7029_CT60 ...
 ....
+Results in temp directory /tmp/tmp.bZdxkMyM3A/alt_treelists
 ```
 
-* Run all the testdata sites in aynch/batch mode; adds them all to the celery queue
+* Run all the testdata plots in aynch/batch mode; adds them all to the celery queue
 
 ```
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsbatch testdata/
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/7029_CT60')    5eca96d0-ba17-45ca-a5f2-b3c527e37611    PENDING
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/7031_CT60')    3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/7032_CT60')    9fbfb26d-0f5d-4a1a-835b-5fe08033578e    PENDING
 ```
 
 * Check status at command line
 
 ```
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus
+{
+  "PENDING": 2,
+  "SUCCESS": 1
+}
+5eca96d0-ba17-45ca-a5f2-b3c527e37611    SUCCESS /usr/local/apps/growth-yield-batch/testdata     7029_CT60       /path_to_output_files
+3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING /usr/local/apps/growth-yield-batch/testdata     7031_CT60       None
+9fbfb26d-0f5d-4a1a-835b-5fe08033578e    PENDING /usr/local/apps/growth-yield-batch/testdata     7032_CT60       None
 ```
 
 * Run celery flower to check status via web interface

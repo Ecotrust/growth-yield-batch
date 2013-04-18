@@ -91,6 +91,8 @@ if (open(FILE_HAND_OUT, ">$data_dir/".$dir_root."_age.txt"))
                 #set the firstrun variable
 		$firstrun = 1;
 		#write the prescrip and offset here
+		#@components=split("_", $fname);
+                #$prescrip_text = @components[1];
 		$prescrip_text = substr($fname,0,2);
 
 		# look for this prescrip_text in the defs loaded from our init.cfg
