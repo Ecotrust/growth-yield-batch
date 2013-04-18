@@ -19,8 +19,16 @@ Major goals include:
 
 ## Running
 
-1. `vagrant up`
-2. 
+1. Install FVS binaries. See [instructions](https://github.com/Ecotrust/growth-yield-batch/blob/master/fvsbin/README.md)
+2. `vagrant up`
+3. 
+
+
+
+
+## Notes
+
+* After initial boot, may need to restart celeryd; `sudo service celeryd restart`
 
 
 
