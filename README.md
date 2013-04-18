@@ -20,7 +20,7 @@ Major goals include:
 ## Running
 
 * Install FVS binaries. See [instructions](https://github.com/Ecotrust/growth-yield-batch/blob/master/fvsbin/README.md)
-* `vagrant up`
+* `vagrant up` then `vagrant ssh`   (TODO: fabric commands instead of ssh access)
 * Run a single test site directly
 
 ```
@@ -42,11 +42,17 @@ vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/batch.py te
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/status.py
 ```
 
+* Run celery flower to check status via web interface
+```
+vagrant@precise32:/var/celery$ celery flower
+[I 130418 12:13:58 command:43] Visit me at http://localhost:5555
+[I 130418 12:13:58 command:44] Broker: redis://localhost:6379/0
+```
 
 ## Notes
 
 * After initial boot, may need to restart celeryd; `sudo service celeryd restart`
-* To check celery status, `cd /var/celery && celery status`
+* To check celery worker status, `cd /var/celery && celery status`
 
 
 

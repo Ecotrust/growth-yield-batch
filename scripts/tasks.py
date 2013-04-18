@@ -30,11 +30,12 @@ def square(z):
 def fvs(datadir):
     assert os.path.isdir(datadir)  # redundant assertion is redundant
 
-    args = ['/usr/local/bin/fvs', datadir]
+    args = ['/usr/local/bin/fvs', datadir]  # TODO: instead of shelling out, pythonify the fvs script
     print "Running %s" % ' '.join(args)
-    proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) 
+    proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
     (out, err) = proc.communicate()
     print out  # how to stream this?
+    print err
 
     if proc.returncode == 0:
         # TODO move output files to appropos location
@@ -45,6 +46,6 @@ def fvs(datadir):
         task_record.result = "/path/to/final_output_files"
         db.session.commit()
     else:
-        raise Exception("fvs('%s') celery task failed" % datadir)
+        raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
 
     return proc.returncode
