@@ -19,16 +19,29 @@ Major goals include:
 
 ## Running
 
-1. Install FVS binaries. See [instructions](https://github.com/Ecotrust/growth-yield-batch/blob/master/fvsbin/README.md)
-2. `vagrant up`
-3. 
+* Install FVS binaries. See [instructions](https://github.com/Ecotrust/growth-yield-batch/blob/master/fvsbin/README.md)
+* `vagrant up`
+* Run a single test site directly
 
+```
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ scripts/fvs testdata/testsite
+Using data dir testdata/testsite ...
+Working in temp directory /tmp/tmp.bZdxkMyM3A
+....
+```
+
+* Run all the testdata sites in batch mode; adds them all to the celery queue
+
+```
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/batch.py testdata/
+```
 
 
 
 ## Notes
 
 * After initial boot, may need to restart celeryd; `sudo service celeryd restart`
+* To check celery status, `cd /var/celery && celery status`
 
 
 
