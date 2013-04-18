@@ -8,7 +8,8 @@
 #################################################################
 
 function throw {
-    echo -e "\e[00;31mERROR :: $1\e[00m"
+    #echo -e "\e[00;31mERROR :: $1\e[00m"
+    echo -e "ERROR :: $1" 1>&2;
 }
 
 # 1st Arg: path to data directory 
