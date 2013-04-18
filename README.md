@@ -24,22 +24,22 @@ Major goals include:
 * Run a single test site directly
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ scripts/fvs testdata/testsite
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvs testdata/testsite
 Using data dir testdata/testsite ...
 Working in temp directory /tmp/tmp.bZdxkMyM3A
 ....
 ```
 
-* Run all the testdata sites in batch mode; adds them all to the celery queue
+* Run all the testdata sites in aynch/batch mode; adds them all to the celery queue
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/batch.py testdata/
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsbatch testdata/
 ```
 
 * Check status at command line
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ python scripts/status.py
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus
 ```
 
 * Run celery flower to check status via web interface
