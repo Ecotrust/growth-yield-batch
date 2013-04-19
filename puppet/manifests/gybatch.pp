@@ -53,6 +53,7 @@ package {'supervisor':
 
 package {'wine':
     ensure => "latest",
+
 }
 
 class { "celery::server":
@@ -112,4 +113,9 @@ file { "/usr/local/bin/fvsbatch":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/batch.py',
     mode   => 775,
+}
+file { "celeryflower.conf":
+  path => "/etc/supervisor/conf.d/celeryflower.conf",
+  content => template("celeryflower.conf"),
+  require => Package['supervisor']
 }

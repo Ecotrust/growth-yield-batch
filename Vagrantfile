@@ -13,7 +13,7 @@ Vagrant::Config.run do |config|
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "lot.pp"
+    puppet.manifest_file  = "gybatch.pp"
     puppet.module_path = "puppet/modules"
     puppet.options = ["--templatedir","/vagrant/puppet/manifests/files", "--verbose", "--debug"]
   end
