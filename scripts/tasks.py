@@ -32,7 +32,7 @@ def fvs(datadir):
 
     args = ['/usr/local/bin/fvs', datadir]  # TODO: instead of shelling out, pythonify the fvs script
     print "Running %s" % ' '.join(args)
-    proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
+    proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     (out, err) = proc.communicate()
     print out  # how to stream this?
     print err
@@ -43,7 +43,7 @@ def fvs(datadir):
         # Update task record
         request = current_task.request
         task_record = Task.query.filter_by(id=request.id).first()
-        task_record.result = "/path/to/final_output_files"
+        task_record.result = "/usr/local/data"
         db.session.commit()
     else:
         raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))

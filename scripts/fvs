@@ -24,7 +24,7 @@ else
 fi
 shift
 
-TEMPDIR=`mktemp -d`
+TEMPDIR=`mktemp -d --tmpdir=/usr/local/data`
 cp -r $DATADIR/* $TEMPDIR
 cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
@@ -81,23 +81,23 @@ do
 done
 
 # Postprocess with perl scripts
-ln -s /usr/local/apps/growth-yield-batch/scripts/postproc/* .
+# ln -s /usr/local/apps/growth-yield-batch/scripts/postproc/* .
 
-echo "Postprocessing for harvest scheduler"
-# TODO perl scripts should error out (exit 1) on failures
-for f in *.pl; do
+# echo "Postprocessing for harvest scheduler"
+# # TODO perl scripts should error out (exit 1) on failures
+# for f in *.pl; do
         
-    echo "Running extract script $f..."
-	perl $f alt > $f.log
+#     echo "Running extract script $f..."
+# 	perl $f alt > $f.log
 
-	# Assert that alt_*.txt files exist and that they have lines
-	# TODO more stringent tests
-	OUT=`ls -t alt_treelists/alt_*.txt | head -n 1`
-	if [[ ! -s $OUT ]]; then
-        throw "$f failed. Extracted file $OUT does not exist or is invalid" | tee $f.log
-        exit 1
-    fi
-done
+# 	# Assert that alt_*.txt files exist and that they have lines
+# 	# TODO more stringent tests
+# 	OUT=`ls -t alt_treelists/alt_*.txt | head -n 1`
+# 	if [[ ! -s $OUT ]]; then
+#         throw "$f failed. Extracted file $OUT does not exist or is invalid" | tee $f.log
+#         exit 1
+#     fi
+# done
 
 echo
-echo "Results in temp directory $(pwd)/alt_treelists"
+echo "Results in temp directory $(pwd)/alt_treelists/"
