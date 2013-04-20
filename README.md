@@ -16,11 +16,18 @@ Major goals include:
 
 
 
+## Initial deployment
 
-## Running
+* Install FVS locally on a Windows machine; [download](http://www.fs.fed.us/fmsc/fvs/software/complete.shtml)
+* Copy the contents of `C:/FVSBin` to `./fvsbin` ... they will be gitignored so not checked into the repo
+* Start virtual machine with `vagrant up`
+* You will have to restart services with `fab dev restart_services`
+* Run the automated batch test with `fab dev run_test_batch`
+* To track status of tasks, visit the celery flower interface at http://localhost:5555
 
-* Install FVS binaries. See [instructions](https://github.com/Ecotrust/growth-yield-batch/blob/master/fvsbin/README.md)
-* `vagrant up` then `vagrant ssh`   (TODO: fabric commands instead of ssh access)
+## Command line details 
+
+* `vagrant up` then `vagrant ssh`
 * Run a single test site directly
 
 ```
@@ -52,22 +59,7 @@ vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus
 9fbfb26d-0f5d-4a1a-835b-5fe08033578e    PENDING /usr/local/apps/growth-yield-batch/testdata     7032_CT60       None
 ```
 
-* Run celery flower to check status via web interface
-
-```
-vagrant@precise32:/var/celery$ celery flower
-[I 130418 12:13:58 command:43] Visit me at http://localhost:5555
-[I 130418 12:13:58 command:44] Broker: redis://localhost:6379/0
-```
-
-## Notes
-
-* After initial boot, may need to restart celeryd; `sudo service celeryd restart`
-* To check celery worker status, `cd /var/celery && celery status`
-
-
-
-
+* To check celery worker status on the remote machine `cd /var/celery && celery status`
 
 
 
