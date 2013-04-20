@@ -7,7 +7,8 @@ vars = {
 }
 
 env.forward_agent = True
-# env.key_filename = '~/.vagrant.d/insecure_private_key'
+env.key_filename = '~/.vagrant.d/insecure_private_key'
+
 
 def dev():
     """ Use development server settings """
@@ -15,36 +16,47 @@ def dev():
     env.hosts = servers
     return servers
 
+
 def prod():
     """ Use production server settings """
     servers = []
     env.hosts = servers
     return servers
 
-def test():
-    """ Use test server settings """
+
+def stage():
+    """ Use staging server settings """
     servers = []
     env.hosts = servers
     return servers
 
+
 def all():
     """ Use all servers """
-    env.hosts = dev() + prod() + test()
+    env.hosts = dev() + prod() + stage()
+
 
 def init():
     """ Initialize the geoportal application """
-    # _install_dos2unix()
-    # _run_celery_flower()
+    pass
+
 
 def _set_environment():
     run('')
-    
-def _install_dos2unix():
-    run('sudo apt-get install dos2unix')
-    
+
+
 def run_test_fvs():
-    run('/usr/local/apps/growth-yield-batch/scripts/fvs /usr/local/apps/growth-yield-batch/testdata/7029_CT60/')
-    
+    run('/usr/local/bin/fvs /usr/local/apps/growth-yield-batch/testdata/7029_CT60/')
+
+
 def run_test_batch():
-    run('/usr/local/apps/growth-yield-batch/scripts/fvsbatch --purge /usr/local/apps/growth-yield-batch/testdata/')
-    
+    run('/usr/local/bin/fvsbatch --purge /usr/local/apps/growth-yield-batch/testdata/')
+
+
+def restart_services():
+    """
+    Not sure exactly why but puppet leaves the services in a bad state
+    celeryd is not chdired to /var/celery and celeryflower doesnt pick up tasks.
+    This is a band-aid to "fix" the issue
+    """
+    run('sudo service celeryd restart && sudo supervisorctl stop all && sudo supervisorctl start all')

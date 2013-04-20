@@ -47,13 +47,17 @@ package { "redis-server":
     ensure => "latest"
 }
 
-package {'supervisor':
+package { "dos2unix":
     ensure => "latest"
+}
+
+package {'supervisor':
+    ensure => "latest",
+    require => File['/var/log/celeryflower.log']
 }
 
 package {'wine':
     ensure => "latest",
-
 }
 
 class { "celery::server":
@@ -90,6 +94,14 @@ file { "/usr/local/data":
     mode   => 775,
 }
 
+file { "/root/.wine":
+    # hack to "solve" ticket #14
+    ensure => "directory",
+    owner  => "celery",
+    group  => "vagrant",
+    mode   => 775,
+}
+
 file { "/home/celery":
     ensure => "directory",
     owner  => "celery",
@@ -114,8 +126,16 @@ file { "/usr/local/bin/fvsbatch":
     target => '/usr/local/apps/growth-yield-batch/scripts/batch.py',
     mode   => 775,
 }
+
 file { "celeryflower.conf":
   path => "/etc/supervisor/conf.d/celeryflower.conf",
   content => template("celeryflower.conf"),
   require => Package['supervisor']
+}
+
+file { "/var/log/celeryflower.log":
+    ensure => "present",
+    owner  => "celery",
+    group  => "vagrant",
+    mode   => 775,
 }
