@@ -59,4 +59,4 @@ def restart_services():
     celeryd is not chdired to /var/celery and celeryflower doesnt pick up tasks.
     This is a band-aid to "fix" the issue
     """
-    run('sudo service celeryd restart && sudo supervisorctl stop all && sudo supervisorctl start all')
+    run('sudo service celeryd restart && sudo service supervisor stop && sudo service supervisor start')
