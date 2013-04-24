@@ -69,7 +69,7 @@ if __name__ == "__main__":
             keyout = os.path.join(keyoutdir, "%s_original.key" % keyname)
 
             copyfile(fvs, os.path.join(keyoutdir, os.path.basename(fvs)))
-            
+
             with open(keyout, 'w') as fh:
                 for line in fileinput.input(basekey, mode='r'):
                     if 'IDB Plot Number' in line:
@@ -80,4 +80,6 @@ if __name__ == "__main__":
                         line = os.path.basename(fvs) + "\n"
 
                     fh.write(line)
+    print 
+    print "Batch keyfile directory output to", outdir
 

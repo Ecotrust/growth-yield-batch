@@ -46,11 +46,18 @@ def _set_environment():
 
 
 def run_test_fvs():
-    run('/usr/local/bin/fvs /usr/local/apps/growth-yield-batch/testdata/7029_CT60/')
+    run('/usr/local/bin/fvs /usr/local/apps/growth-yield-batch/testdata/varPN_rx25_cond42_site2/')
 
 
 def run_test_batch():
     run('/usr/local/bin/fvsbatch --purge /usr/local/apps/growth-yield-batch/testdata/')
+
+
+def run_test_buildkeys():
+    import random
+    import string
+    tmpdir = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+    run('/usr/local/bin/buildkeys /usr/local/apps/growth-yield-batch/test_build_keys/ /tmp/%s' % tmpdir)
 
 
 def restart_services():
