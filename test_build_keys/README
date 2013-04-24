@@ -1,0 +1,13 @@
+use scripts/build_keys.py to construct key files
+
+python build_keys indir outdir
+
+# indir
+indir/rx/varPN_rx17_CONDID_site2.key
+indir/fvs/42.fvs
+indir/fvs/42.sti  <-- our own thing, a single line for the stand info
+
+# outdir
+outdir/varPN_rx17_cond42_site2/varPN_rx17_cond42_site2.key
+outdir/varPN_rx17_cond42_site2/42.fvs
+
