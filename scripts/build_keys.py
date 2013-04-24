@@ -62,7 +62,12 @@ if __name__ == "__main__":
         for basekey in basekeys:
             key = basekey.replace("CONDID", "cond%s" % condid)
             keyname = os.path.splitext(os.path.basename(key))[0]
-            print "  constructing", keyname
+            # create a shorter version for the fvs stand id
+            shortkeyname = keyname.replace("var", "")
+            shortkeyname = shortkeyname.replace("rx", "")
+            shortkeyname = shortkeyname.replace("cond", "")
+            shortkeyname = shortkeyname.replace("site", "")
+            print "  constructing", keyname, shortkeyname
 
             keyoutdir = os.path.join(outdir, keyname) 
             os.makedirs(keyoutdir)
@@ -70,14 +75,27 @@ if __name__ == "__main__":
 
             copyfile(fvs, os.path.join(keyoutdir, os.path.basename(fvs)))
 
+            next_line_is_stdident = False
+            next_line_is_fvs = False
             with open(keyout, 'w') as fh:
                 for line in fileinput.input(basekey, mode='r'):
-                    if 'IDB Plot Number' in line:
-                        line = "%s        IDB Plot Number\n" % "S00999"   # TODO
+                    # STDIDENT
+                    if line.startswith("STDIDENT"):
+                        next_line_is_stdident = True
+                    elif next_line_is_stdident:
+                        line = "%s   %s\n" % (shortkeyname, keyname)
+                        next_line_is_stdident = False
+
+                    # STDINFO
                     elif line.startswith("STDINFO"):
                         line = stdinfo_text + "\n"
-                    elif ".fvs" in line:
+
+                    # .fvs FILE
+                    elif line.startswith("OPEN"):
+                        next_line_is_fvs = True
+                    elif next_line_is_fvs and ".fvs" in line:
                         line = os.path.basename(fvs) + "\n"
+                        next_line_is_fvs = False
 
                     fh.write(line)
     print 
