@@ -34,7 +34,7 @@ Major goals include:
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvs testdata/varPN_rx25_cond42_site2/
 Using data dir testdata/varPN_rx25_cond42_site2 ...
 ....
-Results in temp directory /tmp/tmp.bZdxkMyM3A/alt_treelists
+Results in directory /usr/local/data/out/varPN_rx25_cond42_site2/
 ```
 
 * Run all the testdata plots in asynch/batch mode; adds them all to the celery queue
@@ -90,7 +90,7 @@ varPN_rx25_cond43_site2
    |---- 43.fvs
 ```
 
-### Building the batch directory structure from base data
+## Building the batch directory structure from base data
 
 To build keyfiles in the proper directory structure from base data (.key, .fvs, .stdinfo), 
 you need to start with data like this:
