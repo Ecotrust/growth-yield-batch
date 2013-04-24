@@ -24,13 +24,21 @@ else
 fi
 shift
 
+PLOTNAME=`basename $DATADIR`
+OUTDIR="/usr/local/data/out/$PLOTNAME"
 TEMPDIR=`mktemp -d --tmpdir=/usr/local/data/tmp`
 cp -r $DATADIR/* $TEMPDIR
 cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
 
 # set variant abbreviation
-VARIANT=`cat *.variant`
+VARIANT=`echo "$PLOTNAME" | sed -rn 's/^var(\w{2})_.+$/\1/p' | tr '[:upper:]' '[:lower:]'`
+if [ X"" == X"$VARIANT" ]
+then 
+    throw "Could not determine variant name. Make sure the datadir starts with varXX_ where XX is the variant"
+    exit 1
+fi
+
 EXE="/usr/local/apps/growth-yield-batch/fvsbin/FVS$VARIANT.exe"
 if [[ -x "$EXE" ]]
 then
@@ -83,16 +91,11 @@ do
 	fi
 done
 
-PLOTNAME=`basename $DATADIR`
-OUTDIR="/usr/local/data/out/$PLOTNAME"
-mkdir -p $OUTDIR
-
+#####
+# TODO Lots of error checking
+# if anything is funny, leave it in tmp
+#####
 echo "Moving results from temporary location $TEMPDIR/"
-cp -r $TEMPDIR/* $OUTDIR/
-# rm the temp files
-cd $OUTDIR
-rm -r $TEMPDIR
-
-
+mv $TEMPDIR $OUTDIR
 echo
 echo "Results in directory $OUTDIR/"
