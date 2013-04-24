@@ -38,6 +38,31 @@ def check_indir(indir):
     return True
 
 
+def process_text(keyout, basekey, shortkeyname, keyname, fvs):
+    next_line_is_stdident = False
+    next_line_is_fvs = False
+    with open(keyout, 'w') as fh:
+        for line in fileinput.input(basekey, mode='r'):
+            # STDIDENT
+            if line.startswith("STDIDENT"):
+                next_line_is_stdident = True
+            elif next_line_is_stdident:
+                line = "%s   %s\n" % (shortkeyname, keyname)
+                next_line_is_stdident = False
+
+            # STDINFO
+            elif line.startswith("STDINFO"):
+                line = stdinfo_text + "\n"
+
+            # .fvs FILE
+            elif line.startswith("OPEN"):
+                next_line_is_fvs = True
+            elif next_line_is_fvs and ".fvs" in line:
+                line = os.path.basename(fvs) + "\n"
+                next_line_is_fvs = False
+
+            fh.write(line)
+
 if __name__ == "__main__":
     args = docopt(__doc__, version='Build Keys 1.0')
 
@@ -69,35 +94,30 @@ if __name__ == "__main__":
             shortkeyname = shortkeyname.replace("site", "")
             print "  constructing", keyname, shortkeyname
 
-            keyoutdir = os.path.join(outdir, keyname) 
+            keyoutdir = os.path.join(outdir, keyname)
             os.makedirs(keyoutdir)
             keyout = os.path.join(keyoutdir, "%s_original.key" % keyname)
 
             copyfile(fvs, os.path.join(keyoutdir, os.path.basename(fvs)))
 
-            next_line_is_stdident = False
-            next_line_is_fvs = False
-            with open(keyout, 'w') as fh:
-                for line in fileinput.input(basekey, mode='r'):
-                    # STDIDENT
-                    if line.startswith("STDIDENT"):
-                        next_line_is_stdident = True
-                    elif next_line_is_stdident:
-                        line = "%s   %s\n" % (shortkeyname, keyname)
-                        next_line_is_stdident = False
+            process_text(keyout, basekey, shortkeyname, keyname, fvs)
 
-                    # STDINFO
-                    elif line.startswith("STDINFO"):
-                        line = stdinfo_text + "\n"
+            """
+            ipdb> keyout
+            '/usr/local/apps/growth-yield-batch/__test/out/varPN_rx10_cond42_site2/varPN_rx10_cond42_site2_original.key'
+            ipdb> keyout2 = keyout.replace("_original", "_growonly")
+            ipdb> basekey
+            '/usr/local/apps/growth-yield-batch/__test/rx/varPN_rx10_CONDID_site2.key'
+            ipdb> basekey2 = '/usr/local/apps/growth-yield-batch/__test/rx/varPN_rx1_CONDID_site2.key'
+            """
+            keyout = keyout.replace("_original", "_growonly")
+            keycomp = keyname.split("_")
+            keycomp[1] = "rx1"   # Assume rx1 is grow only
+            keycomp[2] = "CONDID"  # Use the generic base key
+            gokeyname = "_".join(keycomp)
+            basekey = os.path.join(indir, 'rx', '%s.key' % gokeyname) 
+            '/usr/local/apps/growth-yield-batch/__test/rx/varPN_rx1_CONDID_site2.key'
+            process_text(keyout, basekey, shortkeyname, keyname, fvs)
 
-                    # .fvs FILE
-                    elif line.startswith("OPEN"):
-                        next_line_is_fvs = True
-                    elif next_line_is_fvs and ".fvs" in line:
-                        line = os.path.basename(fvs) + "\n"
-                        next_line_is_fvs = False
-
-                    fh.write(line)
-    print 
+    print
     print "Batch keyfile directory output to", outdir
-

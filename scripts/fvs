@@ -57,9 +57,9 @@ fi
 
 # process the *_original.key files and create offsets 4 offsets at 5 yr intervals
 echo "Creating offset keyfiles in temp directory"
-python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 4 5 
+python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 4 5
 if [ $? -ne 0 ]; then
-    throw "CreateOffsets.py failed. Check $TEMPDIR/offsets.log" 
+    throw "CreateOffsets.py failed."
     exit 1
 fi
 
@@ -69,7 +69,7 @@ do
 	filename=$(basename "$f")
 	extension="${filename##*.}"
 	PREFIX="${filename%.*}"
-	if [[ "$PREFIX" != *_original* ]]
+	if [[ "$PREFIX" != *_original*  && "$PREFIX" != *_growonly* ]]
 	then
 		echo "Growing $PREFIX..."
 		touch $PREFIX.input.rsp
@@ -103,6 +103,7 @@ done
 # if anything is funny, leave it in tmp
 #####
 echo "Moving results from temporary location $TEMPDIR/"
-mv $TEMPDIR $OUTDIR
+mv $TEMPDIR/* $OUTDIR/
+rmdir $TEMPDIR
 echo
 echo "Results in directory $OUTDIR/"
