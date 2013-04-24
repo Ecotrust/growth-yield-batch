@@ -25,7 +25,8 @@ fi
 shift
 
 PLOTNAME=`basename $DATADIR`
-OUTDIR="/usr/local/data/out/$PLOTNAME"
+
+
 TEMPDIR="/usr/local/data/tmp/$PLOTNAME"
 if [[ -d $TEMPDIR ]]
 then
@@ -37,6 +38,21 @@ fi
 cp -r $DATADIR/* $TEMPDIR
 cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
+
+
+VAR=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\1/p'`
+RX=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\2/p'`
+SITE=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\4/p'`
+OUTDIR="/usr/local/data/out/$VAR/$RX/$SITE"
+if [[ -d $OUTDIR ]]
+then
+    echo "$OUTDIR exists; wiping out contents"
+    rm -r $OUTDIR/*
+else
+    mkdir -p $OUTDIR
+fi
+echo "Final output (if successful) will be in $OUTDIR"
+
 
 # set variant abbreviation
 VARIANT=`echo "$PLOTNAME" | sed -rn 's/^var(\w{2})_.+$/\1/p' | tr '[:upper:]' '[:lower:]'`

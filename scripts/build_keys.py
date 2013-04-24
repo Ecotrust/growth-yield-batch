@@ -102,14 +102,6 @@ if __name__ == "__main__":
 
             process_text(keyout, basekey, shortkeyname, keyname, fvs)
 
-            """
-            ipdb> keyout
-            '/usr/local/apps/growth-yield-batch/__test/out/varPN_rx10_cond42_site2/varPN_rx10_cond42_site2_original.key'
-            ipdb> keyout2 = keyout.replace("_original", "_growonly")
-            ipdb> basekey
-            '/usr/local/apps/growth-yield-batch/__test/rx/varPN_rx10_CONDID_site2.key'
-            ipdb> basekey2 = '/usr/local/apps/growth-yield-batch/__test/rx/varPN_rx1_CONDID_site2.key'
-            """
             keyout = keyout.replace("_original", "_growonly")
             keycomp = keyname.split("_")
             keycomp[1] = "rx1"   # Assume rx1 is grow only

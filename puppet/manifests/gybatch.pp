@@ -88,26 +88,11 @@ file { "/usr/local/data/tasks.db":
 }
 
 file { "/usr/local/data":
-    ensure => "directory",
-    owner  => "celery",
-    group  => "vagrant",
-    mode   => 775,
+     ensure => "directory",
+     owner  => "celery",
+     group  => "vagrant",
+     mode   => 775,
 }
-
-file { "/usr/local/data/tmp":
-    ensure => "directory",
-    owner  => "celery",
-    group  => "vagrant",
-    mode   => 775,
-}
-
-file { "/usr/local/data/out":
-    ensure => "directory",
-    owner  => "celery",
-    group  => "vagrant",
-    mode   => 775,
-}
-
 
 file { "/root/.wine":
     # hack to "solve" ticket #14
