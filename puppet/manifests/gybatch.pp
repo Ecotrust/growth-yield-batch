@@ -142,6 +142,12 @@ file { "/usr/local/bin/fvsbatch":
     mode   => 775,
 }
 
+file { "/usr/local/bin/buildkeys":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/build_keys.py',
+    mode   => 775,
+}
+
 file { "celeryflower.conf":
   path => "/etc/supervisor/conf.d/celeryflower.conf",
   content => template("celeryflower.conf"),
