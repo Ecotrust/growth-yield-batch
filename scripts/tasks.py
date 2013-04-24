@@ -37,8 +37,12 @@ def fvs(datadir):
     print out  # how to stream this?
     print err
 
-    outdir = os.path.join('/usr/local/data/out', os.path.basename(datadir))
-    assert os.path.isdir(outdir)
+    # compnts = os.path.basename(datadir).split("_")
+    # compnts.pop(2)
+    # parts = ['/usr/local/data/out'] + compnts
+    # outdir = os.path.join(*parts)
+    # TODO assert os.path.isdir(outdir)
+    outdir = '/usr/local/data/out' #TODO
 
     if proc.returncode == 0:
         # Update task record
