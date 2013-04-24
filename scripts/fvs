@@ -24,7 +24,7 @@ else
 fi
 shift
 
-TEMPDIR=`mktemp -d --tmpdir=/usr/local/data`
+TEMPDIR=`mktemp -d --tmpdir=/usr/local/data/tmp`
 cp -r $DATADIR/* $TEMPDIR
 cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
@@ -83,5 +83,16 @@ do
 	fi
 done
 
+PLOTNAME=`basename $DATADIR`
+OUTDIR="/usr/local/data/out/$PLOTNAME"
+mkdir -p $OUTDIR
+
+echo "Moving results from temporary location $TEMPDIR/"
+cp -r $TEMPDIR/* $OUTDIR/
+# rm the temp files
+cd $OUTDIR
+rm -r $TEMPDIR
+
+
 echo
-echo "Results in temp directory $(pwd)/"
+echo "Results in directory $OUTDIR/"

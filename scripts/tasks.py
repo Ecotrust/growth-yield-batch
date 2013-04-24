@@ -28,25 +28,24 @@ def square(z):
 
 @celery.task
 def fvs(datadir):
-    assert os.path.isdir(datadir)  # redundant assertion is redundant
+    assert os.path.isdir(datadir)
 
-    args = ['/usr/local/bin/fvs', datadir]  # TODO: instead of shelling out, pythonify the fvs script
+    args = ['/usr/local/bin/fvs', datadir]
     print "Running %s" % ' '.join(args)
     proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     (out, err) = proc.communicate()
     print out  # how to stream this?
     print err
 
-    if proc.returncode == 0:
+    outdir = os.path.join('/usr/local/data/out', os.path.basename(datadir))
+    assert os.path.isdir(outdir)
 
+    if proc.returncode == 0:
         # Update task record
         request = current_task.request
         task_record = Task.query.filter_by(id=request.id).first()
-        task_record.result = "/usr/local/data"
+        task_record.result = outdir
         db.session.commit()
-
-        # TODO move output files to appropos location
-        # TODO clean out tempfiles
     else:
         raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
 
