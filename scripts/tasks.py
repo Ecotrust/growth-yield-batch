@@ -38,14 +38,16 @@ def fvs(datadir):
     print err
 
     if proc.returncode == 0:
-        # TODO move output files to appropos location
 
         # Update task record
         request = current_task.request
         task_record = Task.query.filter_by(id=request.id).first()
         task_record.result = "/usr/local/data"
         db.session.commit()
+
+        # TODO move output files to appropos location
+        # TODO clean out tempfiles
     else:
         raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
 
-    return proc.returncode
+    return proc.returncode  # TODO tempdir if failed, output dir if good

@@ -11,6 +11,11 @@ Vagrant::Config.run do |config|
 
   config.vm.share_folder "v-app", "/usr/local/apps/growth-yield-batch", "./"
 
+  # use a local copy of the harvest-scheduler code if available; optional, for testing scheduler
+  if File.directory?("../harvest-scheduler")
+    config.vm.share_folder "v-harvestscheduler", "/usr/local/apps/harvest-scheduler", "../harvest-scheduler"
+  end
+
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "gybatch.pp"

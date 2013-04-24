@@ -8,28 +8,27 @@ def log(x):
     print x
 
 
-def create_offsets(baserxdir, outdir, num_offsets=10, period=5):
+def create_offsets(baserxdir, outdir, num_offsets=4, period=5):
     orig_keys = glob.glob(os.path.join(baserxdir, '*_original.key'))
-    if len(orig_keys) < 1:
-        raise Exception("Need at least one *_original.key file")
+    if len(orig_keys) != 1:
+        log("!!!!! Need one and only one *_original.key file per directory")
+        sys.exit(1)
+
     for inkey in orig_keys:
-        keyprefix = os.path.splitext(os.path.basename(inkey))[0]
-        keybase = keyprefix.replace('_original', '')
+        keybase = os.path.splitext(os.path.basename(inkey))[0].replace("_original", "")
         # GO = grow only = a special case
         # if keybase == "GO":
         #     continue
         log("Processing %s keys" % keybase)
 
-        # Create XX_01.key
         outkey = os.path.join(outdir, keybase + "_00.key")
         shutil.copy(inkey, outkey)
         log("\tbase key %s_00.key" % keybase)
 
         for offset in range(1, num_offsets + 1):
-            log("\toffset key %s_%02d" % (keybase, offset))
             offset_years = (offset) * period
-            # Create the XX_YY.key offsets
             outkey = os.path.join(outdir, "%s_%02d.key" % (keybase, offset))
+            log("\toffset key %s_%02d.key" % (keybase, offset))
             ofh = open(outkey, 'w')
             for line in open(inkey, 'r'):
                 newline = line
