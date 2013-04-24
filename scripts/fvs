@@ -26,7 +26,14 @@ shift
 
 PLOTNAME=`basename $DATADIR`
 OUTDIR="/usr/local/data/out/$PLOTNAME"
-TEMPDIR=`mktemp -d --tmpdir=/usr/local/data/tmp`
+TEMPDIR="/usr/local/data/tmp/$PLOTNAME"
+if [[ -d $TEMPDIR ]]
+then
+    echo "$TEMPDIR exists; wiping out contents"
+    rm -r $TEMPDIR/*
+else
+    mkdir -p $TEMPDIR
+fi
 cp -r $DATADIR/* $TEMPDIR
 cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
