@@ -10,6 +10,10 @@ import json
 
 if __name__ == "__main__":
 
+    full_list = True
+    if len(sys.argv) > 1 and sys.argv[1] == 'summary':
+        full_list = False
+
     started = Task.query.all()
     status_count = {}
     trs = []
@@ -23,6 +27,5 @@ if __name__ == "__main__":
         trs.append([task_record.id, task.status, task_record.batchdir, task_record.datadir, task_record.result])
 
     print json.dumps(status_count, indent=2)
-    print "\n".join(['\t'.join(str(x) for x in tr) for tr in trs])
-     
-        
+    if full_list:
+        print "\n".join(['\t'.join(str(x) for x in tr) for tr in trs])
