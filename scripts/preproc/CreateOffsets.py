@@ -16,9 +16,6 @@ def create_offsets(baserxdir, outdir, num_offsets=4, period=5):
 
     for inkey in orig_keys:
         keybase = os.path.splitext(os.path.basename(inkey))[0].replace("_original", "")
-        # GO = grow only = a special case
-        # if keybase == "GO":
-        #     continue
         log("Processing %s keys" % keybase)
 
         outkey = os.path.join(outdir, keybase + "_00.key")
@@ -37,11 +34,17 @@ def create_offsets(baserxdir, outdir, num_offsets=4, period=5):
                 ofh.write(newline)
             ofh.close()
 
-        # Create final key; grow only
-        # gokey = os.path.join(baserxdir, "GO_01.key")
-        # outkey = os.path.join(outdir, "%s_%02d.key" % (keybase, num_offsets))
-        # shutil.copy(gokey, outkey)
-        # log("  grow-only key GO_%s.key" % num_offsets)
+        # create the grow-only
+        offset_years = 100
+        outkey = os.path.join(outdir, "%s_99.key" % (keybase,))
+        log("\toffset key %s_99.key" % (keybase,))
+        ofh = open(outkey, 'w')
+        for line in open(inkey, 'r'):
+            newline = line
+            if line.startswith("Offset ="):
+                newline = "Offset = %d\r\n" % offset_years
+            ofh.write(newline)
+        ofh.close()
 
 
 if __name__ == "__main__":
