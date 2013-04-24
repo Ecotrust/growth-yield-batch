@@ -31,19 +31,18 @@ Major goals include:
 * Run a single test site directly
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvs testdata/7029_CT60/
-Using data dir testdata/7029_CT60 ...
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvs testdata/varPN_rx25_cond42_site2/
+Using data dir testdata/varPN_rx25_cond42_site2 ...
 ....
 Results in temp directory /tmp/tmp.bZdxkMyM3A/alt_treelists
 ```
 
-* Run all the testdata plots in aynch/batch mode; adds them all to the celery queue
+* Run all the testdata plots in asynch/batch mode; adds them all to the celery queue
 
 ```
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsbatch testdata/
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/7029_CT60')    5eca96d0-ba17-45ca-a5f2-b3c527e37611    PENDING
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/7031_CT60')    3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/7032_CT60')    9fbfb26d-0f5d-4a1a-835b-5fe08033578e    PENDING
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/varPN_rx25_cond42_site2')    5eca96d0-ba17-45ca-a5f2-b3c527e37611    PENDING
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/varPN_rx25_cond43_site2')    3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING
 ```
 
 * Check status at command line
@@ -54,17 +53,11 @@ vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus
   "PENDING": 2,
   "SUCCESS": 1
 }
-5eca96d0-ba17-45ca-a5f2-b3c527e37611    SUCCESS /usr/local/apps/growth-yield-batch/testdata     7029_CT60       /path_to_output_files
-3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING /usr/local/apps/growth-yield-batch/testdata     7031_CT60       None
-9fbfb26d-0f5d-4a1a-835b-5fe08033578e    PENDING /usr/local/apps/growth-yield-batch/testdata     7032_CT60       None
+5eca96d0-ba17-45ca-a5f2-b3c527e37611    SUCCESS /usr/local/apps/growth-yield-batch/testdata     varPN_rx25_cond42_site2       /usr/local/data/out/varPN_rx25_cond42_site2
+3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING /usr/local/apps/growth-yield-batch/testdata     varPN_rx25_cond43_site2       None
 ```
 
 * To check celery worker status on the remote machine `cd /var/celery && celery status`
-
-
-
-
-
 
 
 ## FVS Directory Structure
@@ -73,58 +66,70 @@ In order to batch process runs with this system, it's important that the input f
 
 ### Naming requirements
 
-All names should be alphanumeric (no spaces, dashes, underscores, etc)
+Each run is named according to the following scheme:
+```
+var[VARIANT]_rx[RX]_cond[CONDID]_site[SITECLASS]
+```
+For example, using the Pacific Northwest variant, prescription 25, condition 43, and site class 2:
+```
+varPN_rx25_cond43_site2
+```
 
 * **Variants** will be the fvs code used in the .exe file (FVSpn.exe = pacific northwest = `pn` )
 * **Rxs** will should have an easily recognizable nomanclature (60 year rotation with commercial thin = `CT60` )
-* **Stand ids** will be the numeric Condition ID used as the representative plot (`1332`)
+* **Condition ids** will be the numeric Condition ID used as the representative plot (`1332`)
+* **Site class** is a categorized site index
 * **Offsets** are handled automatically *if* there is the appropriate line in the keyfile: "Offset = ___"
 
 ### Data Directory Structure 
 **One key per Rx and Stand**
 
 ```
-{{Condition ID}}_{{Rx ID}}
-   |---- {{Condition ID}}_{{Rx ID}}_original.key
-   |---- {{Condition ID}}.fvs
-   |---- {{Condition ID}}_{{Rx ID}}.variant     <= this file contains the variant code to be used
+varPN_rx25_cond43_site2
+   |---- varPN_rx25_cond43_site2_original.key
+   |---- 43.fvs
 ```
 
-Example:
+### Building the batch directory structure from base data
+
+To build keyfiles in the proper directory structure from base data (.key, .fvs, .stdinfo), 
+you need to start with data like this:
 
 ```
-1332_CT60
-   |---- 1332_CT60_original.key
-   |---- 1332.fvs
-   |---- 1332_CT60.variant 
+basedata/
+|-- fvs
+|   |-- 42.fvs
+|   |-- 42.stdinfo   <---- this file simply contains a single line with the STDINFO keyword
+|   |-- 43.fvs
+|   `-- 43.stdinfo
+`-- rx
+    |-- varPN_rx25_CONDID_site2.key
+    `-- varPN_rx25_CONDID_site3.key
 ```
 
-#### Pros
-
-* Small, fast, self contained runs
-* Output files (ex: alt_cut_vol.txt, etc) will be 1:1 with stands
-
-#### Cons
-
-* Lots of small processes to manage; QC issues
-* Overall speed hit due to overhead time of each run (?)
-
-### Batch runs
-
-Each *data directory* will contain one and only one _original.key file. 
-
-The batch processing system will be set up to accept a *batch directory* which contains multiple *data directories*
-
-Example:
-
+and then run 
 ```
-BatchRun1
-  |-- 6056_CT60
-       |---- 6056_CT60_original.key
-       |---- 6056.fvs
-       |---- 6056_CT60.variant 
-  |-- 1332_CT60
-       |---- 1332_CT60_original.key
-       |---- 1332.fvs
-       |---- 1332_CT60.variant 
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ buildkeys basedata/ batch1
+Working on condition 42
+  constructing varPN_rx25_cond42_site2
+  ....
 ```
+
+which constructs the batch directory structure like so
+```
+batch1
+|-- varPN_rx25_cond42_site2
+|   |-- 42.fvs
+|   `-- varPN_rx25_cond42_site2_original.key
+|-- varPN_rx25_cond42_site3
+|   |-- 42.fvs
+|   `-- varPN_rx25_cond42_site3_original.key
+|-- varPN_rx25_cond43_site2
+|   |-- 43.fvs
+|   `-- varPN_rx25_cond43_site2_original.key
+`-- varPN_rx25_cond43_site3
+    |-- 43.fvs
+    `-- varPN_rx25_cond43_site3_original.key
+```
+
+You can then run `fvsbatch batch1` directly.
