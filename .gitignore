@@ -21,3 +21,6 @@ lot/.coverage
 .DS_Store
 .*.swp
 fvsbin/*
+Vagrantfile
+*.pem
+fab_vars.py
