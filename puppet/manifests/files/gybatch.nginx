@@ -1,0 +1,14 @@
+server {
+    client_max_body_size 20M;
+    #server_name localhost;
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    location / {
+        proxy_set_header Host $http_host;
+        proxy_pass http://localhost:5555;
+        #rewrite  ^/test/(.*)  /$1 break;
+        auth_basic "Restricted";
+        auth_basic_user_file  /usr/local/apps/growth-yield-batch/celeryflower-passwords;
+    }
+}
