@@ -145,3 +145,5 @@ file { "/var/log/celeryflower.log":
     group  => "vagrant",
     mode   => 775,
 }
+
+User<| title == "celery" |> { groups +> [ "vagrant" ] }
