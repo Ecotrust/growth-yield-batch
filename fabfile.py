@@ -1,13 +1,11 @@
 from fabric.api import *
 from fabric.contrib.files import exists
+from fabric.operations import run, put
 import time
-
-vars = {
-    # 'tomcat_version': '6.0.36'
-}
+from fab_vars import *
 
 env.forward_agent = True
-env.key_filename = '~/.vagrant.d/insecure_private_key'
+env.key_filename = KEY_FILENAME
 
 
 def dev():
@@ -26,7 +24,8 @@ def prod():
 
 def stage():
     """ Use staging server settings """
-    servers = []
+    env.key_filename = AWS_KEY_FILENAME
+    servers = [AWS_PUBLIC_DNS]
     env.hosts = servers
     return servers
 
@@ -67,3 +66,42 @@ def restart_services():
     This is a band-aid to "fix" the issue
     """
     run('sudo service celeryd restart && sudo service supervisor stop && sudo service supervisor start')
+    
+def copy_fussy():
+    run('sudo mkdir -p /usr/local/apps')
+    run('sudo mkdir -p /usr/local/apps/growth-yield-batch')
+    run('sudo mkdir -p /usr/local/apps/growth-yield-batch/fvsbin')
+    run('sudo mkdir -p /usr/local/apps/growth-yield-batch/puppet')
+    run('sudo mkdir -p /usr/local/apps/growth-yield-batch/scripts')
+    run('sudo mkdir -p /usr/local/apps/growth-yield-batch/testdata')
+    run('sudo chgrp -R ubuntu /usr/local/apps/growth-yield-batch')
+    run('sudo chmod -R 775 /usr/local/apps/growth-yield-batch')
+    run('sudo mkdir -p /tmp/vagrant-puppet')
+    run('sudo mkdir -p /tmp/vagrant-puppet/manifests')
+    run('sudo mkdir -p /tmp/vagrant-puppet/modules')
+    run('sudo chgrp -R ubuntu /tmp/vagrant-puppet')
+    run('sudo chmod -R 775 /tmp/vagrant-puppet')
+    
+    put('./fvsbin', '/usr/local/apps/growth-yield-batch/fvsbin')
+    put('./puppet', '/usr/local/apps/growth-yield-batch/puppet')
+    put('./scripts', '/usr/local/apps/growth-yield-batch/scripts')
+    put('./testdata', '/usr/local/apps/growth-yield-batch/testdata')
+    put('./requirements.txt', '/usr/local/apps/growth-yield-batch/')
+    put('./puppet/manifests', '/tmp/vagrant-puppet/manifests')
+    put('./puppet/modules', '/tmp/vagrant-puppet/modules')
+    
+def copy():
+    run('sudo mkdir -p /usr/local/apps')
+    run('sudo mkdir -p /usr/local/apps/growth-yield-batch')
+    run('sudo chgrp -R ubuntu /usr/local/apps/growth-yield-batch')
+    run('sudo chmod -R 775 /usr/local/apps/growth-yield-batch')
+    put('./', '/usr/local/apps/growth-yield-batch/')
+    
+def install_puppet():
+    run('sudo apt-get install puppet')
+    run('sudo puppet apply --modulepath=/usr/local/apps/growth-yield-batch/puppet/puppet/modules /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
+    run('sudo puppet apply --templatedir=/usr/local/apps/growth-yield-batch/puppet/puppet/manifests/files /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
+    
+    
+def provision():
+    run('puppet /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
