@@ -23,6 +23,24 @@ package { "git-core":
     ensure => "latest"
 }
 
+package { "nginx-full":
+    ensure => "latest"
+}
+file {"gybatch":
+  path => "/etc/nginx/sites-available/gybatch",
+  content => template("gybatch.nginx"),
+  require => Package['nginx-full']
+}
+file { "/etc/nginx/sites-enabled/gybatch":
+   ensure => 'link',
+   target => '/etc/nginx/sites-available/gybatch',
+   require => File['gybatch']
+}
+file { "/etc/nginx/sites-enabled/default":
+   ensure => 'absent',
+   require => Package['nginx-full']
+}
+
 package { "vim":
     ensure => "latest"
 }
