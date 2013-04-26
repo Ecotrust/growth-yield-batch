@@ -81,6 +81,9 @@ def copy_fussy():
     run('sudo mkdir -p /tmp/vagrant-puppet/modules')
     run('sudo chgrp -R ubuntu /tmp/vagrant-puppet')
     run('sudo chmod -R 775 /tmp/vagrant-puppet')
+    run('sudo mkdir -p /vagrant')
+    run('sudo chgrp -R ubuntu /vagrant')
+    run('sudo chmod -R 775 /vagrant')
     
     put('./fvsbin', '/usr/local/apps/growth-yield-batch/fvsbin')
     put('./puppet', '/usr/local/apps/growth-yield-batch/puppet')
@@ -89,19 +92,36 @@ def copy_fussy():
     put('./requirements.txt', '/usr/local/apps/growth-yield-batch/')
     put('./puppet/manifests', '/tmp/vagrant-puppet/manifests')
     put('./puppet/modules', '/tmp/vagrant-puppet/modules')
+    put('./requirements.txt', '/vagrant/requirements.txt')  #expected in puppet-script
+
     
 def copy():
     run('sudo mkdir -p /usr/local/apps')
     run('sudo mkdir -p /usr/local/apps/growth-yield-batch')
     run('sudo chgrp -R ubuntu /usr/local/apps/growth-yield-batch')
     run('sudo chmod -R 775 /usr/local/apps/growth-yield-batch')
+    run('sudo mkdir -p /vagrant')
+    run('sudo chgrp -R ubuntu /vagrant')
+    run('sudo chmod -R 775 /vagrant')
+    
     put('./', '/usr/local/apps/growth-yield-batch/')
+    put('./requirements.txt', '/vagrant/requirements.txt')  #expected in celery module
     
 def install_puppet():
     run('sudo apt-get install puppet')
-    run('sudo puppet apply --modulepath=/usr/local/apps/growth-yield-batch/puppet/puppet/modules /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
-    run('sudo puppet apply --templatedir=/usr/local/apps/growth-yield-batch/puppet/puppet/manifests/files /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
+    
+    #Copy in conf file /etc/puppet/puppet.conf
+    put('puppet/puppet/manifests/*', '/etc/puppet/manifests/')
+    put('puppet/puppet/modules/*', '/etc/puppet/modules/')
+    
+    # run('sudo puppet apply --modulepath=/usr/local/apps/growth-yield-batch/puppet/puppet/modules /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
+    # run('sudo puppet apply --templatedir=/usr/local/apps/growth-yield-batch/puppet/puppet/manifests/files /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
     
     
 def provision():
-    run('puppet /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
+    # how to get modules?
+    # run('puppet /usr/local/apps/growth-yield-batch/puppet/puppet/manifests/gybatch.pp')
+    run('sudo puppet /etc/puppet/manifests/gybatch.pp')
+    # getting references to group 'vagrant' - fixed only source I could find: growth-yield-batch\puppet\modules\python\manifests\venv\isolate.pp
+    # -- found another in gybatch.pp
+    # -- and another in celeryflower.conf
