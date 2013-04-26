@@ -25,9 +25,9 @@ fi
 shift
 
 PLOTNAME=`basename $DATADIR`
+SUBDIR=`echo "$PLOTNAME" | sed 's/_/\//g'`
 
-
-TEMPDIR="/usr/local/data/tmp/$PLOTNAME"
+TEMPDIR="/usr/local/data/tmp/$SUBDIR"
 if [[ -d $TEMPDIR ]]
 then
     echo "$TEMPDIR exists; wiping out contents"
@@ -40,12 +40,7 @@ cd $TEMPDIR
 echo "Working in temp directory $(pwd)"
 
 
-VAR=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\1/p'`
-RX=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\2/p'`
-CONDID=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\3/p'`
-SITE=`echo "$PLOTNAME" | sed -rn 's/^(var[a-zA-Z0-9]+)_(rx[a-zA-Z0-9]+)_(cond[a-zA-Z0-9]+)_(site[a-zA-Z0-9]+)$/\4/p'`
-
-OUTDIR="/usr/local/data/out/$VAR/$RX/$SITE/$CONDID"
+OUTDIR="/usr/local/data/out/$SUBDIR"
 if [[ -d $OUTDIR ]]
 then
     echo "$OUTDIR exists; wiping out contents"
