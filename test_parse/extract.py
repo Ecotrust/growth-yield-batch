@@ -43,6 +43,7 @@ def split_fixed(line, fixed_schema):
 
 carbon_rows = []
 summary_rows = []
+activity_rows = []
 
 
 def extract_data(outfile):
@@ -130,6 +131,46 @@ def extract_data(outfile):
             data.update(info)
             summary_rows.append(data)
 
+    ############# Extract Activity Summary
+    looking_for = ['FIREHZD', 'NSONESTN', 'BAAGE1']
+    ready = False
+    countdown = None
+    within_year = None
+    data = {}
+    with open(outfile, 'r') as fh:
+        for line in fh:
+            if "ACTIVITY SUMMARY" in line:
+                # We've found the summary stats, data starts x lines down
+                ready = True
+                countdown = 9
+
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
+
+            if line.strip() == "":
+                # blank line == we're done with this TIME PERIOD
+                within_year = None
+                activity_rows.append(data)
+                data = {}
+                continue
+
+            if line.startswith("-----"):
+                activity_rows.append(data)
+                break
+
+            # This is the start of a time period
+            if not within_year:
+                within_year = int(line[7:11])
+                data['year'] = within_year
+                data.update(info)
+            else:
+                var = line[24:34].strip()
+                if var in looking_for:
+                    val = float(line[63:72])
+                    data[var] = val
+
 
 if __name__ == "__main__":
     args = docopt(__doc__, version='1.0')
@@ -138,18 +179,17 @@ if __name__ == "__main__":
     for outfile in glob.glob(os.path.join(indir, "*.out")):
         extract_data(outfile)
 
-    # TODO load into pandas dataframes and join
+    # TODO no globals, load into pandas dataframes, join, write to a csv
     # uid = (info['var'], info['rx'], info['cond'], info['site'], info['offset'], 'YEAR TBD')
     #print json.dumps(carbon_rows[0], indent=2)
     #print json.dumps(summary_rows[0], indent=2)
+    from pandas import DataFrame, merge
+    activity_df = DataFrame(activity_rows)
+    summary_df = DataFrame(summary_rows)
+    carbon_df = DataFrame(carbon_rows)
+    ac_merge = merge(activity_df, carbon_df, how='outer', 
+                     on=['var', 'rx', 'cond', 'site','offset', 'year'])
+    acs_merge = merge(ac_merge, summary_df, how="outer",
+                      on=['var', 'rx', 'cond', 'site','offset', 'year'])
 
-
-
-
-
-
-
-
-
-
-
+    acs_merge.to_csv("test.csv")

@@ -61,6 +61,10 @@ package { "python-dev":
     ensure => "latest"
 }
 
+package { "python-numpy":
+    ensure => "latest"
+}
+
 package { "redis-server":
     ensure => "latest"
 }
