@@ -155,6 +155,12 @@ file { "/usr/local/bin/buildkeys":
     mode   => 775,
 }
 
+file { "/usr/local/bin/extract":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/extract.py',
+    mode   => 775,
+}
+
 file { "celeryflower.conf":
   path => "/etc/supervisor/conf.d/celeryflower.conf",
   content => template("celeryflower.conf"),

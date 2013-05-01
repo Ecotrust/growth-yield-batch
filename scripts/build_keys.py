@@ -6,14 +6,14 @@ Construct key files from .fvs, .stdinfo and base .key files
 # INDIR
 indir/rx/varPN_rx17_CONDID_site2.key
 indir/fvs/42.fvs
-indir/fvs/42.stdinfo  <-- our own thing, a single line for the stand info
+indir/fvs/42.std  <-- our own thing, a single line for the stand info
 
 # OUTDIR
-outdir/varPN_rx17_cond42_site2/varPN_rx17_cond42_site2_original.key
-outdir/varPN_rx17_cond42_site2/42.fvs
+indir/keys/varPN_rx17_cond42_site2/varPN_rx17_cond42_site2_original.key
+indir/keys/varPN_rx17_cond42_site2/42.fvs
 
 Usage:
-  build_keys.py INDIR OUTDIR
+  build_keys.py DIR
   build_keys.py (-h | --help)
   build_keys.py --version
 
@@ -66,8 +66,9 @@ def process_text(keyout, basekey, shortkeyname, keyname, fvs):
 if __name__ == "__main__":
     args = docopt(__doc__, version='Build Keys 1.0')
 
-    indir = os.path.abspath(args['INDIR'])
-    outdir = os.path.abspath(args['OUTDIR'])
+    indir = os.path.abspath(args['DIR'])
+    outdir = os.path.join(indir, "keys")
+    #outdir = os.path.abspath(args['OUTDIR'])
     if not os.path.exists(indir):
         raise Exception("%s does not exist" % indir)
     if not check_indir(indir):
@@ -78,7 +79,7 @@ if __name__ == "__main__":
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
 
     for fvs in glob.glob(os.path.join(indir, 'fvs', '*.fvs')):
-        stdinfo = fvs.replace(".fvs", ".stdinfo")
+        stdinfo = fvs.replace(".fvs", ".std")
         stdinfo_text = open(stdinfo, 'r').read()
         assert os.path.exists(stdinfo)
         condid = os.path.splitext(os.path.basename(fvs))[0]
@@ -108,7 +109,6 @@ if __name__ == "__main__":
             keycomp[2] = "CONDID"  # Use the generic base key
             gokeyname = "_".join(keycomp)
             basekey = os.path.join(indir, 'rx', '%s.key' % gokeyname) 
-            '/usr/local/apps/growth-yield-batch/__test/rx/varPN_rx1_CONDID_site2.key'
             process_text(keyout, basekey, shortkeyname, keyname, fvs)
 
     print
