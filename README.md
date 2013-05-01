@@ -46,7 +46,7 @@ testdata/
 
 and then run 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ buildkeys basedata/ batch1
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ buildkeys testdata
 Working on condition 42
   constructing varPN_rx25_cond42_site2
   ....
