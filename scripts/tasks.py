@@ -51,3 +51,30 @@ def fvs(datadir):
         raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
 
     return proc.returncode  # TODO tempdir if failed, output dir if good
+
+
+@celery.task
+def parse(outdir):
+    assert os.path.isdir(outdir)
+
+    args = ['/usr/local/bin/fvs', datadir]
+    print "Running %s" % ' '.join(args)
+    proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (out, err) = proc.communicate()
+    print out  # how to stream this?
+    print err
+
+    uid = os.path.basename(datadir)
+    outdir = '/usr/local/data/out/' + uid.replace("_", "/")
+    assert os.path.isdir(outdir)
+
+    if proc.returncode == 0:
+        # Update task record
+        request = current_task.request
+        task_record = Task.query.filter_by(id=request.id).first()
+        task_record.result = outdir
+        db.session.commit()
+    else:
+        raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
+
+    return proc.returncode  # TODO tempdir if failed, output dir if good

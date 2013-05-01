@@ -33,6 +33,11 @@ def parse_name(filename):
     return dict(zip(keys, parts))
 
 
+def classify_tree(spz, diam):
+    diam_class = int(diam / 10.0)
+    return "%s_%s" % (spz, diam_class)
+
+
 def split_fixed(line, fixed_schema):
     funcs = {'int': int, 'float': float, 'str': str}
     data = {}
@@ -171,6 +176,63 @@ def extract_data(outfile):
                     val = float(line[63:72])
                     data[var] = val
 
+    ############# Extract Treelist info
+    ## TODO: There might be a way to accomplish this WITHOUT parsing the treelists 
+    ## using compute variables and defining merchantable timber 
+    #
+    # data = None
+    # ready = False
+    # with open(outfile.replace(".out", ".trl"), 'r') as fh:
+    #     for line in fh:
+    #         if line[:4] == "-999":
+    #             # We've found a summary stats header
+    #             """
+    #             column 81 has a T, C, D, or A code:
+    #             T = Live trees at beginning of current cycle/end of previous cycle
+    #             D = Dead trees at beginning of current cycle/end of previous cycle
+    #             C = Trees cut during this cycle
+    #             A = Live trees following cutting in current cycle but prior to growth modeling in current cycle
+    #             """
+    #             import json
+    #             # save previous section data
+    #             if data:
+    #                 print json.dumps(data, indent=2, sort_keys=True)
+
+    #             # start new section
+    #             code = line[80]
+    #             year = line[15:19]
+    #             data = None
+
+    #             # We only want cut lists for now
+    #             if code == "C":
+    #                 ready = True
+    #             else:
+    #                 ready = False
+    #                 continue
+
+    #             data = {'year': year, 'code': code}
+    #             data.update(info)
+
+    #         elif ready:
+    #             # we're reading data points within the section
+    #             spz = line[14:16]
+    #             diam = float(line[47:53])
+    #             treeclass = classify_tree(spz, diam)
+
+    #             #tpa = float(line[30:38])
+    #             #dead_tpa = float(line[40:47])
+    #             #merch_ft3 = float(line[101:108])
+    #             #merch_bdft = float(line[108:116])
+    #             total_ft3 = float(line[94:101])
+
+    #             # TODO class by diameter/spz category
+    #             # TODO aggregate by class
+    #             key_tmpl = treeclass + "_cut_total_ft3"
+    #             if key_tmpl in data.keys():
+    #                 data[key_tmpl] += int(total_ft3)
+    #             else:
+    #                 data[key_tmpl] = int(total_ft3)
+
 
 if __name__ == "__main__":
     args = docopt(__doc__, version='1.0')
@@ -180,9 +242,6 @@ if __name__ == "__main__":
         extract_data(outfile)
 
     # TODO no globals, load into pandas dataframes, join, write to a csv
-    # uid = (info['var'], info['rx'], info['cond'], info['site'], info['offset'], 'YEAR TBD')
-    #print json.dumps(carbon_rows[0], indent=2)
-    #print json.dumps(summary_rows[0], indent=2)
     from pandas import DataFrame, merge
     activity_df = DataFrame(activity_rows)
     summary_df = DataFrame(summary_rows)
