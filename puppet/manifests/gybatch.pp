@@ -83,7 +83,7 @@ package {'wine':
 }
 
 class { "celery::server":
-  requirements => "/vagrant/requirements.txt",
+  requirements => "/usr/local/apps/growth-yield-batch/requirements.txt",
   require => Package['python-pip']
 }
 

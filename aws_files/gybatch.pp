@@ -61,6 +61,10 @@ package { "python-dev":
     ensure => "latest"
 }
 
+package { "python-numpy":
+    ensure => "latest"
+}
+
 package { "redis-server":
     ensure => "latest"
 }
@@ -148,6 +152,12 @@ file { "/usr/local/bin/fvsbatch":
 file { "/usr/local/bin/buildkeys":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/build_keys.py',
+    mode   => 775,
+}
+
+file { "/usr/local/bin/extract":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/extract.py',
     mode   => 775,
 }
 
