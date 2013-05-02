@@ -46,9 +46,9 @@ testdata/
 and then run 
 ```
 vagrant@precise32:/usr/local/apps/growth-yield-batch$ buildkeys testdata
-Working on condition 42
-  constructing varPN_rx25_cond42_site2
-  ....
+Generating keyfiles for condition 32
+Generating keyfiles for condition 91
+....
 ```
 
 which constructs the batch directory structure like
@@ -56,7 +56,7 @@ which constructs the batch directory structure like
 testdata/
 `-- fvs
 `-- rx
-`-- keys
+`-- plots
     `-- varWC_rx9_cond91_site2
         |-- 91.fvs
         |-- varWC_rx9_cond91_site2_growonly.key
@@ -68,10 +68,10 @@ testdata/
 Run a single test site directly
 
 ```
-$ fvs testdata/keys/varPN_rx25_cond42_site2/
+$ fvs testdata/plots/varPN_rx25_cond42_site2/
 Using data dir testdata/varPN_rx25_cond42_site2 ...
 ....
-Results in directory /usr/local/data/out/varPN_rx25_cond42_site2/
+Results in directory /tmp/varPN_rx25_cond42_site2/
 ```
 
 
@@ -80,11 +80,15 @@ Results in directory /usr/local/data/out/varPN_rx25_cond42_site2/
 Adds them all to the celery queue
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsbatch testdata/keys/
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/keys/varPN_rx25_cond42_site2')    5eca96d0-ba17-45ca-a5f2-b3c527e37611    PENDING
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/keys/varPN_rx25_cond43_site2')    3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsbatch testdata/plots/
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/plots/varPN_rx25_cond42_site2')    5eca96d0-ba17-45ca-a5f2-b3c527e37611    PENDING
+Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/plots/varPN_rx25_cond43_site2')    3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING
 ....
 ```
+
+To rerun them all, wiping out all previous results, run with `--purge`.
+
+To rerun only the tasks that previously failed, run with `--fix`.
 
 
 ### Check status at command line
@@ -96,7 +100,6 @@ vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus summary
   "SUCCESS": 228
 }
 ```
-
 
 
 

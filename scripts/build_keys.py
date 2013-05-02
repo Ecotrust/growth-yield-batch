@@ -9,8 +9,8 @@ indir/fvs/42.fvs
 indir/fvs/42.std  <-- our own thing, a single line for the stand info
 
 # OUTDIR
-indir/keys/varPN_rx17_cond42_site2/varPN_rx17_cond42_site2_original.key
-indir/keys/varPN_rx17_cond42_site2/42.fvs
+indir/plots/varPN_rx17_cond42_site2/varPN_rx17_cond42_site2_original.key
+indir/plots/varPN_rx17_cond42_site2/42.fvs
 
 Usage:
   build_keys.py DIR
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     args = docopt(__doc__, version='Build Keys 1.0')
 
     indir = os.path.abspath(args['DIR'])
-    outdir = os.path.join(indir, "keys")
+    outdir = os.path.join(indir, "plots")
     #outdir = os.path.abspath(args['OUTDIR'])
     if not os.path.exists(indir):
         raise Exception("%s does not exist" % indir)
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         stdinfo_text = open(stdinfo, 'r').read()
         assert os.path.exists(stdinfo)
         condid = os.path.splitext(os.path.basename(fvs))[0]
-        print "Working on condition", condid
+        print "Generating keyfiles for condition", condid
 
         for basekey in basekeys:
             key = basekey.replace("CONDID", "cond%s" % condid)
@@ -93,7 +93,7 @@ if __name__ == "__main__":
             shortkeyname = shortkeyname.replace("rx", "")
             shortkeyname = shortkeyname.replace("cond", "")
             shortkeyname = shortkeyname.replace("site", "")
-            print "  constructing", keyname, shortkeyname
+            #print "  constructing", keyname, shortkeyname
 
             keyoutdir = os.path.join(outdir, keyname)
             os.makedirs(keyoutdir)
