@@ -26,6 +26,8 @@ def square(z):
     return z ** 2
 
 
+
+
 @celery.task
 def fvs(datadir):
     assert os.path.isdir(datadir)
@@ -44,6 +46,7 @@ def fvs(datadir):
     assert os.path.isdir(tmpdir)
 
     # TODO more error checking
+    # make sure we have 6 out files and 6 trl files? 
     # if not pass_tests():
     #     raise Exception("Tests failed")
 
@@ -60,7 +63,7 @@ def fvs(datadir):
     import compress
     compress.tar_bzip2_directory(tmpdir, outbz)
     if not os.path.exists(outbz):
-        raise Exception()
+        raise Exception("%s was not created" % outbz)
 
     # clean up temp data
     import shutil
@@ -69,7 +72,7 @@ def fvs(datadir):
     # Update task record
     request = current_task.request
     task_record = Task.query.filter_by(id=request.id).first()
-    task_record.result = outdir
+    task_record.result = os.path.join('/usr/local/data/out/%s.csv' % uid)
     db.session.commit()
 
     return proc.returncode

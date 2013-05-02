@@ -88,7 +88,7 @@ do
         #cat $PREFIX.input.rsp | /usr/bin/wine $EXE > $PREFIX.fvs.log 2>&1
 
         if [ $? -ne 0 ]; then
-            echo "FVS failed. Try: '''cat $PREFIX.input.rsp | /usr/bin/wine $EXE''' " > $PREFIX.error.log
+            echo "FVS failed. Try: '''cd $TEMPDIR && cat $PREFIX.input.rsp | /usr/bin/wine $EXE''' " > $PREFIX.error.log
             cat $PREFIX.error.log
             exit 1
 		fi
