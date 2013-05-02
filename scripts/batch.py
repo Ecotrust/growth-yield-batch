@@ -6,7 +6,7 @@ finds all subdirectories (which are presumed to be a data dir for the fvs script
 and fires off a celery task for each
 
 Usage:
-  batch.py BATCHDIR [--purge] 
+  batch.py BATCHDIR [--purge] [--fix] 
   batch.py (-h | --help)
   batch.py --version
 
@@ -14,6 +14,7 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
   --purge       Clear out a previous batch run; cancel all current jobs, wipe task records.
+  --fix         Clear out a previous batch run and rerun only those that had failed.
 """
 from docopt import docopt
 import os
@@ -50,6 +51,17 @@ if __name__ == "__main__":
             db.session.delete(task_record)
             db.session.commit()
 
+    # if --fix, rerun tasks that have failed
+    if args['--fix']:
+        started = Task.query.filter_by(batchdir=batchdir).all()
+        for task_record in started:
+            task = fvs.AsyncResult(task_record.id)
+            if task.status == "FAILURE":
+                print "Revoking failed task ", task_record.id
+                # delete the task record
+                db.session.delete(task_record)
+                db.session.commit()
+
     for datadir in datadirs:
         fulldatadir = os.path.join(batchdir, datadir)
 
@@ -68,4 +80,3 @@ if __name__ == "__main__":
             db.session.commit()
 
             print "Sent task to queue\tfvs('%s')\t%s\t%s" % (fulldatadir, task.id, task.status)
-    
