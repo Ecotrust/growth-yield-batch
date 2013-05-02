@@ -119,7 +119,7 @@ file { "/usr/local/data":
 file { "/usr/local/data/out":
      ensure => "directory",
      owner  => "celery",
-     group  => "vagrant",
+     group  => "ubuntu",
      require => File['/usr/local/data'],
      mode   => 775,
 }
