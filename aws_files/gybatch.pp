@@ -116,6 +116,14 @@ file { "/usr/local/data":
      mode   => 775,
 }
 
+file { "/usr/local/data/out":
+     ensure => "directory",
+     owner  => "celery",
+     group  => "vagrant",
+     require => File['/usr/local/data'],
+     mode   => 775,
+}
+
 file { "/root/.wine":
     # hack to "solve" ticket #14
     ensure => "directory",
