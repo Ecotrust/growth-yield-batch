@@ -303,12 +303,12 @@ def extract_data(indir):
     summary_df = DataFrame(summary_rows)
     carbon_df = DataFrame(carbon_rows)
     harvested_carbon_df = DataFrame(harvested_carbon_rows)
-    c_merge = merge(carbon_df, harvested_carbon_df, how='outer', 
-                     on=['var', 'rx', 'cond', 'site','offset', 'year'])
-    ac_merge = merge(c_merge, activity_df, how='outer', 
-                     on=['var', 'rx', 'cond', 'site','offset', 'year'])
+    c_merge = merge(carbon_df, harvested_carbon_df, how='outer',
+                    on=['var', 'rx', 'cond', 'site', 'offset', 'year'])
+    ac_merge = merge(c_merge, activity_df, how='outer',
+                     on=['var', 'rx', 'cond', 'site', 'offset', 'year'])
     acs_merge = merge(ac_merge, summary_df, how="outer",
-                      on=['var', 'rx', 'cond', 'site','offset', 'year'])
+                      on=['var', 'rx', 'cond', 'site', 'offset', 'year'])
 
     return acs_merge
 

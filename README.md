@@ -22,8 +22,7 @@ Major goals include:
 * Copy the contents of `C:/FVSBin` to `./fvsbin` ... they will be gitignored so not checked into the repo
 * Start virtual machine with `vagrant up`
 * You will have to restart services with `fab dev restart_services`
-* Run the automated batch test with `fab dev run_test_batch`
-* To track status of tasks, visit the celery flower interface at http://localhost:5555
+* To track status of tasks, visit the celery flower interface at http://localhost:8080
 
 ## Outline
 
@@ -36,9 +35,9 @@ you need to start with data like this:
 testdata/
 |-- fvs
 |   |-- 42.fvs
-|   |-- 42.stdinfo   <---- this file simply contains a single line with the STDINFO keyword
+|   |-- 42.std   <---- this file simply contains a single line with the STDINFO keyword
 |   |-- 43.fvs
-|   `-- 43.stdinfo
+|   `-- 43.std
 `-- rx
     |-- varPN_rx25_CONDID_site2.key
     `-- varPN_rx25_CONDID_site3.key
@@ -91,17 +90,12 @@ Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/keys/va
 ### Check status at command line
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus
+vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus summary
 {
-  "PENDING": 2,
-  "SUCCESS": 1
+  "PENDING": 72,
+  "SUCCESS": 228
 }
-5eca96d0-ba17-45ca-a5f2-b3c527e37611    SUCCESS /usr/local/apps/growth-yield-batch/testdata     varPN_rx25_cond42_site2       /usr/local/data/out/varPN_rx25_cond42_site2
-3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING /usr/local/apps/growth-yield-batch/testdata     varPN_rx25_cond43_site2       None
 ```
-
-
-
 
 
 

@@ -33,48 +33,43 @@ def fvs(datadir):
     args = ['/usr/local/bin/fvs', datadir]
     print "Running %s" % ' '.join(args)
     proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (out, err) = proc.communicate()
-    print out  # how to stream this?
-    print err
+    (fvsout, fvserr) = proc.communicate()
+    print fvsout  # how to stream this?
+    print fvserr
+    if proc.returncode != 0:
+        raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, fvsout, fvserr))
 
     uid = os.path.basename(datadir)
-    outdir = '/usr/local/data/out/' + uid.replace("_", "/")
-    assert os.path.isdir(outdir)
+    tmpdir = os.path.join('/tmp/', uid)  # .replace("_", "/")
+    assert os.path.isdir(tmpdir)
 
-    if proc.returncode == 0:
-        # Update task record
-        request = current_task.request
-        task_record = Task.query.filter_by(id=request.id).first()
-        task_record.result = outdir
-        db.session.commit()
-    else:
-        raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
+    # TODO more error checking
+    # if not pass_tests():
+    #     raise Exception("Tests failed")
 
-    return proc.returncode  # TODO tempdir if failed, output dir if good
+    # parse data from fvs outputs
+    outcsv = os.path.join('/usr/local/data/out/', uid + ".csv")
+    import extract
+    df = extract.extract_data(tmpdir)
+    df.to_csv(outcsv)
+    if not os.path.exists(outcsv):
+        raise Exception("%s not created" % outcsv)
 
+    # tar/bzip the files to their final home
+    outbz = os.path.join('/usr/local/data/out/', uid + ".tar.bz")
+    import compress
+    compress.tar_bzip2_directory(tmpdir, outbz)
+    if not os.path.exists(outbz):
+        raise Exception()
 
-@celery.task
-def parse(outdir):
-    assert os.path.isdir(outdir)
+    # clean up temp data
+    import shutil
+    shutil.rmtree(tmpdir)
 
-    args = ['/usr/local/bin/fvs', datadir]
-    print "Running %s" % ' '.join(args)
-    proc = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (out, err) = proc.communicate()
-    print out  # how to stream this?
-    print err
+    # Update task record
+    request = current_task.request
+    task_record = Task.query.filter_by(id=request.id).first()
+    task_record.result = outdir
+    db.session.commit()
 
-    uid = os.path.basename(datadir)
-    outdir = '/usr/local/data/out/' + uid.replace("_", "/")
-    assert os.path.isdir(outdir)
-
-    if proc.returncode == 0:
-        # Update task record
-        request = current_task.request
-        task_record = Task.query.filter_by(id=request.id).first()
-        task_record.result = outdir
-        db.session.commit()
-    else:
-        raise Exception("fvs('%s') celery task failed ######## OUT ### %s ####### ERR ### %s" % (datadir, out, err))
-
-    return proc.returncode  # TODO tempdir if failed, output dir if good
+    return proc.returncode
