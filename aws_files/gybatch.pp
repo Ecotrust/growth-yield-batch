@@ -84,7 +84,7 @@ package {'wine':
 
 class { "celery::server":
   requirements => "/usr/local/apps/growth-yield-batch/requirements.txt",
-  require => Package['python-pip']
+  require => [Package['python-pip'], Package['build-essential'], Package['python-numpy'], Package['python-virtualenv'], Package['python-dev']]
 }
 
 file { '/var/celery/tasks.py':
