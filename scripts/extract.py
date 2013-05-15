@@ -235,6 +235,9 @@ def extract_data(indir):
                     within_year = int(line[7:11])
                     data['year'] = within_year
                     data.update(info)
+                    # initialize year with null values for all variables
+                    for var in looking_for:
+                        data[var] = None
                 else:
                     var = line[24:34].strip()
                     if var in looking_for:
