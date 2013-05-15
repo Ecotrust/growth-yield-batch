@@ -240,8 +240,9 @@ def extract_data(indir):
                         data[var] = None
                 else:
                     var = line[24:34].strip()
-                    if var in looking_for:
-                        val = float(line[63:72])
+                    status = line[40:59].strip()  # disregard NOT DONE or DELETED OR CANCELED
+                    if status.startswith("DONE IN") and var in looking_for:
+                        val = float(line[61:72])  # Is this wide enough??
                         data[var] = val
 
         ############# Extract Treelist info
