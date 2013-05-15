@@ -62,7 +62,16 @@ if __name__ == "__main__":
                 db.session.delete(task_record)
                 db.session.commit()
 
+    print "Sending all tasks to the queue... patience..."
+    i = 0
+    j = 1000
+    n = len(datadirs)
     for datadir in datadirs:
+        # output every jth iteration
+        i += 1
+        if i % j == 0:
+            print "  sent %s of %s" % (i, n)
+
         fulldatadir = os.path.join(batchdir, datadir)
 
         # check database to see if we started a currently running job for this datadir
@@ -70,7 +79,7 @@ if __name__ == "__main__":
 
         if started:
             task = fvs.AsyncResult(started.id)
-            print "Already started\tfvs('%s')\t%s\t%s" % (fulldatadir, task.id, task.status)
+            #print "Already started\tfvs('%s')\t%s\t%s" % (fulldatadir, task.id, task.status)
         else:  
             task = fvs.apply_async(args=(fulldatadir,))
 
@@ -79,4 +88,4 @@ if __name__ == "__main__":
             db.session.add(task_record)
             db.session.commit()
 
-            print "Sent task to queue\tfvs('%s')\t%s\t%s" % (fulldatadir, task.id, task.status)
+            #print "Sent task to queue\tfvs('%s')\t%s\t%s" % (fulldatadir, task.id, task.status)
