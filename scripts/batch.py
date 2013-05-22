@@ -43,8 +43,8 @@ if __name__ == "__main__":
         c.control.purge()
 
         started = Task.query.filter_by(batchdir=batchdir).all()
+        print "Revoking tasks... "
         for task_record in started:
-            print "Revoking task ", task_record.id
             # stop the worker
             c.control.revoke(task_record.id, terminate=True, signal="SIGTERM")
             # delete the task record
@@ -89,3 +89,5 @@ if __name__ == "__main__":
             db.session.commit()
 
             #print "Sent task to queue\tfvs('%s')\t%s\t%s" % (fulldatadir, task.id, task.status)
+
+    print "Added %d plots to the queue" % n

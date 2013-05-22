@@ -182,17 +182,36 @@ def extract_data(indir):
                 summary_rows.append(data)
 
         ############# Extract Activity Summary
-        """
-        NSONEST             spotted owl nesting suitability
-        NSOFRG               spotted owl foraging suitability
-        NSODIS                spotted owl dispersal suitability
-        PP_BTL                                 mountain pine beetle hazard rating for ponderosa pine
-        LP_BTL                  mountain pine beetle hazard rating for lodgepole pine
-        ES_BTL                  spruce beetle hazard rating for Englemann spruce
-        FIREHZD               wildfire hazard rating
-        DDI                 diameter diversity index
-        """
+        # List of Compute Variables to look for
         looking_for = [
+            "PINE_HRV",
+            "SPRC_HRV",
+            "PINE_BF",
+            "SPRC_BF",
+            "CEDR_HRV",
+            "DF_HRV",
+            "HW_HRV",
+            "MNCONHRV",
+            "MNHW_HRV",
+            "WJ_HRV",
+            "WW_HRV",
+            "CEDR_BF",
+            "DF_BF",
+            "HW_BF",
+            "MNCONBF",
+            "MNHW_BF",
+            "WJ_BF",
+            "WW_BF",
+            "CUT_TYPE",
+            "SM_CF",
+            "SM_HW",
+            "SM_TPA",
+            "LG_CF",
+            "LG_HW",
+            "LG_TPA",
+            "CH_CF",
+            "CH_HW",
+            "CH_TPA",
             "NSONEST",
             "NSOFRG",
             "NSODIS",
@@ -200,7 +219,8 @@ def extract_data(indir):
             "LP_BTL",
             "ES_BTL",
             "FIREHZD",
-            "DDI",
+            "SPPRICH",
+            "SPPSIMP"
         ]
 
         ready = False
@@ -323,4 +343,48 @@ if __name__ == "__main__":
     csv = os.path.abspath(args['OUTCSV'])
 
     df = extract_data(indir)
-    df.to_csv(csv)
+    df.to_csv(csv, index=False, header=True)
+
+    keys = [x.lower() for x in df.columns]
+    vals = [x.name for x in df.dtypes]
+
+    print "-" * 80
+    print "class FVSAggregate(models.Model):"
+    for colname, coltype in zip(keys, vals):
+        if coltype == "float64":
+            print "    %s = models.FloatField(null=True, blank=True)" % colname
+        elif coltype == "int64":
+            print "    %s = models.IntegerField(null=True, blank=True)" % colname
+        elif coltype == "object" and colname in ['var']:
+            print "    %s = models.CharField(max_length=2)" % colname
+        elif coltype == "object" and colname in ['site', 'cond', 'offset', 'rx']:
+            print "    %s = models.IntegerField()" % colname
+        else:  # default
+            print "    %s = models.FloatField(null=True, blank=True)" % colname
+
+    print "-" * 80
+    print """
+            COPY trees_fvsaggregate(%s)
+            FROM '%s'
+            DELIMITER ',' CSV HEADER;""" % (",".join(['"%s"' % x for x in keys]), "merged_file.csv")
+
+    print "-" * 80
+    print """
+            cd /usr/local/data/out
+
+            # copy header
+            sed -n 1p first.csv > merged_file.csv
+
+            #copy all but the first line from all other files
+            for i in *.csv; do sed 1d $i; done >> merged_file.csv"""
+
+    print "-" * 80
+    print """
+    1. Run fvsbatch
+    2. copy model defn
+    3. schemamigration
+    4. migrate
+    5. sed merge csvs
+    6. postgres copy
+    7. create indicies
+    """

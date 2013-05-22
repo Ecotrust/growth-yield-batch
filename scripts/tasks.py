@@ -64,7 +64,8 @@ def fvs(datadir):
     outcsv = os.path.join(OUTDIR, uid + ".csv")
     import extract
     df = extract.extract_data(tmpdir)
-    df.to_csv(outcsv)
+    df.to_csv(outcsv, index=False, header=True)
+
     if not os.path.exists(outcsv):
         err = "FVS ran in %s but %s was not created" % (tmpdir, outcsv)
         write_err(uid, err)

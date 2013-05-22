@@ -50,8 +50,9 @@ def restart_services():
     celeryd is not chdired to /var/celery and celeryflower doesnt pick up tasks.
     This is a band-aid to "fix" the issue
     """
-    run('sudo service celeryd restart && sudo service supervisor stop && sudo service supervisor start')
-    
+    run('sudo service celeryd restart && sudo supervisorctl restart all')
+
+
 def copy_fussy():
     run('sudo mkdir -p /usr/local/apps')
     run('sudo mkdir -p /usr/local/apps/growth-yield-batch')
@@ -69,7 +70,7 @@ def copy_fussy():
     run('sudo mkdir -p /vagrant')
     run('sudo chgrp -R ubuntu /vagrant')
     run('sudo chmod -R 775 /vagrant')
-    
+
     put('./fvsbin', '/usr/local/apps/growth-yield-batch/fvsbin')
     put('./puppet', '/usr/local/apps/growth-yield-batch/puppet')
     put('./scripts', '/usr/local/apps/growth-yield-batch/scripts')
@@ -77,9 +78,9 @@ def copy_fussy():
     put('./requirements.txt', '/usr/local/apps/growth-yield-batch/')
     put('./puppet/manifests', '/tmp/vagrant-puppet/manifests')
     put('./puppet/modules', '/tmp/vagrant-puppet/modules')
-    put('./requirements.txt', '/vagrant/requirements.txt')  #expected in puppet-script
+    put('./requirements.txt', '/vagrant/requirements.txt')  # expected in puppet-script
 
-    
+
 def copy():
     run('sudo mkdir -p /usr/local/apps')
     run('sudo mkdir -p /usr/local/apps/growth-yield-batch')
