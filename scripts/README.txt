@@ -1,0 +1,1 @@
+see https://github.com/Ecotrust/land_owner_tools/wiki/Fixture-management
