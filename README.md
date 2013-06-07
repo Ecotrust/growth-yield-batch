@@ -93,16 +93,34 @@ To rerun only the tasks that previously failed, run with `--fix`.
 
 ### Check status at command line
 
+The old way (NOT RECOMENDED AS it seems to have bad side effects and bad performance):
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus summary
+$ fvsstatus summary
 {
   "PENDING": 72,
   "SUCCESS": 228
 }
 ```
 
+The new way, to avoid costly queries, just :
 
+```
+$ ls -1 /usr/local/data/out/var*csv | wc -l; date
+396
+Fri Jun  7 15:53:31 UTC 2013
+```
 
+### Combining csvs
+
+```
+cd /usr/local/data/out
+# copy header
+sed -n 1p `ls var*csv | head -n 1` > merged.csv
+#copy all but the first line from all other files
+for i in var*.csv; do sed 1d $i >> merged.csv ; done
+```
+
+For next steps, please review https://github.com/Ecotrust/land_owner_tools/wiki/Fixture-management#fvsaggregate-and-conditionvariantlookup
 
 ## Notes
 
@@ -111,7 +129,7 @@ vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsstatus summary
 
 ### FVS Directory Structure and Naming requirements
 
-In order to batch process runs with this system, it's important that the input files conform to this file structure outlined below... *Work in progress; three potential strategies outlined below*
+In order to batch process runs with this system, it's important that the input files conform to this file structure outlined below... 
 
 Each run is named according to the following scheme:
 ```
