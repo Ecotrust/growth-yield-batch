@@ -17,6 +17,7 @@ from pandas import DataFrame, merge
 import glob
 import os
 import re
+global_errorfile = "/tmp/errors.txt"
 
 
 def parse_name(filename):
@@ -265,6 +266,32 @@ def extract_data(indir):
                         val = float(line[61:72])  # Is this wide enough??
                         data[var] = val
 
+        ############# Extract Errors and Warnings
+        ready = False
+        data = None
+        with open(outfile, 'r') as fh:
+            with open(global_errorfile, 'a') as errfh:
+                errfh.write("\n\n\n\n%s\n\n" % (outfile,))
+                for line in fh:
+                    if "WARNING" in line or "ERROR" in line:
+                        if line.startswith("RATIO OF STANDARD ERRORS"):
+                            continue
+                        # We've found a error/warning, grab the next 3 lines
+                        ready = True
+                        still_counting = 3
+
+                    if not ready:
+                        continue
+
+                    if ready and still_counting == 0:
+                        errfh.write("--\n")
+                        ready = False
+                        continue
+
+                    errfh.write(line.strip())
+                    errfh.write("\n")
+                    still_counting -= 1
+
         ############# Extract Treelist info
         ## TODO: There might be a way to accomplish this WITHOUT parsing the treelists
         ## using compute variables and defining merchantable timber
@@ -388,3 +415,5 @@ if __name__ == "__main__":
     6. postgres copy
     7. create indicies
     """
+    print
+    print "global_errorfile is %s" % global_errorfile
