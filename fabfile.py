@@ -17,16 +17,9 @@ def dev():
 
 def prod():
     """ Use production server settings """
-    servers = []
+    servers = PROD_SERVERS
     env.hosts = servers
-    return servers
-
-
-def stage():
-    """ Use staging server settings """
-    env.key_filename = AWS_KEY_FILENAME
-    servers = [AWS_PUBLIC_DNS]
-    env.hosts = servers
+    env.key_filename = AWS_KEY_FILENAME_PROD
     return servers
 
 
@@ -111,3 +104,8 @@ def provision():
     # getting references to group 'vagrant' - fixed only source I could find: growth-yield-batch\puppet\modules\python\manifests\venv\isolate.pp
     # -- found another in gybatch.pp
     # -- and another in celeryflower.conf
+
+
+def progress():
+    run('ls -1 /usr/local/data/out/*.csv | wc -l')
+    run('ls -1 /usr/local/data/out/*.err | wc -l')
