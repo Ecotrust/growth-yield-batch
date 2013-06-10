@@ -1,4 +1,4 @@
-from celery import Celery, current_task
+from celery import Celery
 import sys
 import os
 import subprocess
@@ -8,9 +8,6 @@ celery = Celery()
 sys.path.append("/var/celery")
 sys.path.append("/usr/local/apps/growth-yield-batch/scripts")
 celery.config_from_object('celeryconfig')
-
-
-from models import Task, db
 
 
 class FVSException(Exception):
@@ -74,11 +71,5 @@ def fvs(datadir):
     # clean up temp data
     import shutil
     shutil.rmtree(tmpdir)
-
-    # Update task record
-    request = current_task.request
-    task_record = Task.query.filter_by(id=request.id).first()
-    task_record.result = os.path.join(OUTDIR, '%s.csv' % uid)
-    db.session.commit()
 
     return proc.returncode
