@@ -107,5 +107,5 @@ def provision():
 
 
 def progress():
-    run('ls -1 /usr/local/data/out/*.csv | wc -l')
-    run('ls -1 /usr/local/data/out/*.err | wc -l')
+    run('find /usr/local/data/out/ -name "*.csv" | wc -l')
+    run('find /usr/local/data/out/ -name "*.err" | wc -l')
