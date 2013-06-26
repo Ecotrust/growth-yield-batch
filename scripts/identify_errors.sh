@@ -1,10 +1,10 @@
 #!/bin/bash
-datadir=/mnt/ebs1a
+datadir=/mnt/ebs1A
 
 echo "1. identify explicit errors"
 echo
 
-#mkdir -p /tmp/to_fix
+mkdir -p /tmp/to_fix
 
 for i in $datadir/out/var*.err; 
 do
@@ -14,6 +14,8 @@ do
    echo $datadir/realdata/$var/plots/$name
    #cp -r $datadir/realdata/$var/plots/$name /tmp/to_fix/$name
 done
+
+exit 
 
 echo "2. identify original data that hasn't got csvs or bz2s (not yet run for whatever reason)"
 echo 
