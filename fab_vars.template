@@ -1,3 +1,3 @@
-KEY_FILENAME = '[YOUR PRIVATE KEY FOR VAGRANT]'
-AWS_KEY_FILENAME = ['C:/YOUR_FILE.pem']
-AWS_PUBLIC_DNS = 'ubuntu@PUBLIC_DNS'
+KEY_FILENAME = 'keys/insecure_private_key'
+AWS_KEY_FILENAME_PROD = 'keys/mykey.pem'
+PROD_SERVERS = ['ubuntu@PUBLIC_IP']
