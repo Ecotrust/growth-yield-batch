@@ -10,6 +10,7 @@ import csv
 
 CSVDIR = "/mnt/ebsFINAL/out/"
 FILTER = "varPN_*.csv"
+DATABASE = "data.db"
 
 
 def data_generator():
@@ -21,7 +22,7 @@ def data_generator():
 
 
 if __name__ == "__main__":
-    con = sqlite3.connect("data.db")
+    con = sqlite3.connect(DATABASE)
     cur = con.cursor()
 
     try:
@@ -104,5 +105,3 @@ if __name__ == "__main__":
 
     con.commit()
     cur.close()
-
-
