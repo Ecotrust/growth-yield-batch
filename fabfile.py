@@ -107,6 +107,7 @@ def provision():
 
 
 def progress():
+    run('date')
     run('find /usr/local/data/out/ -name "*.csv" | wc -l')
     run('find /usr/local/data/out/ -name "*.err" | wc -l')
     run('du -h /usr/local/data/out/ --max-depth=0')
