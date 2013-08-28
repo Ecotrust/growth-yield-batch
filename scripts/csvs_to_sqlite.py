@@ -105,3 +105,11 @@ if __name__ == "__main__":
 
     con.commit()
     cur.close()
+
+    print """ Now manually create indexes:
+        CREATE INDEX idx_trees_fvsaggregate_var ON trees_fvsaggregate (var);
+        CREATE INDEX idx_trees_fvsaggregate_year ON trees_fvsaggregate (year);
+        CREATE INDEX idx_trees_fvsaggregate_cond ON trees_fvsaggregate (cond);
+        CREATE INDEX idx_trees_fvsaggregate_rx ON trees_fvsaggregate (rx);
+        CREATE INDEX idx_trees_fvsaggregate_offset ON trees_fvsaggregate ("offset");
+    """
