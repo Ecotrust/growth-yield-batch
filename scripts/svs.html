@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="./libgif.js"></script>
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+		<title>
+			Example gif
+		</title>
+	</head>
+	
+	<body>
+		<center>
+			<div class="row">
+			  <div class="col-md-3">
+			  	<h4>Grow Only</h4>
+			  </div>
+			  <div class="col-md-3">
+			  	<h4> 40 yr rotation, Higher retention, mixed spp.</h4>
+			  </div>
+			  <div class="col-md-3">
+			  	<h4> 10 yr repeated thinning </h4>
+			  </div>
+			  <div class="col-md-3">
+			  	<h4> 75 yr rotation with PCT </h4>
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="col-md-3">
+				<img id="example1" src="../gifs/varPN_rx1_cond29106_site2_00.gif" rel:animated_src="../gifs/varPN_rx1_cond29106_site2_00.gif" rel:auto_play="0"/>
+			  </div>
+			  <div class="col-md-3">
+				<img id="example2" src="../gifs/varPN_rx6_cond29106_site2_00.gif" rel:animated_src="../gifs/varPN_rx6_cond29106_site2_00.gif" rel:auto_play="0"/>
+			  </div>
+			  <div class="col-md-3">
+				<img id="example3" src="../gifs/varPN_rx24_cond29106_site2_00.gif" rel:animated_src="../gifs/varPN_rx24_cond29106_site2_00.gif" rel:auto_play="0"/>
+			  </div>
+			  <div class="col-md-3">
+				<img id="example4" src="../gifs/varPN_rx21_cond29106_site2_00.gif" rel:animated_src="../gifs/varPN_rx21_cond29106_site2_00.gif" rel:auto_play="0"/>
+			  </div>
+			</div>
+
+			<br>
+			<script type="text/javascript">
+			    var sups = [];
+
+                function createCallback(id) {
+                	return function loadCallback() {
+                		console.log(id);
+                	};
+                };
+
+				var sup1 = new SuperGif({ gif: document.getElementById('example1') } );
+				sup1.load(createCallback(1));
+				sups.push(sup1);
+				var sup2 = new SuperGif({ gif: document.getElementById('example2') } );
+				sup2.load(createCallback(2));
+				sups.push(sup2);
+				var sup3 = new SuperGif({ gif: document.getElementById('example3') } );
+				sup3.load(createCallback(3));
+				sups.push(sup3);
+				var sup4 = new SuperGif({ gif: document.getElementById('example4') } );
+				sup4.load(createCallback(4));
+				sups.push(sup4);
+
+                var step = 0; 
+                var maxstep = 19;
+				function moveAll(x, resetx) {
+					step += x;
+					if (resetx) {
+					 	step = 0;
+					}
+					for (var i = sups.length - 1; i >= 0; i--) {
+						sup = sups[i];
+						sup.move_to(step);
+					};
+				};
+
+				$(document).ready(function() {
+					$("#timebar").mousemove(function(e) {
+					  var parentOffset = $(this).offset(); 
+					  var relX = e.pageX - parentOffset.left;
+					  var pct = relX / $(this).width();
+					  var newstep = Math.round(maxstep * pct);
+					  if (newstep !== step) {
+					      step = newstep;	
+						  moveAll(0); // no relative motion; already set manually
+					  }
+					});
+				});
+			</script>
+			<!--
+			<a href="javascript:;" onmousedown="sup1.pause(); sup2.pause(); return false;">Pause</a> |
+			<a href="javascript:;" onmousedown="sup1.move_to(0); sup2.move_to(0); return false;">Restart</a> |
+			<a href="javascript:;" onmousedown="sup1.play(); sup2.play(); return false;">Play</a> | 
+			<a href="javascript:;" onmousedown="sup1.move_relative(-1); sup2.move_relative(-1); return false;"> &lt;&lt; Step back</a> |
+			<a href="javascript:;" onmousedown="sup1.move_relative(1); sup2.move_relative(1); return false;">Step forward &gt;&gt;</a>
+			<a href="javascript:;" onmousedown="moveAll(0, true); return false;"> Begin</a> |
+			<a href="javascript:;" onmousedown="moveAll(-1); return false;"> &lt;&lt; Step back</a> |
+			<a href="javascript:;" onmousedown="moveAll(1); return false;">Step forward &gt;&gt;</a>
+			-->
+
+			<div id="timebar" style="padding:62px; width:90%; background-color:lightgreen; border:1px solid grey;">
+              <h3 style="float:left;">2013</h3>
+              <h3 style="float:right;">2113</h3>
+			</div>
+
+
+
+
+		</center>
+
+	</body>
+
+</html>
