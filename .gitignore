@@ -25,3 +25,5 @@ Vagrantfile
 *.pem
 fab_vars.py
 celeryflower-passwords
+__*
+testdata/plots
