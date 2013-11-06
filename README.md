@@ -1,6 +1,6 @@
 # growth-yield-batch
 
-### An automated batch process to predict of "growth and yield" for forest vegetation plots
+### An automated batch process to prediction of growth and yield for forest vegetation plots
 
 Major goals include:
 
