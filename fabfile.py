@@ -44,6 +44,7 @@ def restart_services():
     This is a band-aid to "fix" the issue
     """
     run('sudo service celeryd restart && sudo supervisorctl restart all')
+    run('sudo service nginx restart')
 
 
 def copy_fussy():
