@@ -23,6 +23,10 @@ package { "git-core":
     ensure => "latest"
 }
 
+package { "python-jinja2":
+    ensure => "latest"
+}
+
 package { "nginx-full":
     ensure => "latest"
 }
