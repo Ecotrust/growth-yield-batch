@@ -81,9 +81,8 @@ if __name__ == "__main__":
         condid = os.path.splitext(os.path.basename(fvs))[0]
         print "Generating keyfiles for condition", condid
 
-        stdinfo = fvs.replace(".fvs", ".std")
-        stdinfo_text = open(stdinfo, 'r').read()
-        assert os.path.exists(stdinfo)
+        stdinfo_path = fvs.replace(".fvs", ".std")
+        stdinfo = open(stdinfo_path, 'r').read().strip()
 
         cli = fvs.replace(".fvs", ".cli")
         assert os.path.exists(cli)
@@ -101,6 +100,9 @@ if __name__ == "__main__":
                 print "\t", out
                 outdir = os.path.join(plotsdir, out)
                 os.makedirs(outdir)
+
+                stdident = "%s    var%s_rx%s_cond%s_site%s" % (
+                    condid, variant, rx, condid, site)
 
                 cli = fvs.replace('.fvs','.cli')
                 std = fvs.replace('.fvs','.std')
