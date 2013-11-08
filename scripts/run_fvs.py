@@ -17,7 +17,8 @@ Options:
 from docopt import docopt
 import os
 import glob
-from shutil import copytree
+from extract import extract_data
+from shutil import copytree, rmtree
 from subprocess import Popen, PIPE
 
 
@@ -26,25 +27,32 @@ def apply_fvs_to_plotdir(plotdir):
     from plots/varWC_rx1_cond31566, 
         write working dir to ../../work/varWC_rx1_cond31566
     """
+    print plotdir
     assert os.path.exists(plotdir)
     path = os.path.normpath(plotdir)
     dirname = path.split(os.sep)[-1]
+
+    final = os.path.abspath(os.path.join(plotdir, "..", "..", "final"))
+    if not os.path.exists(final):
+        os.makedirs(final)
+
     work_base = os.path.abspath(os.path.join(plotdir, "..", "..", "work"))
     if not os.path.exists(work_base):
         os.makedirs(work_base)
-
-    # TODO overwrite, bail or make multiple work dirs? Going for the later now...
     work = os.path.join(work_base, dirname)
-    original_work = work
-    version = 2
-    while os.path.exists(work):
-        work = original_work + "_%d" % version
-        version += 1
-
+    if os.path.exists(work):
+        rmtree(work)
     copytree(plotdir, work)
+
     keys = glob.glob(os.path.join(work, '*.key'))
     for key in keys:
         exectute_fvs(key)
+        pass
+
+    csv = os.path.join(final, dirname + ".csv")
+    df = extract_data(work)
+    df.to_csv(csv, index=False, header=True)
+    print "CSV written to %s" % csv
 
 
 def exectute_fvs(key):
@@ -60,6 +68,9 @@ def exectute_fvs(key):
         extension = ".exe"
     fvsbin = os.path.join(fvsbin_dir, 'FVS%s' % variant + extension)
 
+    error_logfile = 'log.error.txt'
+    logfile = 'log.output.txt'
+
     cmd = [fvsbin, '--keywordfile=%s' % basename]
     print ' '.join(cmd)
 
@@ -70,25 +81,29 @@ def exectute_fvs(key):
     print fvsout
     print fvserr
 
-    # if [ $? -ne 0 ]; then
-    #     echo "FVS failed. Try: '''cd $TEMPDIR && cat $PREFIX.input.rsp | /usr/bin/wine $EXE''' " > $PREFIX.error.log
-    #     cat $PREFIX.error.log
-    #     exit 1
-    # fi
-    # if [ -f $PREFIX.err ]; then
-    #     echo "\n !!!!!!!!!!! \n FVS found a $PREFIX.err file" >> $PREFIX.error.log
-    #     # just warn, don't exit
-    #     # exit 1
-    # fi
-    # if [ ! -f $PREFIX.out ] || [ ! -f $PREFIX.trl ]; then
-    #     throw "FVS failed to produce necessary output files" >> $PREFIX.error.log
-    #     cat $PREFIX.error.log
-    #     exit 1
-    # fi
+    with open(logfile, 'w') as log:
+        log.write("[%s]" % key)
+        log.write("\n")
+        log.write(fvsout)
+        log.write("\n")
 
-    print "TODO: WE CREATE FINAL DIR"
-    print "TODO: WE EXTRACT csv FROM THE .out FILE"
+    has_trl = False
+    has_out = False
+    if os.path.exists(key.replace(".key", ".trl")):
+        has_trl = True
+    if os.path.exists(key.replace(".key", ".trl")):
+        has_out = True
 
+    if fvserr or not has_trl or not has_out:
+        with open(error_logfile, 'w') as log:
+            log.write("[%s]" % key)
+            log.write("\n")
+            log.write(fvserr)
+            if not has_trl:
+                log.write("NO .TRL FILE!")
+            if not has_out:
+                log.write("NO .OUT FILE!")
+            log.write("\n")
 
 if __name__ == "__main__":
     args = docopt(__doc__, version='2.0')

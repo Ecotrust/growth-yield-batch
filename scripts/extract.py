@@ -22,16 +22,17 @@ global_errorfile = "/tmp/errors.txt"
 
 def parse_name(filename):
     """
-    >>> parse_name("/path/to/some/varPN_rx4_cond43_site2_00.key")
-    >>> parse_name("varPN_rx4_cond43_site2_00.key")
-    >>> parse_name("varPN_rx4_cond43_site2_00")
+    >>> parse_name("/path/to/some/varWC_rx25_cond31566_site3_climNoClimate_off20.key")
+    >>> parse_name("varWC_rx25_cond31566_site3_climNoClimate_off20.key")
+    >>> parse_name("varWC_rx25_cond31566_site3_climNoClimate_off20")
 
-    {'var': 'PN', 'cond': '43', 'rx': '4', 'site': '2', 'offset': '00'}
+    {'var': 'WC', 'cond': '31566', 'rx': '25', 'site': '3', 'offset': '20', 'climate': 'NoClimate'}
     """
     basename = os.path.splitext(os.path.basename(filename))[0]
-    exp = re.compile("var([a-zA-Z]+)_rx([0-9a-zA-Z]+)_cond([0-9a-zA-Z]+)_site([0-9a-zA-Z]+)_([0-9]+)")
+    print basename
+    exp = re.compile("var([a-zA-Z]+)_rx([0-9a-zA-Z]+)_cond([0-9a-zA-Z]+)_site([0-9a-zA-Z]+)_clim([0-9a-zA-Z-]+)_off([0-9]+)")
     parts = exp.match(basename).groups()
-    keys = ("var", "rx", "cond", "site", "offset")
+    keys = ("var", "rx", "cond", "site", "climate", "offset")
     return dict(zip(keys, parts))
 
 
@@ -355,11 +356,11 @@ def extract_data(indir):
     carbon_df = DataFrame(carbon_rows)
     harvested_carbon_df = DataFrame(harvested_carbon_rows)
     c_merge = merge(carbon_df, harvested_carbon_df, how='outer',
-                    on=['var', 'rx', 'cond', 'site', 'offset', 'year'])
+                    on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
     ac_merge = merge(c_merge, activity_df, how='outer',
-                     on=['var', 'rx', 'cond', 'site', 'offset', 'year'])
+                     on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
     acs_merge = merge(ac_merge, summary_df, how="outer",
-                      on=['var', 'rx', 'cond', 'site', 'offset', 'year'])
+                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
 
     return acs_merge
 

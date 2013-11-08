@@ -22,7 +22,7 @@ Options:
   --version     Show version.
 """
 from docopt import docopt
-from shutil import copyfile
+from shutil import copyfile, rmtree
 import os
 import glob
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     if not check_indir(indir):
         raise Exception("%s is not configured correctly; see --help" % indir)
     if os.path.exists(plotsdir):
-        raise Exception("%s already exists" % plotsdir)
+        rmtree(plotsdir)
 
     # Require a climate.conf
     #     lines starting with # are ignored, one climate scenario name
@@ -81,6 +81,9 @@ if __name__ == "__main__":
         condid = os.path.splitext(os.path.basename(fvs))[0]
         print "Generating keyfiles for condition", condid
 
+        cli = fvs.replace('.fvs','.cli')
+        std = fvs.replace('.fvs','.std')
+
         stdinfo_path = fvs.replace(".fvs", ".std")
         stdinfo = open(stdinfo_path, 'r').read().strip()
 
@@ -96,31 +99,30 @@ if __name__ == "__main__":
 
             for site in site_indexes:
 
-                out = "var%s_rx%s_cond%s_site%s" % (variant, rx, condid, site)
-                print "\t", out
-                outdir = os.path.join(plotsdir, out)
-                os.makedirs(outdir)
-
-                stdident = "%s    var%s_rx%s_cond%s_site%s" % (
-                    condid, variant, rx, condid, site)
-
-                cli = fvs.replace('.fvs','.cli')
-                std = fvs.replace('.fvs','.std')
-                copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
-                copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
-                copyfile(std, os.path.join(outdir, os.path.basename(std)))
-
-                sitecode = get_sitecode(variant, site)
-
                 for climate in climate_scenarios:
 
-                    for offset in offsets:
-                        print "\t\t", climate, offset,
+                    climate_safe = climate.replace("_", '-')  # no underscores
 
-                        keyout = out + "_clim%s_off%s.key" % (
-                            climate.replace("_","-"), offset)
+                    out = "var%s_rx%s_cond%s_site%s_clim%s" % (
+                        variant, rx, condid, site, climate_safe)
+                    print "\t", out
+                    outdir = os.path.join(plotsdir, out)
+                    os.makedirs(outdir)
+
+                    stdident = "%s    var%s_rx%s_cond%s_site%s_clim%s" % (
+                        condid, variant, rx, condid, site, climate_safe)
+
+                    copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
+                    copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
+                    copyfile(std, os.path.join(outdir, os.path.basename(std)))
+
+                    sitecode = get_sitecode(variant, site)
+
+                    for offset in offsets:
+
+                        keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)
-                        print keyoutpath
+                        print "\t\t", keyout
 
                         from jinja2 import Template
                         with open(basekey, 'r') as fh:

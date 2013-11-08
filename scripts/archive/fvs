@@ -1,0 +1,108 @@
+#!/bin/bash
+#################################################################
+# Usage:
+#  fvs /path/to/data
+#
+#  see https://github.com/Ecotrust/growth-yield-batch/wiki/FVS-directory-structure
+#  for more info on how to set up data directory
+#################################################################
+
+function throw {
+    #echo -e "\e[00;31mERROR :: $1\e[00m"
+    echo -e "ERROR :: $1" 1>&2;
+}
+
+DISPLAY=":0.0"
+
+# 1st Arg: path to data directory 
+# TODO: must contain .tre, .sum, .key, .chp  and ***.fvs files
+DATADIR="$1"
+if [[ -d "$DATADIR" ]]
+then
+    echo "Using data dir $DATADIR ..."
+else
+    throw "'$DATADIR' not found; please specify DATADIR"
+    exit 1
+fi
+shift
+
+PLOTNAME=`basename $DATADIR`
+#SUBDIR=`echo "$PLOTNAME" | sed 's/_/\//g'`
+
+TEMPDIR="/tmp/$PLOTNAME"
+if [[ -d $TEMPDIR ]]
+then
+    echo "$TEMPDIR exists; wiping out contents"
+    rm -r $TEMPDIR/*
+else
+    mkdir -p $TEMPDIR
+fi
+cp -r $DATADIR/* $TEMPDIR
+cd $TEMPDIR
+echo "Working in temp directory $(pwd)"
+
+
+# set variant abbreviation
+VARIANT=`echo "$PLOTNAME" | sed -rn 's/^var(\w{2})_.+$/\1/p' | tr '[:upper:]' '[:lower:]'`
+if [ X"" == X"$VARIANT" ]
+then 
+    throw "Could not determine variant name. Make sure the datadir starts with varXX_ where XX is the variant"
+    exit 1
+fi
+
+EXE="/usr/local/apps/growth-yield-batch/fvsbin/FVS$VARIANT.exe"
+if [[ -x "$EXE" ]]
+then
+    echo "Using $EXE..."
+else
+    throw "File '$EXE' is not executable or found; check the .variant file in $DATADIR"
+    exit 1
+fi
+
+# process the *_original.key files and create offsets 4 offsets at 5 yr intervals
+echo "Creating offset keyfiles in temp directory"
+python /usr/local/apps/growth-yield-batch/scripts/preproc/CreateOffsets.py $TEMPDIR $TEMPDIR 4 5
+if [ $? -ne 0 ]; then
+    throw "CreateOffsets.py failed."
+    exit 1
+fi
+
+# Run all the keyfiles
+for f in *.key
+do
+	filename=$(basename "$f")
+	extension="${filename##*.}"
+	PREFIX="${filename%.*}"
+	if [[ "$PREFIX" != *_original*  && "$PREFIX" != *_growonly* ]]
+	then
+		echo "Growing $PREFIX..."
+		touch $PREFIX.input.rsp
+		echo $PREFIX.key >  $PREFIX.input.rsp
+        echo $PREFIX.tre >> $PREFIX.input.rsp
+        echo $PREFIX.out >> $PREFIX.input.rsp
+        echo $PREFIX.trl >> $PREFIX.input.rsp
+        echo $PREFIX.sum >> $PREFIX.input.rsp
+        echo $PREFIX.chp >> $PREFIX.input.rsp
+
+        cat $PREFIX.input.rsp | /usr/bin/wine $EXE "$@"
+        #cat $PREFIX.input.rsp | /usr/bin/wine $EXE > $PREFIX.fvs.log 2>&1
+
+        if [ $? -ne 0 ]; then
+            echo "FVS failed. Try: '''cd $TEMPDIR && cat $PREFIX.input.rsp | /usr/bin/wine $EXE''' " > $PREFIX.error.log
+            cat $PREFIX.error.log
+            exit 1
+		fi
+        if [ -f $PREFIX.err ]; then
+            echo "\n !!!!!!!!!!! \n FVS found a $PREFIX.err file" >> $PREFIX.error.log
+            # just warn, don't exit
+            # exit 1
+        fi
+        if [ ! -f $PREFIX.out ] || [ ! -f $PREFIX.trl ]; then
+            throw "FVS failed to produce necessary output files" >> $PREFIX.error.log
+            cat $PREFIX.error.log
+            exit 1
+        fi
+	fi
+done
+
+echo "Results in directory $TEMPDIR/"
