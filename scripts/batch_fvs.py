@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 """FVS Batch 
 
-Looks in a directory, 
-finds all subdirectories (which are presumed to be a data dir for the fvs script),
-and fires off a celery task for each
+Looks in a directory, finds `plots` (presumably created by build_keys.py) 
+finds all subdirectories (presumably plots)
+and runs all the key files withing the plot dir (output to `work` directory)
+and compiles their results to a csv (`final` directory)
 
 Usage:
-    batch.py [BATCHDIR]
-    batch.py (-h | --help)
-    batch.py --version
+    batch_fvs.py [BATCHDIR]
+    batch_fvs.py (-h | --help)
+    batch_fvs.py --version
 
 Options:
     -h --help     Show this screen.
@@ -40,15 +41,7 @@ if __name__ == "__main__":
         print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    i = 0
-    j = 1000
-    n = len(datadirs)
     for datadir in datadirs:
-        # output every jth iteration
-        i += 1
-        if i % j == 0:
-            print "  sent %s of %s" % (i, n)
-
         plotdir = os.path.join(plotsdir, datadir) 
         print plotdir
         apply_fvs_to_plotdir(plotdir)

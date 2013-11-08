@@ -6,9 +6,9 @@ finds all subdirectories (which are presumed to be a data dir for the fvs script
 and fires off a celery task for each
 
 Usage:
-  batch.py BATCHDIR [--purge] [--fix] 
-  batch.py (-h | --help)
-  batch.py --version
+  batch_fvs_celery.py [BATCHDIR]
+  batch_fvs_celery.py (-h | --help)
+  batch_fvs_celery.py --version
 
 Options:
   -h --help     Show this screen.
@@ -26,15 +26,22 @@ def get_immediate_subdirectories(dir):
 if __name__ == "__main__":
     args = docopt(__doc__, version='FVS Batch 1.0')
 
-    batchdir = os.path.abspath(args['BATCHDIR'])
-    datadirs = get_immediate_subdirectories(batchdir)
+    batchdir = args['BATCHDIR']
+    if not batchdir:
+        batchdir = os.path.curdir
+    batchdir = os.path.abspath(batchdir)
+    plotsdir = os.path.join(batchdir, 'plots')
+    if not os.path.exists(plotsdir):
+        print "ERROR:: No plots directory found in %s; Run build_keys first" % batchdir
+        sys.exit
+
+    datadirs = get_immediate_subdirectories(plotsdir)
     if len(datadirs) == 0:
-        print "ERROR:: Batch directory '%s' doesn't contain any subdirectories" % batchdir
+        print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    print "Sending all tasks to the queue... patience..."
     i = 0
-    j = 1000
+    j = 10
     n = len(datadirs)
     for datadir in datadirs:
         # output every jth iteration

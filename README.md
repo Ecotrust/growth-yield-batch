@@ -13,9 +13,6 @@ Major goals include:
 * A devops environment using Vagrant/Puppet for development and Amazon EC2 for deployment.
 
 
-
-
-
 ## Initial deployment
 
 * Install FVS locally on a Windows machine; [download](http://www.fs.fed.us/fmsc/fvs/software/complete.shtml)
@@ -24,93 +21,161 @@ Major goals include:
 * You will have to restart services with `fab dev restart_services`
 * To track status of tasks, visit the celery flower interface at http://localhost:8080
 
-## Outline
 
-### Building the batch directory structure from base data
+## Building the batch directory structure from base data
 
 To build keyfiles in the proper directory structure from base data (.key, .fvs, .stdinfo), 
-you need to start with data like this:
+it's important that the input files conform to this file structure outlined below: 
 
+### Project Directory structure
 ```
-testdata/
-|-- fvs
-|   |-- 42.fvs
-|   |-- 42.std   <---- this file simply contains a single line with the STDINFO keyword
-|   |-- 43.fvs
-|   `-- 43.std
+project_directory
+|-- climate.conf
+|-- default.site
+|-- offset.conf
+|-- cond
+|   |-- 31566.cli
+|   |-- 31566.fvs
+|   |-- 31566.site
+|   `-- 31566.std
 `-- rx
-    |-- varPN_rx25_CONDID_site2.key
-    `-- varPN_rx25_CONDID_site3.key
+    |-- varWC_rx1.key
+    `-- varWC_rx25.key
+
 ```
 
-and then run 
+#### climate.conf
+Contains a line-seperated list of the climate models of interest. 
+These *must* exist in each of your condition's climate input files.
+Use a `#` to comment out particular models
+
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ buildkeys testdata
-Generating keyfiles for condition 32
-Generating keyfiles for condition 91
+#CCSM4_rcp45
+#CCSM4_rcp60
+#CCSM4_rcp85
+Ensemble_rcp45
+Ensemble_rcp60
+Ensemble_rcp85
+#GFDLCM3_rcp45
+#GFDLCM3_rcp60
+#GFDLCM3_rcp85
+#HadGEM2ES_rcp45
+#HadGEM2ES_rcp60
+#HadGEM2ES_rcp85
+NoClimate
+```
+
+#### default.site
+Contains a line separated list of site classes to apply to *all* conditions. 
+If you have site index data specific to a condition, you can override this 
+by using the `<condid>.site` file. They contain a site class number, :, then
+the complete fvs SITECODE keyword. 
+
+```
+3:SiteCode          DF       105         1
+```
+which is interpreted as "Site class 3 corresponds to a site index of 105 ft with a Douglas-fir site tree"
+
+#### offset.conf
+A line-separated list of years to offset. Leave this file blank or delete it to
+only grow zero-offset. Years must be in multiples of the FVS cycle.
+
+#### <condid>.cli
+
+Climate file as per the [FVS climate extension](http://www.fs.fed.us/fmsc/fvs/whatis/climate-fvs.shtml)
+
+#### <condid>.fvs
+
+FVS input tree lists
+
+#### <condid>.site
+
+Optional. Overrides the default site classes for this condition.
+
+#### <condid>.std
+
+Single line representing the FVS STDINFO keyword entry. Contains information about
+plot location, slope, aspect, etc.
+
+### Building Keys
+
+```
+$ cd project_directory
+$ build_keys.py
+Generating keyfiles for condition 31566
 ....
 ```
 
-which constructs the batch directory structure like
+This will add a `plots` directory to the project with every combination of 
+Rx, condition, site, climate model and offset:
 ```
-testdata/
-`-- fvs
-`-- rx
-`-- plots
-    `-- varWC_rx9_cond91_site2
-        |-- 91.fvs
-        |-- varWC_rx9_cond91_site2_growonly.key
-        `-- varWC_rx9_cond91_site2_original.key
-```
-
-### Running a single test plot directly
-
-Run a single test site directly
-
-```
-$ fvs testdata/plots/varPN_rx25_cond42_site2/
-Using data dir testdata/varPN_rx25_cond42_site2 ...
-....
-Results in directory /tmp/varPN_rx25_cond42_site2/
+|-- plots
+|   |-- varWC_rx1_cond31566_site3_climEnsemble-rcp45
+|   |   |-- 31566.cli
+|   |   |-- 31566.fvs
+|   |   |-- 31566.std
+|   |   |-- varWC_rx1_cond31566_site3_climEnsemble-rcp45_off0.key
+|   |   |-- varWC_rx1_cond31566_site3_climEnsemble-rcp45_off10.key
+|   |   |-- varWC_rx1_cond31566_site3_climEnsemble-rcp45_off15.key
+|   |   |-- varWC_rx1_cond31566_site3_climEnsemble-rcp45_off20.key
+|   |   `-- varWC_rx1_cond31566_site3_climEnsemble-rcp45_off5.key
+... etc ...
 ```
 
+## Running FVS
 
-### Run all the testdata plots in asynch/batch mode
+There are three options for running FVS:
 
-Adds them all to the celery queue
+##### 1. Run the FVS exectuable directly. 
+For newer versions that accept command line
+parameters:
+```
+/usr/local/bin/FVSwcc --keywordfile=varWC_rx1_cond31566_site3_climEnsemble-rcp45_off0.key
+```
+Or on windows
+```
+C:\FVSBin\FVSwc.exe --keywordfile=varWC_rx1_cond31566_site3_climEnsemble-rcp45_off0.key
+```
+Note that this works in the current working directory and doesn't do any parsing or anything; useful for debugging keyfiles.
+
+##### 2. Running a single plot, all offsets 
+
 
 ```
-vagrant@precise32:/usr/local/apps/growth-yield-batch$ fvsbatch testdata/plots/
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/plots/varPN_rx25_cond42_site2')    5eca96d0-ba17-45ca-a5f2-b3c527e37611    PENDING
-Sent task to queue      fvs('/usr/local/apps/growth-yield-batch/testdata/plots/varPN_rx25_cond43_site2')    3f388542-d52a-4e60-83d8-fb27dfb68bfe    PENDING
-....
+$ cd project_directory
+$ build_keys.py
+$ run_fvs.py testdata/plots/varWC_rx1_cond31566_site3_climEnsemble-rcp45/
+$ run_fvs.py testdata/plots/varWC_rx1_cond31566_site3_climEnsemble-rcp60/
+...
 ```
 
-To rerun them all, wiping out all previous results, run with `--purge`.
 
-To rerun only the tasks that previously failed, run with `--fix`.
-
-
-### Check status at command line
-
-The old way (NOT RECOMENDED AS it seems to have bad side effects and bad performance):
-```
-$ fvsstatus summary
-{
-  "PENDING": 72,
-  "SUCCESS": 228
-}
-```
-
-The new way, to avoid costly queries, just :
+### 3. Run all the project's plots in batch mode 
 
 ```
-$ ls -1 /usr/local/data/out/var*csv | wc -l; date
-396
-Fri Jun  7 15:53:31 UTC 2013
+$ cd project_directory
+$ build_keys.py
+$ batch_fvs.py
 ```
 
-### Combining csvs
+### 4. Run all the project's plots in asynchronous batch mode
+
+```
+$ cd project_directory
+$ build_keys.py
+$ batch_fvs_celery.py
+```
+
+### Outputs 
+All working data is written to `work`. The FVS .out files are parsed and 
+written to csvs in the `final` directory. There should be as many .csvs in `final`
+as there are directories in `plots`. So to check the status of a long running batch
+
+```
+$ ls -1 project_directory/final/var*csv | wc -l
+```
+
+## Combining csvs
 
 ```
 cd /usr/local/data/out
@@ -120,7 +185,8 @@ sed -n 1p `ls var*csv | head -n 1` > merged.csv
 for i in var*.csv; do sed 1d $i >> merged.csv ; done
 ```
 
-For next steps, please review https://github.com/Ecotrust/land_owner_tools/wiki/Fixture-management#fvsaggregate-and-conditionvariantlookup
+For next steps on importing data to the Forest Planner
+please review https://github.com/Ecotrust/land_owner_tools/wiki/Fixture-management#fvsaggregate-and-conditionvariantlookup
 
 ## Notes
 
@@ -129,20 +195,12 @@ For next steps, please review https://github.com/Ecotrust/land_owner_tools/wiki/
 
 ### FVS Directory Structure and Naming requirements
 
-In order to batch process runs with this system, it's important that the input files conform to this file structure outlined below... 
-
 Each run is named according to the following scheme:
 ```
-var[VARIANT]_rx[RX]_cond[CONDID]_site[SITECLASS]
-```
-For example, using the Pacific Northwest variant, prescription 25, condition 43, and site class 2:
-```
-varPN_rx25_cond43_site2
+var[VARIANT]_rx[RX]_cond[CONDID]_site[SITECLASS]_clim[CLIMATE SCENARIO]_off[OFFSET YEARS]
 ```
 
-* **Variants** will be the fvs code used in the .exe file (FVSpn.exe = pacific northwest = `pn` )
-* **Rxs** will should have an easily recognizable nomanclature (60 year rotation with commercial thin = `CT60` )
-* **Condition ids** will be the numeric Condition ID used as the representative plot (`1332`)
-* **Site class** is a categorized site index
-* **Offsets** are handled automatically *if* there is the appropriate line in the keyfile: "Offset = ___"
-
+For example, using the Pacific Northwest variant, prescription 25, condition 43, and site class 2 with the Ensemble/rcp45 climate scenario and a 5 year offset:
+```
+varPN_rx25_cond43_site2_climEnsemble-rcp45_off5
+```

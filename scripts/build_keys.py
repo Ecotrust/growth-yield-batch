@@ -1,16 +1,23 @@
 #!/usr/bin/env python
 """build_keys.py
 
-Construct key files from .fvs, .stdinfo and base .key files
+Construct key files from project directory containing Rx and Condition data.
 
-# INDIR
-indir/rx/varPN_rx17_CONDID_site2.key
-indir/fvs/42.fvs
-indir/fvs/42.std  <-- our own thing, a single line for the stand info
+See https://github.com/Ecotrust/growth-yield-batch#building-the-batch-directory-structure-from-base-data
+for details on how to set up your project directory (example below)
 
-# OUTDIR
-indir/plots/varPN_rx17_cond42_site2/varPN_rx17_cond42_site2_original.key
-indir/plots/varPN_rx17_cond42_site2/42.fvs
+project_directory
+|-- climate.conf
+|-- default.site
+|-- offset.conf
+|-- cond
+|   |-- 31566.cli
+|   |-- 31566.fvs
+|   |-- 31566.site
+|   `-- 31566.std
+`-- rx
+    |-- varWC_rx1.key
+    `-- varWC_rx25.key
 
 Usage:
   build_keys.py [DIR]
@@ -31,15 +38,11 @@ def check_indir(indir):
     """ make sure this logic matches the top-level docstring """
     # TODO MORE REQUIREMENTS ......
     subdirs = [name for name in os.listdir(indir) if os.path.isdir(os.path.join(indir, name))]
-    required = ['rx', 'fvs']
+    required = ['rx', 'cond']
     for req in required:
         if req not in subdirs:
             return False
     return True
-
-def get_sitecode(variant, site):
-    # TODO get from G:\projects\projects2011\LandOwnerTools\util\scripts\Site Index Override Addfiles
-    return "SITECODE          DF       125         1"
 
 
 if __name__ == "__main__":
@@ -73,11 +76,11 @@ if __name__ == "__main__":
     # Require a default.site
     #     one site index per line
     with open(os.path.join(indir, 'default.site'), 'r') as fh:
-        site_indexes = [x.strip() for x in fh.readlines()]
+        sites = [x.split(":") for x in fh.readlines()]
 
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
 
-    for fvs in glob.glob(os.path.join(indir, 'fvs', '*.fvs')):
+    for fvs in glob.glob(os.path.join(indir, 'cond', '*.fvs')):
         condid = os.path.splitext(os.path.basename(fvs))[0]
         print "Generating keyfiles for condition", condid
 
@@ -97,26 +100,26 @@ if __name__ == "__main__":
             variant = variant.replace('var','')
             rx = rx.replace('rx','')
 
-            for site in site_indexes:
+            for site in sites:
+
+                site_class, sitecode = site
 
                 for climate in climate_scenarios:
 
                     climate_safe = climate.replace("_", '-')  # no underscores
 
                     out = "var%s_rx%s_cond%s_site%s_clim%s" % (
-                        variant, rx, condid, site, climate_safe)
+                        variant, rx, condid, site_class, climate_safe)
                     print "\t", out
                     outdir = os.path.join(plotsdir, out)
                     os.makedirs(outdir)
 
                     stdident = "%s    var%s_rx%s_cond%s_site%s_clim%s" % (
-                        condid, variant, rx, condid, site, climate_safe)
+                        condid, variant, rx, condid, site_class, climate_safe)
 
                     copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
                     copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
                     copyfile(std, os.path.join(outdir, os.path.basename(std)))
-
-                    sitecode = get_sitecode(variant, site)
 
                     for offset in offsets:
 
