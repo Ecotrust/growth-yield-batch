@@ -80,6 +80,13 @@ if __name__ == "__main__":
 
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
 
+    include = {}
+    for inc_path in glob.glob(os.path.join(indir, 'rx', 'include',"*")):
+        inc_var = os.path.splitext(os.path.basename(inc_path))[0]
+        with open(inc_path, 'r') as fh:
+            inc_content = fh.read()
+        include[inc_var] = inc_content
+
     for fvs in glob.glob(os.path.join(indir, 'cond', '*.fvs')):
         condid = os.path.splitext(os.path.basename(fvs))[0]
         print "Generating keyfiles for condition", condid

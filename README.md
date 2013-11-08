@@ -65,7 +65,7 @@ Ensemble_rcp85
 NoClimate
 ```
 
-#### default.site
+##### default.site
 Contains a line separated list of site classes to apply to *all* conditions. 
 If you have site index data specific to a condition, you can override this 
 by using the `<condid>.site` file. They contain a site class number, :, then
@@ -76,29 +76,76 @@ the complete fvs SITECODE keyword.
 ```
 which is interpreted as "Site class 3 corresponds to a site index of 105 ft with a Douglas-fir site tree"
 
-#### offset.conf
+##### offset.conf
 A line-separated list of years to offset. Leave this file blank or delete it to
 only grow zero-offset. Years must be in multiples of the FVS cycle.
 
-#### <condid>.cli
+##### <condid>.cli
 
 Climate file as per the [FVS climate extension](http://www.fs.fed.us/fmsc/fvs/whatis/climate-fvs.shtml)
 
-#### <condid>.fvs
+#####<condid>.fvs
 
 FVS input tree lists
 
-#### <condid>.site
+##### <condid>.site
 
 Optional. Overrides the default site classes for this condition.
 
-#### <condid>.std
+##### <condid>.std
 
 Single line representing the FVS STDINFO keyword entry. Contains information about
 plot location, slope, aspect, etc.
 
+##### .key files
+
+These use the jinja2 templating language as placeholders for plot-specific variables.
+For example, to refer to the condition id in the keyfile:
+```
+{{condid}}.fvs
+```
+The build process provides the following variables followed by an example:
+
+```
+ 'climate': 'Ensemble_rcp45',
+ 'condid': '31566',
+ 'keyout': 'varWC_rx1_cond31566_site3_climEnsemble-rcp45_off0.key',
+ 'offset': 0,
+ 'out': 'varWC_rx1_cond31566_site3_climEnsemble-rcp45',
+ 'rx': '1',
+ 'site_class': '3',
+ 'sitecode': 'SiteCode          DF       105         1\n',
+ 'stdident': '31566    varWC_rx1_cond31566_site3_climEnsemble-rcp45',
+ 'stdinfo': 'STDINFO          617    CFS551        13                            61',
+ 'variant': 'WC',
+```
+
+##### includes
+
+You can also provide variant-level include files for common parts of you keyfile.
+For example, if you wanted to have a common output database for all files. You could 
+put this in your keyfile:
+
+```
+{{include.carbon_xls}}
+```
+
+And include a file named `rx/include/carbon_xls.txt` with the following contents:
+```
+DATABASE
+DSNOut
+FVSClimateOut.xls
+CARBRPTS
+END
+```
+
+Note the rx/include/**<name>**.txt corresponds exactly with the {{include.**<name>**}}
+in the keyfile.
+
+
 ### Building Keys
 
+Assuming you have set up your project directory according to the structure above:
 ```
 $ cd project_directory
 $ build_keys.py

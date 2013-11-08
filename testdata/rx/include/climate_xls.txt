@@ -1,0 +1,11 @@
+
+COMMENT
+    Cannot write to xls from excel; could not find a linux ODBC driver 
+    DATABASE
+    DSNOut
+    FVSClimateOut.xls
+    COMPUTE
+    CARBRPTS
+    SUMMARY
+    END
+END
