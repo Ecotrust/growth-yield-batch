@@ -123,7 +123,7 @@ CARBRPTS
 END
 ```
 
-Note the rx/include/**<name>**.txt corresponds exactly with the {{include.**<name>**}}
+Note the rx/include/**name**.txt corresponds exactly with the {{include.**name**}}
 in the keyfile.
 
 

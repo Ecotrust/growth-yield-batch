@@ -26,6 +26,7 @@ Vagrantfile
 fab_vars.py
 celeryflower-passwords
 __*
-testdata/plots
-testdata/final
-testdata/work
+projects/*/plots
+projects/*/final
+projects/*/work
+
