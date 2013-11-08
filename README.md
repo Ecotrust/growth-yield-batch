@@ -181,7 +181,7 @@ $ run_fvs.py testdata/plots/varWC_rx1_cond31566_site3_climEnsemble-rcp60/
 ```
 
 
-### 3. Run all the project's plots in batch mode 
+##### 3. Run all the project's plots in batch mode 
 
 ```
 $ cd project_directory
@@ -189,7 +189,7 @@ $ build_keys.py
 $ batch_fvs.py
 ```
 
-### 4. Run all the project's plots in asynchronous batch mode
+##### 4. Run all the project's plots in asynchronous batch mode
 
 ```
 $ cd project_directory
