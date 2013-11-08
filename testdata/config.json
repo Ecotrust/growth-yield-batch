@@ -1,0 +1,19 @@
+{
+  "climate_scenarios": [
+    "Ensemble_rcp45",
+    "Ensemble_rcp60",
+    "Ensemble_rcp85",
+    "NoClimate"
+  ],
+  "sites": {
+    "2": "SiteCode          DF       125         1",
+    "3": "SiteCode          DF       105         1"
+  },
+  "offsets": [
+    0,
+    5,
+    10,
+    15,
+    20
+  ]
+}

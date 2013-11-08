@@ -30,9 +30,7 @@ it's important that the input files conform to this file structure outlined belo
 ### Project Directory structure
 ```
 project_directory
-|-- climate.conf
-|-- default.site
-|-- offset.conf
+|-- config.json
 |-- cond
 |   |-- 31566.cli
 |   |-- 31566.fvs
@@ -44,60 +42,46 @@ project_directory
 
 ```
 
-#### climate.conf
-Contains a line-seperated list of the climate models of interest. 
-These *must* exist in each of your condition's climate input files.
-Use a `#` to comment out particular models
+##### config.json
+JSON formatted file with variables that define the "multipliers"; e.g. variables
+for which we're calculate all permutations for each condition.
 
 ```
-#CCSM4_rcp45
-#CCSM4_rcp60
-#CCSM4_rcp85
-Ensemble_rcp45
-Ensemble_rcp60
-Ensemble_rcp85
-#GFDLCM3_rcp45
-#GFDLCM3_rcp60
-#GFDLCM3_rcp85
-#HadGEM2ES_rcp45
-#HadGEM2ES_rcp60
-#HadGEM2ES_rcp85
-NoClimate
+{
+  "climate_scenarios": [
+    "Ensemble_rcp45",
+    "Ensemble_rcp60",
+    "Ensemble_rcp85",
+    "NoClimate"
+  ],
+  "sites": {
+    "2": "SiteCode          DF       125         1",
+    "3": "SiteCode          DF       105         1"
+  },
+  "offsets": [
+    0,
+    5,
+    10,
+    15,
+    20
+  ]
+}
 ```
 
-##### default.site
-Contains a line separated list of site classes to apply to *all* conditions. 
-If you have site index data specific to a condition, you can override this 
-by using the `<condid>.site` file. They contain a site class number, :, then
-the complete fvs SITECODE keyword. 
-
-```
-3:SiteCode          DF       105         1
-```
-which is interpreted as "Site class 3 corresponds to a site index of 105 ft with a Douglas-fir site tree"
-
-##### offset.conf
-A line-separated list of years to offset. Leave this file blank or delete it to
-only grow zero-offset. Years must be in multiples of the FVS cycle.
-
-##### <condid>.cli
+##### cond/<condid>.cli
 
 Climate file as per the [FVS climate extension](http://www.fs.fed.us/fmsc/fvs/whatis/climate-fvs.shtml)
 
-#####<condid>.fvs
+##### cond/<condid>.fvs
 
 FVS input tree lists
 
-##### <condid>.site
-
-Optional. Overrides the default site classes for this condition.
-
-##### <condid>.std
+##### cond/<condid>.std
 
 Single line representing the FVS STDINFO keyword entry. Contains information about
 plot location, slope, aspect, etc.
 
-##### .key files
+##### rx/*.key files
 
 These use the jinja2 templating language as placeholders for plot-specific variables.
 For example, to refer to the condition id in the keyfile:
@@ -120,7 +104,7 @@ The build process provides the following variables followed by an example:
  'variant': 'WC',
 ```
 
-##### includes
+##### rx/includes
 
 You can also provide variant-level include files for common parts of you keyfile.
 For example, if you wanted to have a common output database for all files. You could 

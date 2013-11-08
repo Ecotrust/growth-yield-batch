@@ -32,6 +32,7 @@ from docopt import docopt
 from shutil import copyfile, rmtree
 import os
 import glob
+import json
 
 
 def check_indir(indir):
@@ -60,23 +61,12 @@ if __name__ == "__main__":
     if os.path.exists(plotsdir):
         rmtree(plotsdir)
 
-    # Require a climate.conf
-    #     lines starting with # are ignored, one climate scenario name
-    with open(os.path.join(indir, 'climate.conf'), 'r') as fh:
-        climate_scenarios = [x.strip() for x in fh.readlines() if not x.startswith('#')]
-
-    # Look for an offset.conf
-    offsets = [0]
-    try:
-        with open(os.path.join(indir, 'offset.conf'), 'r') as fh:
-            offsets.extend([int(x.strip()) for x in fh.readlines()])
-    except OSError:
-        pass
-
-    # Require a default.site
-    #     one site index per line
-    with open(os.path.join(indir, 'default.site'), 'r') as fh:
-        sites = [x.split(":") for x in fh.readlines()]
+    with open(os.path.join(indir, 'config.json'), 'r') as fh:
+        conf = json.loads(fh.read())
+        assert sorted([
+            'climate_scenarios', 
+            'sites', 
+            'offsets']) == sorted(conf.keys())
 
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
 
@@ -107,11 +97,9 @@ if __name__ == "__main__":
             variant = variant.replace('var','')
             rx = rx.replace('rx','')
 
-            for site in sites:
+            for site_class, sitecode in conf['sites'].items():
 
-                site_class, sitecode = site
-
-                for climate in climate_scenarios:
+                for climate in conf['climate_scenarios']:
 
                     climate_safe = climate.replace("_", '-')  # no underscores
 
@@ -128,7 +116,7 @@ if __name__ == "__main__":
                     copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
                     copyfile(std, os.path.join(outdir, os.path.basename(std)))
 
-                    for offset in offsets:
+                    for offset in conf['offsets']:
 
                         keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)
