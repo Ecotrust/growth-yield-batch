@@ -27,3 +27,5 @@ fab_vars.py
 celeryflower-passwords
 __*
 testdata/plots
+testdata/final
+testdata/work
