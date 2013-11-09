@@ -22,6 +22,9 @@ from shutil import copytree, rmtree
 from subprocess import Popen, PIPE
 
 
+class FVSError(Exception):
+    pass
+
 def apply_fvs_to_plotdir(plotdir):
     """
     from plots/varWC_rx1_cond31566, 
@@ -46,8 +49,13 @@ def apply_fvs_to_plotdir(plotdir):
 
     keys = glob.glob(os.path.join(work, '*.key'))
     for key in keys:
-        exectute_fvs(key)
-        pass
+        try:
+            exectute_fvs(key)
+        except FVSError as exc:
+            err = os.path.join(final, dirname + ".err")
+            with open(err, 'w') as fh:
+                fh.write("key:" + key + "\n" + exc.message)
+            return False
 
     csv = os.path.join(final, dirname + ".csv")
     df = extract_data(work)
@@ -68,8 +76,7 @@ def exectute_fvs(key):
         extension = ".exe"
     fvsbin = os.path.join(fvsbin_dir, 'FVS%s' % variant + extension)
 
-    error_logfile = 'log.error.txt'
-    logfile = 'log.output.txt'
+    logfile = 'log.output.txt' # TODO this prolly gets overridden eh
 
     cmd = [fvsbin, '--keywordfile=%s' % basename]
     print ' '.join(cmd)
@@ -87,23 +94,16 @@ def exectute_fvs(key):
         log.write(fvsout)
         log.write("\n")
 
-    has_trl = False
-    has_out = False
-    if os.path.exists(key.replace(".key", ".trl")):
-        has_trl = True
-    if os.path.exists(key.replace(".key", ".trl")):
-        has_out = True
+    # Validate
+    if not os.path.exists(key.replace(".key", ".out")):
+        fvserr += "No OUT file\n"
+    if not os.path.exists(key.replace(".key", ".trl")):
+        fvserr += "No TRL file\n"
+    if "STOP 20" in fvsout:
+        fvserr += "STOP 20\n"
 
-    if fvserr or not has_trl or not has_out:
-        with open(error_logfile, 'w') as log:
-            log.write("[%s]" % key)
-            log.write("\n")
-            log.write(fvserr)
-            if not has_trl:
-                log.write("NO .TRL FILE!")
-            if not has_out:
-                log.write("NO .OUT FILE!")
-            log.write("\n")
+    if fvserr:
+        raise FVSError(fvserr)
 
 if __name__ == "__main__":
     args = docopt(__doc__, version='2.0')

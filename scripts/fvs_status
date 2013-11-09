@@ -1,0 +1,5 @@
+#!/bin/bash
+good=`find final -type f -print | grep var | wc -l`
+bad=`find final -type f -print | grep err | wc -l`
+total=`find plots -type d -print | grep var | wc -l`
+echo $good "out of" $total "done (includes" $bad "failures)"
