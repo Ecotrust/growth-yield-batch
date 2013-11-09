@@ -15,12 +15,19 @@ Major goals include:
 
 ## Initial deployment
 
-* Install FVS locally on a Windows machine; [download](http://www.fs.fed.us/fmsc/fvs/software/complete.shtml)
-* Copy the contents of `C:/FVSBin` to `./fvsbin` ... they will be gitignored so not checked into the repo
+#### Linux VM (recommended)
 * Start virtual machine with `vagrant up`
+* You'll need to install the FVS binaries into `/usr/local/bin`; currently this step is 
+not automated and there are no Linux binaries available for distribution. Follow the
+[build instructions](https://github.com/Ecotrust/growth-yield-batch/wiki/Building-FVS-binaries-on-Linux).
 * You will have to restart services with `fab dev restart_services`
-* To track status of tasks, visit the celery flower interface at http://localhost:8080
+* To track status of celery tasks, visit the celery flower interface at `http://localhost:8082`
 
+#### Windows
+
+* Install these python libraries: numpy, pandas and docopt
+* Install FVS locally on a Windows machine; [download](http://www.fs.fed.us/fmsc/fvs/software/complete.shtml)... the contents will be in `C:/FVSBin`
+* Note that many of the examples below use linux script name instead of the full .py filename. You'll need to call python and point to the full filename if running on windows. (e.g. Instead of `build_keys` you would use `C:\Python27\python.exe <FULLPATH>\build_keys.py`)
 
 ## Building the batch directory structure from base data
 
