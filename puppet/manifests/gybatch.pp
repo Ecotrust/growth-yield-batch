@@ -153,25 +153,31 @@ file { "/home/celery":
     mode   => 775,
 }
 
-file { "/usr/local/bin/run_fvs.py":
+file { "/usr/local/bin/run_fvs":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/run_fvs.py',
     mode   => 775,
 }
 
-file { "/usr/local/bin/batch_fvs.py":
+file { "/usr/local/bin/batch_fvs":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/batch_fvs.py',
     mode   => 775,
 }
 
-file { "/usr/local/bin/batch_fvs_celery.py":
+file { "/usr/local/bin/status_fvs":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/status_fvs',
+    mode   => 775,
+}
+
+file { "/usr/local/bin/batch_fvs_celery":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/batch_fvs_celery.py',
     mode   => 775,
 }
 
-file { "/usr/local/bin/build_keys.py":
+file { "/usr/local/bin/build_keys":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/build_keys.py',
     mode   => 775,

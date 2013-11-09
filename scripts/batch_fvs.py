@@ -43,7 +43,6 @@ if __name__ == "__main__":
 
     for datadir in datadirs:
         plotdir = os.path.join(plotsdir, datadir) 
-        print plotdir
         apply_fvs_to_plotdir(plotdir)
 
     print "DONE!"

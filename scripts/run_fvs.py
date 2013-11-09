@@ -30,7 +30,6 @@ def apply_fvs_to_plotdir(plotdir):
     from plots/varWC_rx1_cond31566, 
         write working dir to ../../work/varWC_rx1_cond31566
     """
-    print plotdir
     assert os.path.exists(plotdir)
     path = os.path.normpath(plotdir)
     dirname = path.split(os.sep)[-1]
@@ -55,12 +54,13 @@ def apply_fvs_to_plotdir(plotdir):
             err = os.path.join(final, dirname + ".err")
             with open(err, 'w') as fh:
                 fh.write("key:" + key + "\n" + exc.message)
+            print "  ERROR written to %s" % err
             return False
 
     csv = os.path.join(final, dirname + ".csv")
     df = extract_data(work)
     df.to_csv(csv, index=False, header=True)
-    print "CSV written to %s" % csv
+    print "  CSV written to %s" % csv
 
 
 def exectute_fvs(key):
@@ -84,9 +84,6 @@ def exectute_fvs(key):
     os.chdir(os.path.dirname(key))
     proc = Popen(cmd, shell=False, stdout=PIPE, stderr=PIPE)
     (fvsout, fvserr) = proc.communicate() 
-
-    print fvsout
-    print fvserr
 
     with open(logfile, 'w') as log:
         log.write("[%s]" % key)

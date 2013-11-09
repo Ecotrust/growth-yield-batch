@@ -29,7 +29,6 @@ def parse_name(filename):
     {'var': 'WC', 'cond': '31566', 'rx': '25', 'site': '3', 'offset': '20', 'climate': 'NoClimate'}
     """
     basename = os.path.splitext(os.path.basename(filename))[0]
-    print basename
     exp = re.compile("var([a-zA-Z]+)_rx([0-9a-zA-Z]+)_cond([0-9a-zA-Z]+)_site([0-9a-zA-Z]+)_clim([0-9a-zA-Z-]+)_off([0-9]+)")
     parts = exp.match(basename).groups()
     keys = ("var", "rx", "cond", "site", "climate", "offset")

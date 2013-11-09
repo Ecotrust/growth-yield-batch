@@ -209,10 +209,12 @@ $ batch_fvs_celery.py
 ## Outputs 
 All working data is written to `work`. The FVS .out files are parsed and 
 written to csvs in the `final` directory. There should be as many .csvs in `final`
-as there are directories in `plots`. So to check the status of a long running batch
+as there are directories in `plots`. To check the status of a long running batch
 
 ```
-$ ls -1 project_directory/final/var*csv | wc -l
+$ cd project_directory
+$ status_fvs
+12 out of 160 done (including 2 failures)
 ```
 
 ## Combining csvs
