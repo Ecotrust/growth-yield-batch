@@ -96,6 +96,16 @@ file { '/var/celery/tasks.py':
    target => '/usr/local/apps/growth-yield-batch/scripts/tasks.py',
 }
 
+file { '/var/celery/run_fvs.py':
+   ensure => 'link',
+   target => '/usr/local/apps/growth-yield-batch/scripts/run_fvs.py',
+}
+
+file { '/var/celery/extract.py':
+   ensure => 'link',
+   target => '/usr/local/apps/growth-yield-batch/scripts/extract.py',
+}
+
 file { "/usr/local/apps/growth-yield-batch/fvsbin/FVSpn.exe":
     ensure => "present",
 }

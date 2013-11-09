@@ -175,8 +175,8 @@ Note that this works in the current working directory and doesn't do any parsing
 ```
 $ cd project_directory
 $ build_keys.py
-$ run_fvs.py testdata/plots/varWC_rx1_cond31566_site3_climEnsemble-rcp45/
-$ run_fvs.py testdata/plots/varWC_rx1_cond31566_site3_climEnsemble-rcp60/
+$ run_fvs.py plots/varWC_rx1_cond31566_site3_climEnsemble-rcp45/
+$ run_fvs.py plots/varWC_rx1_cond31566_site3_climEnsemble-rcp60/
 ...
 ```
 
@@ -191,13 +191,20 @@ $ batch_fvs.py
 
 ##### 4. Run all the project's plots in asynchronous batch mode
 
+This only works if you're running through the virtual machine or on a Linux-based server
+instance. First you may need to confirm that celery is up and running
+
+1. Check the number of nodes in `/etc/defaults/celeryd`
+2. Restart celery `sudo service celeryd restart`
+3. Check status `cd /var/celery && celery status`
+4. Go...
 ```
 $ cd project_directory
 $ build_keys.py
 $ batch_fvs_celery.py
 ```
 
-### Outputs 
+## Outputs 
 All working data is written to `work`. The FVS .out files are parsed and 
 written to csvs in the `final` directory. There should be as many .csvs in `final`
 as there are directories in `plots`. So to check the status of a long running batch

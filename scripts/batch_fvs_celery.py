@@ -40,16 +40,15 @@ if __name__ == "__main__":
         print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    i = 0
-    j = 10
+    j = 100
     n = len(datadirs)
-    for datadir in datadirs:
+    for i, datadir in enumerate(datadirs):
         # output every jth iteration
         i += 1
         if i % j == 0:
             print "  sent %s of %s" % (i, n)
 
-        fulldatadir = os.path.join(batchdir, datadir)
+        fulldatadir = os.path.join(os.path.abspath(plotsdir), datadir)
         task = fvs.apply_async(args=(fulldatadir,))
 
     print "Added %d plots to the queue" % n

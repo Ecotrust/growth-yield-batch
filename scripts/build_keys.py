@@ -7,9 +7,7 @@ See https://github.com/Ecotrust/growth-yield-batch#building-the-batch-directory-
 for details on how to set up your project directory (example below)
 
 project_directory
-|-- climate.conf
-|-- default.site
-|-- offset.conf
+|-- config.json
 |-- cond
 |   |-- 31566.cli
 |   |-- 31566.fvs
