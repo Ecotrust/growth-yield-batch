@@ -207,6 +207,7 @@ instance. First you may need to confirm that celery is up and running
 2. Restart celery `sudo service celeryd restart`
 3. Check status `cd /var/celery && celery status`
 4. Go...
+
 ```
 $ cd project_directory
 $ build_keys.py
