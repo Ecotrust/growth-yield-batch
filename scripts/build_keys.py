@@ -109,14 +109,14 @@ if __name__ == "__main__":
                     outdir = os.path.join(plotsdir, out)
                     os.makedirs(outdir)
 
-                    stdident = "%s    var%s_rx%s_cond%s_site%s_clim%s" % (
-                        condid, variant, rx, condid, site_class, climate_safe)
-
                     copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
                     copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
                     copyfile(std, os.path.join(outdir, os.path.basename(std)))
 
                     for offset in conf['offsets']:
+
+                        stdident = "%s var%s_rx%s_cond%s_site%s_clim%s_off%s" % (
+                            condid, variant, rx, condid, site_class, climate_safe, offset)
 
                         keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)

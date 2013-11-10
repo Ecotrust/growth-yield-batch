@@ -54,23 +54,28 @@ def apply_fvs_to_plotdir(plotdir):
     keys = glob.glob(os.path.join(work, '*.key'))
     for key in keys:
         try:
-            exectute_fvs(key)
+            fvsout, fvswarn = exectute_fvs(key)
+            print
+            print fvsout
+            print
+            print fvswarn
+            print
         except FVSError as exc:
             err = os.path.join(final, dirname + ".err")
             with open(err, 'w') as fh:
-                fh.write("key:" + key + "\n" + exc.message)
-            print "  ERROR written to %s" % err
+                fh.write("key:\n" + key + "\n" + exc.message)
+            print "  ERROR written to ./final/%s.err" % dirname
             return False
 
-    # TODO copy trl and out files
+    print "  FVS run successfully. Results in ./work/%s" % dirname
 
     if extract_data:
         csv = os.path.join(final, dirname + ".csv")
         df = extract_data(work)
         df.to_csv(csv, index=False, header=True)
-        print "  CSV written to %s" % csv
+        print "  Parsed .out file. CSV written to ./final/%s.csv" % dirname
     else:
-        print "  FVS run successfully; results in %s" % work
+        print "  Unable to extract data from .out file. Install the pandas python library."
 
 
 def exectute_fvs(key):
@@ -86,8 +91,6 @@ def exectute_fvs(key):
         extension = ".exe"
     fvsbin = os.path.join(fvsbin_dir, 'FVS%s' % variant + extension)
 
-    logfile = 'log.output.txt' # TODO this prolly gets overridden eh
-
     cmd = [fvsbin, '--keywordfile=%s' % basename]
     print ' '.join(cmd)
 
@@ -95,29 +98,52 @@ def exectute_fvs(key):
     proc = Popen(cmd, shell=False, stdout=PIPE, stderr=PIPE)
     (fvsout, fvserr) = proc.communicate() 
 
-    with open(logfile, 'w') as log:
-        log.write("[%s]" % key)
-        log.write("\n")
-        log.write(fvsout)
-        log.write("\n")
-
-    # Validate
-    if not os.path.exists(key.replace(".key", ".out")):
+    # Validate outputs
+    outfile = key.replace(".key", ".out")
+    if not os.path.exists(outfile):
         fvserr += "No OUT file\n"
     if not os.path.exists(key.replace(".key", ".trl")):
         fvserr += "No TRL file\n"
-    if "STOP 20" in fvsout:
-        fvserr += "STOP 20\n"
+    if "STOP" in fvsout:
+        fvserr += "STOP\n"
+
+    # Validate .out file
+    still_capturing_error = 0
+    still_capturing_warning = 0
+    fvswarn = ""
+    with open(outfile, 'r') as fh:
+        for line in fh.readlines():
+            if still_capturing_error > 0:
+                fvserr += line
+                still_capturing_error -= 1
+
+            if still_capturing_warning > 0:
+                fvswarn += line
+                still_capturing_warning -= 1
+
+            if "NO CLIMATE DATA FOR THIS STAND" in line:
+                fvserr += line
+                still_capturing_error = 0
+
+            elif "ERROR" in line:
+                if line.startswith("RATIO OF STANDARD ERRORS"):
+                    continue
+                # We've found a actual error, grab the next few lines
+                fvserr += line
+                still_capturing_error = 3
+
+            elif "WARNING" in line:
+                fvswarn += line
+                # We've found a warning grab the next few lines
+                still_capturing_warning = 3
 
     if fvserr:
         raise FVSError(fvserr)
 
+    return fvsout, fvswarn
+
 if __name__ == "__main__":
     args = docopt(__doc__, version='2.0')
 
-    indata = args['INPUT']
+    indata = args['PLOTDIRECTORY']
     apply_fvs_to_plotdir(indata)
-
-    # TODO run_fvs.py plots/varWC_rx1...../blah.key  <--- run just this single keyfile  
-    # where to put working dir? 
-
