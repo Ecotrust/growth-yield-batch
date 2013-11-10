@@ -118,7 +118,6 @@ if __name__ == "__main__":
 
                         keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)
-                        print "\t\t", keyout
 
                         from jinja2 import Template
                         with open(basekey, 'r') as fh:
