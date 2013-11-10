@@ -17,13 +17,18 @@ Options:
 from docopt import docopt
 import os
 import glob
-from extract import extract_data
 from shutil import copytree, rmtree
 from subprocess import Popen, PIPE
+try:
+    from extract import extract_data
+except ImportError:
+    # pandas is probably not available
+    extract_data = None
 
 
 class FVSError(Exception):
     pass
+
 
 def apply_fvs_to_plotdir(plotdir):
     """
@@ -57,10 +62,15 @@ def apply_fvs_to_plotdir(plotdir):
             print "  ERROR written to %s" % err
             return False
 
-    csv = os.path.join(final, dirname + ".csv")
-    df = extract_data(work)
-    df.to_csv(csv, index=False, header=True)
-    print "  CSV written to %s" % csv
+    # TODO copy trl and out files
+
+    if extract_data:
+        csv = os.path.join(final, dirname + ".csv")
+        df = extract_data(work)
+        df.to_csv(csv, index=False, header=True)
+        print "  CSV written to %s" % csv
+    else:
+        print "  FVS run successfully; results in %s" % work
 
 
 def exectute_fvs(key):
