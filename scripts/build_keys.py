@@ -15,7 +15,9 @@ project_directory
 |   `-- 31566.std
 `-- rx
     |-- varWC_rx1.key
-    `-- varWC_rx25.key
+    |-- varWC_rx25.key
+    `-- include
+        `-- spotted_owl.txt
 
 Usage:
   build_keys.py [DIR]

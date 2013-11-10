@@ -6,7 +6,7 @@ After running build_keys ....
 run_fvs.py plots/varWC_rx1...../  <--- this is a plot directory containing .key files to be run
 
 Usage:
-  run_fvs.py INPUT
+  run_fvs.py PLOTDIRECTORY
   run_fvs.py (-h | --help)
   run_fvs.py --version
 

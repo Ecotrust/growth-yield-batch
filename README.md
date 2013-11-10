@@ -44,10 +44,10 @@ project_directory
 |   |-- 31566.site
 |   `-- 31566.std
 `-- rx
-    |-- include
-        `-- spotted_owl.txt
     |-- varWC_rx1.key
-    `-- varWC_rx25.key
+    |-- varWC_rx25.key
+    `-- include
+        `-- spotted_owl.txt
 
 ```
 
