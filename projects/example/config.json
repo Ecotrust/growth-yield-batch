@@ -1,8 +1,6 @@
 {
   "climate_scenarios": [
     "Ensemble_rcp45",
-    "Ensemble_rcp60",
-    "Ensemble_rcp85",
     "NoClimate"
   ],
   "sites": {
@@ -11,9 +9,6 @@
   },
   "offsets": [
     0,
-    5,
-    10,
-    15,
-    20
+    10
   ]
 }

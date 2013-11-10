@@ -115,9 +115,6 @@ if __name__ == "__main__":
 
                     for offset in conf['offsets']:
 
-                        stdident = "%s var%s_rx%s_cond%s_site%s_clim%s_off%s" % (
-                            condid, variant, rx, condid, site_class, climate_safe, offset)
-
                         keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)
 
