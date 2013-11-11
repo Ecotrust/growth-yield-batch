@@ -90,6 +90,17 @@ if __name__ == "__main__":
         cli = fvs.replace(".fvs", ".cli")
         assert os.path.exists(cli)
 
+        site_override = fvs.replace(".fvs", ".site")
+        if os.path.exists(site_override):
+            try:
+                with open(site_override, 'r') as fh:
+                    sitecls = fh.readlines()[0].strip()
+                sites = {sitecls: conf['sites'][sitecls]}
+            except:
+                sites = conf['sites']
+        else:
+            sites = conf['sites']
+
         for basekey in basekeys:
             key_prefix = os.path.splitext(os.path.basename(basekey))[0]
             variant, rx = key_prefix.split('_')
@@ -97,7 +108,7 @@ if __name__ == "__main__":
             variant = variant.replace('var','')
             rx = rx.replace('rx','')
 
-            for site_class, sitecode in conf['sites'].items():
+            for site_class, sitecode in sites.items():
 
                 for climate in conf['climate_scenarios']:
 

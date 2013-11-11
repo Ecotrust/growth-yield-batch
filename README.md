@@ -90,6 +90,11 @@ FVS input tree lists
 Single line representing the FVS STDINFO keyword entry. Contains information about
 plot location, slope, aspect, etc.
 
+##### cond/<condid>.site
+
+*Optionally* include a .site file to specify a single site class on which to run this 
+particular condition. Must match one of the site classes specified in config.json
+
 ##### rx/*.key files
 
 These use the jinja2 templating language as placeholders for plot-specific variables.
