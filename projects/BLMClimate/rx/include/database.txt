@@ -1,0 +1,10 @@
+
+COMMENT
+    DATABASE
+    DSNOut
+    FVSClimateOut.xls
+    COMPUTE
+    CARBRPTS
+    SUMMARY
+    END
+END
