@@ -1,0 +1,26 @@
+{
+  "climate_scenarios": [
+    "Ensemble_rcp45",
+    "CCSM4_rcp45",
+    "GFDLCM3_rcp45",
+    "HadGEM2ES_rcp45",
+
+    "Ensemble_rcp60",
+    "CCSM4_rcp60",
+    "GFDLCM3_rcp60",
+    "HadGEM2ES_rcp60",
+
+    "Ensemble_rcp85",
+    "CCSM4_rcp85",
+    "GFDLCM3_rcp85",
+    "HadGEM2ES_rcp85",
+
+    "NoClimate"
+  ],
+  "sites": {
+    "3": "SiteCode          DF       105         1"
+  },
+  "offsets": [
+    0
+  ]
+}
