@@ -11,25 +11,41 @@ class apt {
 
 include apt
 
-package { "build-essential":
-    ensure => "installed"
+package { "build-essential": ensure => "installed"}
+package { "python-software-properties": ensure => "installed"}
+package { "git-core": ensure => "latest"}
+package { "python-jinja2": ensure => "latest"}
+package { "nginx-full": ensure => "latest"}
+package { "vim": ensure => "latest"}
+package { "python-psycopg2": ensure => "latest"}
+package { "python-virtualenv": ensure => "latest"}
+package { "python-pip": ensure => "latest"}
+package { "python-dev": ensure => "latest"}
+package { "python-numpy": ensure => "latest"}
+package { "redis-server": ensure => "latest"}
+package { "dos2unix": ensure => "latest"}
+
+package { "unixodbc": ensure => "latest"}
+package { "unixodbc-dev": ensure => "latest"}
+package { "odbc-postgresql": ensure => "latest"}
+package { "gfortran": ensure => "latest"}
+package { "cmake": ensure => "latest"}
+package { "subversion": ensure => "latest"}
+
+file {"odbc.ini":
+  path => "/etc/odbc.ini",
+  content => template("odbc.ini"),
+  owner => "root",
+  mode => 644
 }
 
-package { "python-software-properties":
-    ensure => "installed"
+file {"odbcinst.ini":
+  path => "/etc/odbcinst.ini",
+  content => template("odbcinst.ini"),
+  owner => "root",
+  mode => 644
 }
 
-package { "git-core":
-    ensure => "latest"
-}
-
-package { "python-jinja2":
-    ensure => "latest"
-}
-
-package { "nginx-full":
-    ensure => "latest"
-}
 file {"gybatch":
   path => "/etc/nginx/sites-available/gybatch",
   content => template("gybatch.nginx"),
@@ -45,45 +61,9 @@ file { "/etc/nginx/sites-enabled/default":
    require => Package['nginx-full']
 }
 
-package { "vim":
-    ensure => "latest"
-}
-
-package { "python-psycopg2":
-    ensure => "latest"
-}
-
-package { "python-virtualenv":
-    ensure => "latest"
-}
-
-package { "python-pip":
-    ensure => "latest"
-}
-
-package { "python-dev":
-    ensure => "latest"
-}
-
-package { "python-numpy":
-    ensure => "latest"
-}
-
-package { "redis-server":
-    ensure => "latest"
-}
-
-package { "dos2unix":
-    ensure => "latest"
-}
-
 package {'supervisor':
     ensure => "latest",
     require => File['/var/log/celeryflower.log']
-}
-
-package {'wine':
-    ensure => "latest",
 }
 
 class { "celery::server":
@@ -105,16 +85,7 @@ file { '/var/celery/extract.py':
    ensure => 'link',
    target => '/usr/local/apps/growth-yield-batch/scripts/extract.py',
 }
-
-file { "/usr/local/apps/growth-yield-batch/fvsbin/FVSpn.exe":
-    ensure => "present",
-}
-
-file { "/usr/local/apps/growth-yield-batch/scripts/fvs":
-    ensure => "present",
-    mode   => 775,
-}
-
+  
 file { "/usr/local/data/tasks.db":
     ensure => "present",
     owner  => "vagrant",
@@ -197,3 +168,13 @@ file { "/var/log/celeryflower.log":
 }
 
 User<| title == "celery" |> { groups +> [ "vagrant" ] }
+
+class { "postgresql::server": version => "9.1",
+    listen_addresses => "'*'",
+    max_connections => 100
+}
+
+postgresql::database { "fvsdb":
+  owner => 'fvsdb',
+}
+

@@ -2,9 +2,10 @@
 COMMENT
     DATABASE
     DSNOut
-    FVSClimateOut.xls
+    fvsdb
     COMPUTE
     CARBRPTS
     SUMMARY
     END
 END
+
