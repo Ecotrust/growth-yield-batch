@@ -1,4 +1,1 @@
-rm -rf final
-rm -rf work
-build_keys
-batch_fvs
+rm -rf final work plots && build_keys && batch_fvs
