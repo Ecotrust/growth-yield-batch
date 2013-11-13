@@ -1,3 +1,4 @@
+#!/bin/env python
 """
 Take directory of csvs created by the growth-yield-batch process
 and import them to a sqlite3 TABLE
@@ -6,10 +7,11 @@ import sqlite3
 import os
 import glob
 import csv
+import os
 
 
-CSVDIR = "/mnt/ebsFINAL/out/"
-FILTER = "varPN_*.csv"
+CSVDIR = os.curdir
+FILTER = "var*.csv"
 DATABASE = "data.db"
 
 
@@ -17,8 +19,11 @@ def data_generator():
     csv_paths = glob.glob(os.path.join(CSVDIR, FILTER))
     for csv_path in csv_paths:
         fvsreader = csv.reader(open(csv_path, 'rb'), delimiter=',', quotechar='"')
+        fvsreader.next()  # skip header
         for row in fvsreader:
-            yield row
+            # only yield a row if it has data in first column (AGL)
+            if row[0]:
+                yield row
 
 
 if __name__ == "__main__":
@@ -31,6 +36,7 @@ if __name__ == "__main__":
         agl double precision,
         bgl double precision,
         calc_carbon double precision,
+        climate character varying(20),
         cond integer NOT NULL,
         dead double precision,
         "offset" integer NOT NULL,
@@ -100,7 +106,7 @@ if __name__ == "__main__":
         print "Table already exists"
 
     print "Inserting data into table"
-    sql = "INSERT INTO trees_fvsaggregate VALUES (%s);" % (",".join("?"*65))
+    sql = "INSERT INTO trees_fvsaggregate VALUES (%s);" % (",".join("?"*66))
     cur.executemany(sql, data_generator())
 
     con.commit()

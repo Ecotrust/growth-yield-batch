@@ -1,5 +1,7 @@
 import os
 
+#### DEPRECATED .. see build_cond_dir.py
+
 master_climate = "C:/Users/mperry/Desktop/FVSClimAttrs_NoClimateAdded.csv"
 outdir = "E:/workspace/testout"
 

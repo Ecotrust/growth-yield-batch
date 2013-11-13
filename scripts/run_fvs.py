@@ -106,7 +106,9 @@ def apply_fvs_to_plotdir(plotdir):
 def exectute_fvs(key):
     basename = os.path.basename(key)
     prefix, ext = os.path.splitext(basename)
-    variant = "wc"
+
+    assert basename[0:3] == "var"
+    variant = basename[3:5].lower()
     
     if os.name == 'posix':
         fvsbin_dir = '/usr/local/bin'
@@ -128,7 +130,13 @@ def exectute_fvs(key):
         proc = Popen(cmd, shell=False, stdout=PIPE, stderr=PIPE, creationflags=CREATE_NEW_PROCESS_GROUP)
     (fvsout, fvserr) = proc.communicate() 
     returncode = proc.returncode
-    if returncode != 0:
+    #
+    # Assume STOP 10 is OK
+    # THIS SMELLS FUNNY
+    #
+    if fvserr == 'STOP 10\n':
+        fvserr = ''
+    if returncode not in [0, 10]:
         fvserr += "PROCESS RETURNED CODE %d" % returncode
 
     if os.name == 'nt':
@@ -143,8 +151,6 @@ def exectute_fvs(key):
         fvserr += "No OUT file\n"
     if not os.path.exists(key.replace(".key", ".trl")):
         fvserr += "No TRL file\n"
-    if "STOP" in fvsout:
-        fvserr += "STOP\n"
 
     # Validate .out file
     still_capturing_error = 0
