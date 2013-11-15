@@ -1,10 +1,9 @@
-#!/bin/env python
+#!/usr/bin/env python
 """
 Take directory of csvs created by the growth-yield-batch process
 and import them to a sqlite3 TABLE
 """
 import sqlite3
-import os
 import glob
 import csv
 import os
@@ -16,7 +15,7 @@ DATABASE = "data.db"
 
 
 def data_generator():
-    csv_paths = glob.glob(os.path.join(CSVDIR, FILTER))
+    csv_paths = glob.glob(os.path.join(CSVDIR, 'final', FILTER))
     for csv_path in csv_paths:
         fvsreader = csv.reader(open(csv_path, 'rb'), delimiter=',', quotechar='"')
         fvsreader.next()  # skip header

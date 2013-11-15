@@ -85,7 +85,7 @@ file { '/var/celery/extract.py':
    ensure => 'link',
    target => '/usr/local/apps/growth-yield-batch/scripts/extract.py',
 }
-  
+
 file { "/usr/local/data/tasks.db":
     ensure => "present",
     owner  => "vagrant",
@@ -133,6 +133,12 @@ file { "/usr/local/bin/run_fvs":
 file { "/usr/local/bin/batch_fvs":
     ensure => "link",
     target => '/usr/local/apps/growth-yield-batch/scripts/batch_fvs.py',
+    mode   => 775,
+}
+
+file { "/usr/local/bin/csvs_to_sqlite":
+    ensure => "link",
+    target => '/usr/local/apps/growth-yield-batch/scripts/csvs_to_sqlite.py',
     mode   => 775,
 }
 

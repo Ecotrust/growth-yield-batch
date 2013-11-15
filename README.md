@@ -8,10 +8,11 @@ Major goals include:
 
 * Automate the post-processing, parsing and organization of the FVS output; preps the input files for the harvest scheduler.
 
-* Parrallelize the task load onto multiple servers to acheive a target completion time.
+* Parrallelize the task load through an asyncronous task queue
 
-* A devops environment using Vagrant/Puppet for development and Amazon EC2 for deployment.
+* A dev environment using Vagrant/Puppet
 
+<img src="https://raw.github.com/Ecotrust/growth-yield-batch/master/img/process_overview.png" alt="GYB Process Overview" />
 
 ## Initial deployment
 

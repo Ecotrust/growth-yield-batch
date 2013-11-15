@@ -1,0 +1,15 @@
+Index: clin.f
+===================================================================
+--- clin.f	(revision 1085)
++++ clin.f	(working copy)
+@@ -328,8 +328,8 @@
+   310       FORMAT (/A8,'   CLIMATE-CAUSED MORTALITY MULTIPLIERS',
+      >           ' FOR SPECIES ',I3,'=',A,' ARE ',2F12.4)
+           ELSE IF (I.EQ.0) THEN
+-            IF (LNOTBK(2)) CLMRTMLT1 = ARRAY(2)
+-            IF (LNOTBK(3)) CLMRTMLT2 = ARRAY(3)
++            IF (LNOTBK(3)) CLMRTMLT1 = ARRAY(3)
++            IF (LNOTBK(4)) CLMRTMLT2 = ARRAY(4)
+             IF(LKECHO)WRITE(JOSTND,315) KEYWRD,CLMRTMLT1(1),
+      >            CLMRTMLT2(1)
+   315       FORMAT (/A8,'   CLIMATE-CAUSED MORTALITY MULTIPLIERS',
