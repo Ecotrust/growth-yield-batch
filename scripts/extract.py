@@ -30,8 +30,16 @@ def parse_name(filename):
     basename = os.path.splitext(os.path.basename(filename))[0]
     exp = re.compile("var([a-zA-Z]+)_rx([0-9a-zA-Z]+)_cond([0-9a-zA-Z]+)_site([0-9a-zA-Z]+)_clim([0-9a-zA-Z-]+)_off([0-9]+)")
     parts = exp.match(basename).groups()
+    conv_parts = []
+    for part in parts:
+        try:
+            part = int(part)
+        except ValueError:
+            part = str(part)
+        conv_parts.append(part)
+
     keys = ("var", "rx", "cond", "site", "climate", "offset")
-    return dict(zip(keys, parts))
+    return dict(zip(keys, conv_parts))
 
 
 def classify_tree(spz, diam):
@@ -333,6 +341,12 @@ def extract_data(indir):
                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
     acs_merge = merge(ac_merge, summary_df, how="outer",
                       on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+
+    # manage types
+    acs_merge[['offset']] = acs_merge[['offset']].astype(int)
+    acs_merge[['rx']] = acs_merge[['rx']].astype(int)
+    acs_merge[['year']] = acs_merge[['year']].astype(int)
+    acs_merge[['cond']] = acs_merge[['cond']].astype(int)
 
     return acs_merge
 

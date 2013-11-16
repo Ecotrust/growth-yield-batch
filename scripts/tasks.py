@@ -9,4 +9,6 @@ celery.config_from_object('celeryconfig')
 
 @celery.task
 def fvs(plotdir):
-    apply_fvs_to_plotdir(plotdir)
+    # TODO specify extract_methods=['csv'] if sqlite write locks become an issue
+    apply_fvs_to_plotdir(plotdir)  
+

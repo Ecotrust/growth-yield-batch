@@ -126,6 +126,10 @@ if __name__ == "__main__":
 
                     for offset in conf['offsets']:
 
+                        if rx == '1' and offset > 0:
+                            # special case
+                            continue
+
                         keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)
 

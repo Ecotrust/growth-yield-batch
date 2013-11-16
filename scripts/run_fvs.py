@@ -19,10 +19,14 @@ import os
 import glob
 from shutil import copytree, rmtree, copyfile
 from subprocess import Popen, PIPE
+
 try:
     from extract import extract_data
+    import sqlite3
+    from pandas.io import sql as sqlio
 except ImportError:
     # pandas is probably not available
+    print "  Unable to extract data from .out file. Import failed, installing pandas should fix."
     extract_data = None
 
 
@@ -30,7 +34,7 @@ class FVSError(Exception):
     pass
 
 
-def apply_fvs_to_plotdir(plotdir):
+def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     """
     from plots/varWC_rx1_cond31566, 
         write working dir to ../../work/varWC_rx1_cond31566
@@ -39,9 +43,25 @@ def apply_fvs_to_plotdir(plotdir):
     path = os.path.normpath(plotdir)
     dirname = path.split(os.sep)[-1]
 
+    if not extract_methods:
+        # default to sqlite3 only, no csv
+        extract_methods = ['sqlite3']
+
     final = os.path.abspath(os.path.join(plotdir, "..", "..", "final"))
     if not os.path.exists(final):
         os.makedirs(final)
+
+    if sqlite3 and extract_data:
+        db_path = os.path.join(final, "data.db")
+        try:
+            create_data_db(db_path)
+        except sqlite3.OperationalError as e:
+            if e.message == "table trees_fvsaggregate already exists":
+                # table already exists
+                # TODO ... check for table rather than try/except?
+                pass
+            else:
+                raise sqlite3.OperationalError(e.message)
 
     outfiledir = os.path.join(final, "out")
     if not os.path.exists(outfiledir):
@@ -86,13 +106,49 @@ def apply_fvs_to_plotdir(plotdir):
         copyfile(outfile, os.path.join(outfiledir, os.path.basename(outfile)))
     print "  FVS run successfully. OUT files in ./final/out/"
 
-    if extract_data:
+    if 'csv' in extract_methods and extract_data:
         csv = os.path.join(final, dirname + ".csv")
         df = extract_data(work)
         df.to_csv(csv, index=False, header=True)
         print "  EXTRACTED .csv from .out file. Written to ./final/%s.csv" % dirname
-    else:
-        print "  Unable to extract data from .out file. Install the pandas python library."
+
+    if 'sqlite3' in extract_methods and extract_data and sqlite3:
+        df = extract_data(work)
+
+        db_path = os.path.join(final, "data.db")
+        conn = sqlite3.connect(db_path, timeout=10)  # 10 seconds to avoid write deadlock?
+        try:
+            sqlio.write_frame(df, name='trees_fvsaggregate',
+                con=conn, flavor='sqlite', if_exists='append')
+        except sqlite3.IntegrityError as e:
+            if e.message.endswith("are not unique"):
+                # try to drop and rerun
+                cursor = conn.cursor()
+
+                delete_sql = """DELETE FROM trees_fvsaggregate
+                  WHERE var = '%(var)s'
+                  AND rx = %(rx)d
+                  AND cond = %(cond)d
+                  AND site = %(site)d
+                  AND climate = '%(climate)s'
+                """ % df.irow(0)  # assume the dataframe has the same data
+
+                res = cursor.execute(delete_sql)
+                if res.rowcount > 0:
+                    print "  WARNING: Deleting %d old rows from ./final/data.db" % res.rowcount
+
+                # try again
+                sqlio.write_frame(df, name='trees_fvsaggregate',
+                    con=conn, flavor='sqlite', if_exists='append')
+
+            else:
+                # something else went wrong
+                conn.rollback()
+                raise sqlite3.IntegrityError(e.message)
+
+        conn.commit()
+        conn.close()
+        print "  EXTRACTED data from .out file. Appended to ./final/data.db"
 
     # If we've gotten this far, we don't need the work directory any longer
     try:
@@ -130,10 +186,8 @@ def exectute_fvs(key):
         proc = Popen(cmd, shell=False, stdout=PIPE, stderr=PIPE, creationflags=CREATE_NEW_PROCESS_GROUP)
     (fvsout, fvserr) = proc.communicate() 
     returncode = proc.returncode
-    #
-    # Assume STOP 10 is OK
-    # THIS SMELLS FUNNY
-    #
+    
+    # Assume STOP 10 is OK if there are no errors in the .out file
     if fvserr == 'STOP 10\n':
         fvserr = ''
     if returncode not in [0, 10]:
@@ -186,6 +240,103 @@ def exectute_fvs(key):
         raise FVSError(fvserr)
 
     return fvsout, fvswarn
+
+def create_data_db(db_path):
+
+    if not sqlite3:
+        raise Exception('Install sqlite3 to use create_table_db')
+
+    conn = sqlite3.connect(db_path)
+
+    create_sql = """CREATE TABLE trees_fvsaggregate (
+      "agl" REAL,
+      "bgl" REAL,
+      "calc_carbon" REAL,
+      "climate" TEXT,
+      "cond" INTEGER,
+      "dead" REAL,
+      "offset" INTEGER,
+      "rx" INTEGER,
+      "site" REAL,
+      "total_stand_carbon" REAL,
+      "var" TEXT,
+      "year" INTEGER,
+      "merch_carbon_removed" REAL,
+      "merch_carbon_stored" REAL,
+      "CEDR_BF" REAL,
+      "CEDR_HRV" REAL,
+      "CH_CF" REAL,
+      "CH_HW" REAL,
+      "CH_TPA" REAL,
+      "CUT_TYPE" REAL,
+      "DF_BF" REAL,
+      "DF_HRV" REAL,
+      "ES_BTL" REAL,
+      "FIREHZD" REAL,
+      "HW_BF" REAL,
+      "HW_HRV" REAL,
+      "LG_CF" REAL,
+      "LG_HW" REAL,
+      "LG_TPA" REAL,
+      "LP_BTL" REAL,
+      "MNCONBF" REAL,
+      "MNCONHRV" REAL,
+      "MNHW_BF" REAL,
+      "MNHW_HRV" REAL,
+      "NSODIS" REAL,
+      "NSOFRG" REAL,
+      "NSONEST" REAL,
+      "PINE_BF" REAL,
+      "PINE_HRV" REAL,
+      "PP_BTL" REAL,
+      "SM_CF" REAL,
+      "SM_HW" REAL,
+      "SM_TPA" REAL,
+      "SPPRICH" REAL,
+      "SPPSIMP" REAL,
+      "SPRC_BF" REAL,
+      "SPRC_HRV" REAL,
+      "WJ_BF" REAL,
+      "WJ_HRV" REAL,
+      "WW_BF" REAL,
+      "WW_HRV" REAL,
+      "after_ba" INTEGER,
+      "after_merch_bdft" INTEGER,
+      "after_merch_ft3" INTEGER,
+      "after_total_ft3" INTEGER,
+      "after_tpa" INTEGER,
+      "age" INTEGER,
+      "removed_merch_bdft" INTEGER,
+      "removed_merch_ft3" INTEGER,
+      "removed_total_ft3" INTEGER,
+      "removed_tpa" INTEGER,
+      "start_ba" INTEGER,
+      "start_merch_bdft" INTEGER,
+      "start_merch_ft3" INTEGER,
+      "start_total_ft3" INTEGER,
+      "start_tpa" INTEGER,
+      -- if primary keys change, make sure to update IntegrityError logic above
+      PRIMARY KEY ("var", "rx", "cond", "site", "climate", "offset", "year")
+    );"""
+
+    cursor = conn.cursor()
+    cursor.execute(create_sql)
+
+    idx_sqls = [
+        "CREATE INDEX idx_trees_fvsaggregate_var ON trees_fvsaggregate (var);",
+        "CREATE INDEX idx_trees_fvsaggregate_year ON trees_fvsaggregate (year);",
+        "CREATE INDEX idx_trees_fvsaggregate_cond ON trees_fvsaggregate (cond);",
+        "CREATE INDEX idx_trees_fvsaggregate_rx ON trees_fvsaggregate (rx);",
+        "CREATE INDEX idx_trees_fvsaggregate_climate ON trees_fvsaggregate (climate);",
+        'CREATE INDEX idx_trees_fvsaggregate_offset ON trees_fvsaggregate ("offset");',
+        'CREATE INDEX idx_fvs ON trees_fvsaggregate ("var", "rx", "cond", "site", "climate", "offset");'
+    ]
+    for sql in idx_sqls:
+        cursor.execute(sql)
+
+    conn.commit()
+    conn.close()
+    return
 
 if __name__ == "__main__":
     args = docopt(__doc__, version='2.0')

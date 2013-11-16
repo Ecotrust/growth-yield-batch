@@ -1,5 +1,6 @@
 #!/bin/bash
-good=`find final -type f -print | grep 'var.*csv' | wc -l`
+# good=`find final -type f -print | grep 'var.*csv' | wc -l`
+good=`sqlite3 final/data.db "select var, rx, cond, site, climate from trees_fvsaggregate group by var, rx, cond, site, climate;" | wc -l`
 bad=`find final -type f -print | grep 'var.*err' | wc -l`
 total=`find plots -type d -print | grep var | wc -l`
 echo $good "out of" $total "completed (plus" $bad "failures)"
