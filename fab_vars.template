@@ -1,3 +1,0 @@
-KEY_FILENAME = 'keys/insecure_private_key'
-AWS_KEY_FILENAME_PROD = 'keys/mykey.pem'
-PROD_SERVERS = ['ubuntu@PUBLIC_IP']
