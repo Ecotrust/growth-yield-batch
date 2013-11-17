@@ -75,7 +75,7 @@ package {'supervisor':
 
 class { "celery::server":
   requirements => "/usr/local/apps/growth-yield-batch/requirements.txt",
-  require => [Group['ubuntu group'], Package['python-pip'], Package['build-essential'], Package['python-numpy'], Package['python-virtualenv'], Package['python-dev']]
+  require => [Package['python-pip'], Package['build-essential'], Package['python-numpy'], Package['python-virtualenv'], Package['python-dev']]
 }
 
 file { '/var/celery/tasks.py':
@@ -152,13 +152,6 @@ file { "/var/log/celeryflower.log":
 group { "ubuntu group":
         name => $group,
         ensure => present
-}
-
-user { "celery":
-        ensure => present,
-        gid => $group,
-        shell => "/bin/bash",
-        require => Group["ubuntu group"]
 }
 
 class { "postgresql::server": version => "9.1",
