@@ -1,3 +1,10 @@
+if $user == undef {
+    $user = 'vagrant'
+}
+if $group == undef {
+    $group = 'vagrant'
+}
+
 # ensure that apt update is run before any packages are installed
 class apt {
   exec { "apt-update":
@@ -86,37 +93,6 @@ file { '/var/celery/extract.py':
    target => '/usr/local/apps/growth-yield-batch/scripts/extract.py',
 }
 
-file { "/usr/local/data/tasks.db":
-    ensure => "present",
-    owner  => "vagrant",
-    group  => "celery",
-    require => File['/usr/local/data'],
-    mode   => 775,
-}
-
-file { "/usr/local/data":
-     ensure => "directory",
-     owner  => "celery",
-     group  => "vagrant",
-     mode   => 775,
-}
-
-file { "/usr/local/data/out":
-     ensure => "directory",
-     owner  => "celery",
-     group  => "vagrant",
-     require => File['/usr/local/data'],
-     mode   => 775,
-}
-
-file { "/root/.wine":
-    # hack to "solve" ticket #14
-    ensure => "directory",
-    owner  => "celery",
-    group  => "vagrant",
-    mode   => 775,
-}
-
 file { "/home/celery":
     ensure => "directory",
     owner  => "celery",
@@ -169,11 +145,11 @@ file { "celeryflower.conf":
 file { "/var/log/celeryflower.log":
     ensure => "present",
     owner  => "celery",
-    group  => "vagrant",
+    group  => $group,
     mode   => 775,
 }
 
-User<| title == "celery" |> { groups +> [ "vagrant" ] }
+User<| title == "celery" |> { groups +> [ $group ] }
 
 class { "postgresql::server": version => "9.1",
     listen_addresses => "'*'",
