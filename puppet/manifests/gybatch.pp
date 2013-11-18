@@ -31,6 +31,7 @@ package { "python-dev": ensure => "latest"}
 package { "python-numpy": ensure => "latest"}
 package { "redis-server": ensure => "latest"}
 package { "dos2unix": ensure => "latest"}
+package { "sqlite3": ensure => "latest"}
 
 package { "unixodbc": ensure => "latest"}
 package { "unixodbc-dev": ensure => "latest"}

@@ -5,7 +5,7 @@ env.forward_agent = True
 env.key_filename = KEY_FILENAME
 
 servers = ['vagrant@127.0.0.1:2222']
-#servers = ['ubuntu@something.ecotrust.org']
+#servers = ['ubuntu@ford.ecotrust.org']
 env.hosts = servers
 #env.key_filename = AWS_KEY_FILENAME_PROD
 
