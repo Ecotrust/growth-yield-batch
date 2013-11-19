@@ -60,11 +60,11 @@ for vcs in project:
 
     # copy fvs
     copyfile(
-        os.path.join(INDIR, "%d.fvs" % vcs['cond']), 
+        os.path.join(INDIR, vcs['var'].upper(), "fvs", "%d.fvs" % vcs['cond']), 
         os.path.join(outdir, "%d.fvs" % vcs['cond']), 
     )
     copyfile(
-        os.path.join(INDIR, "%d.std" % vcs['cond']), 
+        os.path.join(INDIR, vcs['var'].upper(), "fvs", "%d.std" % vcs['cond']), 
         os.path.join(outdir, "%d.std" % vcs['cond']), 
     )
 
