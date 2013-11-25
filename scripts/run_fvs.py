@@ -6,13 +6,13 @@ After running build_keys ....
 run_fvs.py plots/varWC_rx1...../  <--- this is a plot directory containing .key files to be run
 
 Usage:
-  run_fvs.py PLOTDIRECTORY
-  run_fvs.py (-h | --help)
-  run_fvs.py --version
+    run_fvs.py PLOTDIRECTORY
+    run_fvs.py (-h | --help)
+    run_fvs.py --version
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
+    -h --help     Show this screen.
+    --version     Show version.
 """
 from docopt import docopt
 import os
@@ -34,6 +34,72 @@ class FVSError(Exception):
     pass
 
 
+def prep_final(plotdir, extract_methods):
+    final = os.path.abspath(os.path.join(plotdir, "..", "..", "final"))
+    if not os.path.exists(final):
+        os.makedirs(final)
+
+    if 'sqlite3' in extract_methods:
+        db_path = os.path.join(final, "data.db")
+        try:
+            create_data_db(db_path)
+        except sqlite3.OperationalError as e:
+            if e.message == "table trees_fvsaggregate already exists":
+                # table already exists
+                # TODO ... check for table rather than try/except?
+                pass
+            else:
+                raise sqlite3.OperationalError(e.message)
+
+    return final
+
+
+def write_final(dirname, work, final, extract_methods):
+    if 'csv' in extract_methods:
+        csv = os.path.join(final, dirname + ".csv")
+        df = extract_data(work)
+        df.to_csv(csv, index=False, header=True)
+        print "  EXTRACTED .csv from .out file. Written to ./final/%s.csv" % dirname
+
+    if 'sqlite3' in extract_methods:
+        df = extract_data(work)
+
+        db_path = os.path.join(final, "data.db")
+        conn = sqlite3.connect(db_path, timeout=10)  # 10 seconds to avoid write deadlock?
+        try:
+            sqlio.write_frame(df, name='trees_fvsaggregate',
+                con=conn, flavor='sqlite', if_exists='append')
+        except sqlite3.IntegrityError as e:
+            if e.message.endswith("are not unique"):
+                # try to drop and rerun
+                cursor = conn.cursor()
+
+                delete_sql = """DELETE FROM trees_fvsaggregate
+                  WHERE var = '%(var)s'
+                  AND rx = %(rx)d
+                  AND cond = %(cond)d
+                  AND site = %(site)d
+                  AND climate = '%(climate)s'
+                """ % df.irow(0)  # assume the dataframe has the same data
+
+                res = cursor.execute(delete_sql)
+                if res.rowcount > 0:
+                    print "  WARNING: Deleting %d old rows from ./final/data.db" % res.rowcount
+
+                # try again
+                sqlio.write_frame(df, name='trees_fvsaggregate',
+                    con=conn, flavor='sqlite', if_exists='append')
+
+            else:
+                # something else went wrong
+                conn.rollback()
+                raise sqlite3.IntegrityError(e.message)
+
+        conn.commit()
+        conn.close()
+        print "  EXTRACTED data from .out file. Appended to ./final/data.db"
+
+
 def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     """
     from plots/varWC_rx1_cond31566, 
@@ -46,22 +112,8 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     if not extract_methods:
         # default to sqlite3 only, no csv
         extract_methods = ['sqlite3']
-
-    final = os.path.abspath(os.path.join(plotdir, "..", "..", "final"))
-    if not os.path.exists(final):
-        os.makedirs(final)
-
-    if sqlite3 and extract_data:
-        db_path = os.path.join(final, "data.db")
-        try:
-            create_data_db(db_path)
-        except sqlite3.OperationalError as e:
-            if e.message == "table trees_fvsaggregate already exists":
-                # table already exists
-                # TODO ... check for table rather than try/except?
-                pass
-            else:
-                raise sqlite3.OperationalError(e.message)
+    
+    final = prep_final(plotdir, extract_methods)
 
     outfiledir = os.path.join(final, "out")
     if not os.path.exists(outfiledir):
@@ -106,49 +158,7 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
         copyfile(outfile, os.path.join(outfiledir, os.path.basename(outfile)))
     print "  FVS run successfully. OUT files in ./final/out/"
 
-    if 'csv' in extract_methods and extract_data:
-        csv = os.path.join(final, dirname + ".csv")
-        df = extract_data(work)
-        df.to_csv(csv, index=False, header=True)
-        print "  EXTRACTED .csv from .out file. Written to ./final/%s.csv" % dirname
-
-    if 'sqlite3' in extract_methods and extract_data and sqlite3:
-        df = extract_data(work)
-
-        db_path = os.path.join(final, "data.db")
-        conn = sqlite3.connect(db_path, timeout=10)  # 10 seconds to avoid write deadlock?
-        try:
-            sqlio.write_frame(df, name='trees_fvsaggregate',
-                con=conn, flavor='sqlite', if_exists='append')
-        except sqlite3.IntegrityError as e:
-            if e.message.endswith("are not unique"):
-                # try to drop and rerun
-                cursor = conn.cursor()
-
-                delete_sql = """DELETE FROM trees_fvsaggregate
-                  WHERE var = '%(var)s'
-                  AND rx = %(rx)d
-                  AND cond = %(cond)d
-                  AND site = %(site)d
-                  AND climate = '%(climate)s'
-                """ % df.irow(0)  # assume the dataframe has the same data
-
-                res = cursor.execute(delete_sql)
-                if res.rowcount > 0:
-                    print "  WARNING: Deleting %d old rows from ./final/data.db" % res.rowcount
-
-                # try again
-                sqlio.write_frame(df, name='trees_fvsaggregate',
-                    con=conn, flavor='sqlite', if_exists='append')
-
-            else:
-                # something else went wrong
-                conn.rollback()
-                raise sqlite3.IntegrityError(e.message)
-
-        conn.commit()
-        conn.close()
-        print "  EXTRACTED data from .out file. Appended to ./final/data.db"
+    write_final(dirname, work, final, extract_methods)
 
     # If we've gotten this far, we don't need the work directory any longer
     try:
