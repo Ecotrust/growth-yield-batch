@@ -19,6 +19,7 @@ import os
 import glob
 from shutil import copytree, rmtree, copyfile
 from subprocess import Popen, PIPE
+import gzip
 
 try:
     from extract import extract_data
@@ -59,7 +60,7 @@ def write_final(dirname, work, final, extract_methods):
         csv = os.path.join(final, dirname + ".csv")
         df = extract_data(work)
         df.to_csv(csv, index=False, header=True)
-        print "  EXTRACTED .csv from .out file. Written to ./final/%s.csv" % dirname
+        print "  EXTRACTED data from .out file. CSV written to ./final/%s.csv" % dirname
 
     if 'sqlite3' in extract_methods:
         df = extract_data(work)
@@ -97,7 +98,7 @@ def write_final(dirname, work, final, extract_methods):
 
         conn.commit()
         conn.close()
-        print "  EXTRACTED data from .out file. Appended to ./final/data.db"
+        print "  EXTRACTED data from .out file. Row appended to ./final/data.db"
 
 
 def apply_fvs_to_plotdir(plotdir, extract_methods=None):
@@ -110,8 +111,8 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     dirname = path.split(os.sep)[-1]
 
     if not extract_methods:
-        # default to sqlite3 only, no csv
-        extract_methods = ['sqlite3']
+        # default to both
+        extract_methods = ['sqlite3', 'csv']
     
     final = prep_final(plotdir, extract_methods)
 
@@ -153,10 +154,14 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
 
             return False
 
+    # automatically write outfiles
     outs = glob.glob(os.path.join(work, '*.out'))
-    for outfile in outs:
-        copyfile(outfile, os.path.join(outfiledir, os.path.basename(outfile)))
-    print "  FVS run successfully. OUT files in ./final/out/"
+    for fvsworkfile in outs:
+        outpath = os.path.join(outfiledir, os.path.basename(fvsworkfile) + ".gz")
+        with gzip.open(outpath, 'wb') as outfh:
+            with open(fvsworkfile, 'r') as infh:
+                outfh.write(infh.read())
+    print "  FVS run successfully. GZipped FVS .out files in ./final/out/"
 
     write_final(dirname, work, final, extract_methods)
 
