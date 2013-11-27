@@ -1,7 +1,11 @@
 #!/usr/bin/env python
+#####################################
+# DEPRECATED: See prep_gyb.py
+#####################################
 import pyodbc
 import os
 from shutil import copyfile
+
 
 db = r"G:\projects\projects2011\LandOwnerTools\data\IDB_for_FVS\climate_lookup.accdb"
 BASEOUTDIR = os.path.abspath(r"output")
