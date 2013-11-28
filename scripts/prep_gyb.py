@@ -132,7 +132,7 @@ def make_stdinfofile(stand, outdir, treelistdb):
      
     field 7: Stand Latitude in degrees.
     '''
-    # 1, 4, 5, 6, 7 from shapefile; field names = ['region', 'aspect', 'slope', 'elev', 'lat']
+    # 1, 4, 5, 6, 7 from shapefile; field names = ['location', 'aspect', 'slope', 'elev', 'lat']
 
     # 2 (habitat code) is hard to determine. (may be able to construct via GNN stand-level forest types?)
     #    It drives site tree, site index and max density but we override the first two anyways
@@ -141,14 +141,47 @@ def make_stdinfofile(stand, outdir, treelistdb):
     # and 3 (stand age) could be derived from the data in the treelist?
     #    for now, just do TPA-weighted average of ALL live trees?
     #    ONLY dominiant species? Should we just join with sppz_attr_all and use age_dom_no_rem?
-    pass
+
+    standid = stand['standid']
+    fcid = stand['gnnfcid']
+    path = os.path.join(outdir, "%d.std" % standid)
+
+    with open(path, 'w') as fh:
+        with sqlite3.connect(treelistdb[0]) as con:
+            cur = con.cursor()
+            sql = """SELECT TPA, Tree_Age, Tree_Age * TPA as MULT
+                     FROM %s
+                     WHERE GNN_FCID = %d;""" % (treelistdb[1], fcid)
+
+            data = list(cur.execute(sql))
+            if len(data) == 0:
+                print "WARNING, no data for standid %s, fcid %s" % (standid, fcid)
+                return
+            sumtpa = sum([d[0] for d in data])
+            summult = sum([d[2] for d in data])
+            age = int(summult/sumtpa)
+
+        line = concat_fvs_line("STDINFO", [
+            stand['location'],
+            '',
+            age,
+            int(stand['aspect']),
+            int(stand['slope']),
+            int(stand['elev']),
+            int(stand['lat']),
+        ])
+
+        fh.write(line)
+        fh.write("\n")
+
 
 def concat_fvs_line(keyword, fields):
     col = "%10s"
-    line = col % keyword.upper()
+    line = "{0:<10}".format(keyword.upper(), )
     for field in fields:
         line += col % field
     return line
+
 
 def make_climatefile(stand, outdir, climatedb):
     # query climate.db
@@ -193,7 +226,12 @@ def make_climatefile(stand, outdir, climatedb):
 def make_sitefile(stand, outdir):
     # read site from stand and write number to file
     # return site indecies
-    pass
+    standid = stand['standid']
+    path = os.path.join(outdir, "%d.site" % standid)
+    with open(path, 'w') as fh:
+        fh.write(str(stand['sitecls']))
+        fh.write("\n")
+
 
 def get_sitecls(variant):
     if variant == 'PN':
@@ -203,9 +241,11 @@ def get_sitecls(variant):
         }
     return sitecls
 
+
 def get_climates(climatedb):
     # connect to climatedb and find all unique climate names
     pass
+
 
 def stand_iter(shp):
     import shapefile
@@ -215,23 +255,14 @@ def stand_iter(shp):
         dd = dict(zip(fields, record))
         yield dd      
 
+
 def write_config(sitecls, clims, outdir):
     # write config.json 
     # default to 0, 5, 10, 15 offsets
     pass
 
 
-
-
-
-
-
-
-
-
-
-
-
+#------------------------------------------------------------------------------#
 
 
 def main(variant, shp='stands_aea_join.shp'):
@@ -256,93 +287,3 @@ def main(variant, shp='stands_aea_join.shp'):
     write_config(sitecls, clims, outdir)
 
 main('PN')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-
-db = r"G:\projects\projects2011\LandOwnerTools\data\IDB_for_FVS\climate_lookup.accdb"
-BASEOUTDIR = os.path.abspath(r"output")
-INDIR = r"G:\projects\projects2011\LandOwnerTools\data\IDB_for_FVS\cond"
-
-
-conn = pyodbc.connect("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=%s;" % db)
-cursor = conn.cursor()
-
-sql = """
-SELECT *
-FROM CondForProject
-"""
-cursor.execute(sql)
-project = []
-for row in cursor:
-    project.append({
-        'var': row.Variant,
-        'cond': int(row.COND_ID),
-        'site': row.SiteClass 
-    })
-
-# New cursor necessary? 
-del cursor
-cursor = conn.cursor()
-
-header = """StandID,Scenario,Year,mat,map,gsp,mtcm,mmin,mtwm,mmax,sday,ffp,dd5,gsdd5,d100,dd0,smrpb,smrsprpb,sprp,smrp,winp,ABAM,ABCO,ABGR,ABLA,ABLAA,ABMA,ABPR,ABSH,ACGL,ACGR3,ACMA3,AECA,ALRH2,ALRU2,ARME,BEPA,BEPAC,CADE27,CELE3,CHCH7,CHLA,CHNO,CONU4,FRLA,JUCO11,JUDE2,JUMO,JUOC,JUOS,JUSC2,LALY,LAOC,LIDE3,OLTE,PIAL,PIAR,PIAT,PIBR,PICO,PICO3,PIED,PIEN,PIFL2,PIJE,PILA,PILO,PIMO,PIMO3,PIPO,PIPU,PISI,PIST3,PODEM,POTR5,PROSO,PRUNU,PSME,QUAG,QUCH2,QUDO,QUEM,QUGA,QUGA4,QUHY,QUKE,QULO,QUOB,QUWI2,RONE,SALIX,SEGI2,TABR2,THPL,TSHE,TSME,UMCA,pSite,DEmtwm,DEmtcm,DEdd5,DEsdi,DEdd0,DEpdd5"""
-
-for vcs in project:
-    print "-----"
-    print vcs
-    sql = """
-    SELECT *
-    FROM ClimateByCond
-    WHERE StandID = %s
-    """ % vcs['cond']
-
-    # make variant directory if not done
-    outdir = os.path.join(BASEOUTDIR, vcs['var'], 'cond')
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
-
-    # write cli
-    cursor.execute(sql)
-    with open(os.path.join(outdir, "%d.cli" % vcs['cond']),'w') as fh:
-        fh.write(header)
-        fh.write("\n")
-        for row in cursor:
-            fh.write(",".join([str(x) for x in row[1:]])) # dont include 1st col (access pk)
-            fh.write("\n")
-
-    # write .site
-    with open(os.path.join(outdir, "%d.site" % vcs['cond']),'w') as fh:
-        fh.write(str(vcs['site']))
-        fh.write("\n")
-
-    # copy fvs
-    copyfile(
-        os.path.join(INDIR, vcs['var'].upper(), "fvs", "%d.fvs" % vcs['cond']), 
-        os.path.join(outdir, "%d.fvs" % vcs['cond']), 
-    )
-    copyfile(
-        os.path.join(INDIR, vcs['var'].upper(), "fvs", "%d.std" % vcs['cond']), 
-        os.path.join(outdir, "%d.std" % vcs['cond']), 
-    )
-'''
