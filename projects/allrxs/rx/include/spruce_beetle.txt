@@ -1,3 +1,13 @@
+COMMENT
+Ratings for spruce beetle hazard (ES_BTL), based on Schmid and Frye (1976)
+and described in User's Guide to Post-Processors for the Forest Vegetation 
+Simulator (Van Dyck 2005):
+4-5   = LOW
+6     = LOW-MODERATE
+7-9   = MODERATE
+10    = MODERATE-HIGH
+11-12 = HIGH
+END
 IF
 EVPHASE EQ 2
 THEN

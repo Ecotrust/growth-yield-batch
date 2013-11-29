@@ -1,3 +1,16 @@
+COMMENT
+Ratings for Ponderosa Pine (PP_BTL), based on Munson and Anhold (1995)
+and described in User's Guide to the Post-Processors for the Forest 
+Vegetation Simulator (Van Dyck 2005):
+3-4  = Low
+5-8  = Moderate
+9-11 = High
+Ratings for Lodgepole Pine (LP_BTL), based on Randall and Tensmeyer (2000):
+1    = Extremely low
+2-7  = Low
+8-13 = Moderate
+14   = High
+END
 IF
 EVPHASE EQ 2
 THEN

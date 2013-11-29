@@ -1,3 +1,10 @@
+COMMENT
+Variables provide average cubic foot volume of harvested trees ("CF" at end 
+of name), number of trees per acre harvested ("TPA" at end of name), and 
+proportion of harvested volume coming from hardwoods ("HW" at end of name)
+in diameter classes 2"<CH<5" 5"<SM<20" and LG>=20" (CH, SM, LG at beginning 
+of name).
+END
 COMPUTE            0
 CH_TPA = SPMCDBH(1,All,0,2,5,0,999,2)
 SM_TPA = SPMCDBH(1,All,0,5,20,0,999,2)
