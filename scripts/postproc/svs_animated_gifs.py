@@ -2,9 +2,6 @@
 import os
 import glob
 
-FVSOUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "__svs_test", "tmpout"))
-GIFOUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "__svs_test", "gifs"))
-
 def index_to_bmps(index):
     lines = open(index,'r').readlines()
     svs_list = []
@@ -22,38 +19,30 @@ def index_to_bmps(index):
 
 
 def svs_to_bmp(svs):
-    cmd = "e:\\git\\growth-yield-batch\\fvsbin\\winsvs.exe -A292 -E320 -S27 -D252 -L46 -C%s.bmp %s" % (svs, svs)
+    # tweak manually then get display > command line options
+    cmd = "c:\\fvsbin\\winsvs.exe -A216 -E400 -S16 -D314 -L58 -C%s.bmp %s" % (svs, svs)
     print cmd
     os.system(cmd)
+    # cmd = '"c:\\Program Files (x86)\\ImageMagick\\convert.exe" %s.bmp %s.png' % (svs, svs)
+    # print cmd
+    # os.system(cmd)
 
 
 if __name__ == '__main__':
-    os.chdir(FVSOUT)
     cmds = []
-    for rundir in glob.glob("var*"):
-        os.chdir(rundir)
 
-        indexes = [
-            "varPN_rx1_cond29106_site2_00_index.svs",
-            "varPN_rx21_cond29106_site2_00_index.svs",
-            "varPN_rx24_cond29106_site2_00_index.svs",
-            "varPN_rx6_cond29106_site2_00_index.svs",
-        ]
+    for index in glob.glob("*_index.svs"):
+        # if index not in indexes:
+        #     continue
 
-        for index in glob.glob("*_index.svs"):
-            if index not in indexes:
-                continue
+        # uncomment to recreate bmps
+        index_to_bmps(index)
 
-            # uncomment to recreate bmps
-            index_to_bmps(index)
-
-            prefix = index.replace("_index.svs","")
-            bmp_glob = os.path.join(rundir, prefix + "*.svs.bmp")
-            gif = os.path.join(GIFOUT, prefix + ".gif")
-            cmd = '"c:\\Program Files (x86)\\ImageMagick\\convert.exe" -delay 60 -resize 75%% %s %s' % (bmp_glob, gif)
-            cmds.append(cmd)
-
-        os.chdir("..")
+        prefix = os.path.basename(index).replace("_index.svs","")
+        bmp_glob = os.path.join('.', prefix + "*.svs.bmp")
+        gif = os.path.join('.', prefix + ".gif")
+        cmd = '"c:\\Program Files (x86)\\ImageMagick\\convert.exe" -delay 60 -resize 75%% %s %s' % (bmp_glob, gif)
+        cmds.append(cmd)
 
     print
     print "=" * 80

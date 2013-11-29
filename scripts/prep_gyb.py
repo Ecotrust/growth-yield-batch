@@ -6,6 +6,8 @@ Requires stands.shp + treeslist.db + climate.db
 '''
 import os
 import sqlite3
+import json
+import glob
 
 
 TF = [
@@ -83,7 +85,8 @@ def make_fvsfile(stand, outdir, treelistdb, variant):
                         # assert len(val.strip()) <= valwidth, (col, val, valwidth)
                         pass
                     elif valtype == "int":
-                        # special case, convert to code !!!!!!!!!!!!!!!!!!!!!!!!! THIS SHOULD BE DONE IN THE ACCESS DB QUERY!!!!!!!!!!!!!!!!!!
+                        # special case, convert to code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+                        # THIS SHOULD BE DONE IN THE ACCESS DB QUERY
                         if col == "Crown":
                             val = 1 + int( (val-1) / 10)
                             if val > 9:
@@ -106,8 +109,9 @@ def make_fvsfile(stand, outdir, treelistdb, variant):
                     fval = fmt.format(val)
 
                     if len(fval) > valwidth:
-                        print "WARNING: %s is '%s' but should only be %d wide; truncating!!" % (col, val, valwidth)
-                    line += fval[-1 * valwidth:]  # Just take the trailing chars if over, TODO
+                        print "WARNING: %s is '%s' should only be %d wide!!" % (col,
+                            val, valwidth)
+                    line += fval[-1 * valwidth:]  # Just take the trailing chars 
                 #print line
                 fh.write(line)
                 fh.write("\n")
@@ -134,33 +138,36 @@ def make_stdinfofile(stand, outdir, treelistdb):
     '''
     # 1, 4, 5, 6, 7 from shapefile; field names = ['location', 'aspect', 'slope', 'elev', 'lat']
 
-    # 2 (habitat code) is hard to determine. (may be able to construct via GNN stand-level forest types?)
-    #    It drives site tree, site index and max density but we override the first two anyways
-    #    LEAVE BLANK AND USE DEFUALT FOR NOW - ie accept the default max stand density
+    # 2 (habitat code) is hard to determine.
+    #    (may be able to construct via GNN stand-level forest types?)
+    #    It drives site tree/index and max density but we override the first two anyways
+    #    LEAVE BLANK AND USE DEFUALT FOR NOW - ie accept the default max stand density !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     # and 3 (stand age) could be derived from the data in the treelist?
     #    for now, just do TPA-weighted average of ALL live trees?
-    #    ONLY dominiant species? Should we just join with sppz_attr_all and use age_dom_no_rem?
+    #    ONLY dominiant species? 
+    # Should we just join with sppz_attr_all and use age_dom_no_rem? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 
     standid = stand['standid']
     fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.std" % standid)
 
+    with sqlite3.connect(treelistdb[0]) as con:
+        cur = con.cursor()
+        sql = """SELECT TPA, Tree_Age, Tree_Age * TPA as MULT
+                 FROM %s
+                 WHERE GNN_FCID = %d;""" % (treelistdb[1], fcid)
+
+        data = list(cur.execute(sql))
+        if len(data) == 0:
+            warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
+            raise Exception(warn)
+            return
+        sumtpa = sum([d[0] for d in data])
+        summult = sum([d[2] for d in data])
+        age = int(summult/sumtpa)
+
     with open(path, 'w') as fh:
-        with sqlite3.connect(treelistdb[0]) as con:
-            cur = con.cursor()
-            sql = """SELECT TPA, Tree_Age, Tree_Age * TPA as MULT
-                     FROM %s
-                     WHERE GNN_FCID = %d;""" % (treelistdb[1], fcid)
-
-            data = list(cur.execute(sql))
-            if len(data) == 0:
-                print "WARNING, no data for standid %s, fcid %s" % (standid, fcid)
-                return
-            sumtpa = sum([d[0] for d in data])
-            summult = sum([d[2] for d in data])
-            age = int(summult/sumtpa)
-
         line = concat_fvs_line("STDINFO", [
             stand['location'],
             '',
@@ -199,7 +206,7 @@ def make_climatefile(stand, outdir, climatedb):
     "QUCH2,QUDO,QUEM,QUGA,QUGA4,QUHY,QUKE,QULO,QUOB,QUWI2,RONE,SALIX,SEGI2,TABR2," \
     "THPL,TSHE,TSME,UMCA,pSite,DEmtwm,DEmtcm,DEdd5,DEsdi,DEdd0,DEpdd5"
 
-    standid = stand['standid']
+    standid = orig_standid = stand['standid']
     #fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.cli" % standid)
 
@@ -211,7 +218,7 @@ def make_climatefile(stand, outdir, climatedb):
             cur = con.cursor()
 
             # TODO until we get the new fvs climate data associated with standids
-            # fake it
+            # grab a random id  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             import random
             standid = random.choice([1, 7, 10])
 
@@ -219,7 +226,8 @@ def make_climatefile(stand, outdir, climatedb):
                      FROM %s
                      WHERE StandID = %d;""" % (header, climatedb[1], standid)
             for i, row in enumerate(cur.execute(sql)):
-                fh.write(",".join([str(x) for x in row]))
+                # TODO when fixed ... fh.write(",".join([str(x) for x in row]))
+                fh.write(",".join([str(orig_standid)] + [str(x) for x in row[1:]]))
                 fh.write("\n")
 
 
@@ -234,17 +242,23 @@ def make_sitefile(stand, outdir):
 
 
 def get_sitecls(variant):
-    if variant == 'PN':
+    #TODO more site classes and variants !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if variant in ['PN', 'WC', 'CA']:
         sitecls = {
-          '2': "blah",
-          '3': "foob"
+            "2": "SiteCode          DF       125         1",
+            "3": "SiteCode          DF       105         1"
         }
     return sitecls
 
 
 def get_climates(climatedb):
     # connect to climatedb and find all unique climate names
-    pass
+    with sqlite3.connect(climatedb[0]) as con:
+        cur = con.cursor()
+        sql = """SELECT DISTINCT Scenario
+                 FROM %s""" % (climatedb[1], )
+        scenarios = [x[0] for x in cur.execute(sql)]
+    return scenarios
 
 
 def stand_iter(shp):
@@ -256,10 +270,19 @@ def stand_iter(shp):
         yield dd      
 
 
-def write_config(sitecls, clims, outdir):
+def write_config(variant, climatedb, outdir):
     # write config.json 
     # default to 0, 5, 10, 15 offsets
-    pass
+    sitecls = get_sitecls(variant)
+    clims = get_climates(climatedb)
+    data = {
+      "climate_scenarios": clims,
+      "sites": sitecls,
+      "offsets": [0, 5, 10, 15]
+    }
+    with open(os.path.join(outdir, 'config.json'), 'w') as fh:
+        fh.write(json.dumps(data, indent=2))
+
 
 
 #------------------------------------------------------------------------------#
@@ -275,15 +298,17 @@ def main(variant, shp='stands_aea_join.shp'):
         os.makedirs(outdir)
 
     for stand in stand_iter(shp):
-        print stand['standid']
-        make_climatefile(stand, outdir, climatedb)
+        try:
+            make_climatefile(stand, outdir, climatedb)
+            make_fvsfile(stand, outdir, treelistdb, variant)
+            make_stdinfofile(stand, outdir, treelistdb)
+            make_sitefile(stand, outdir)
+        except Exception as exc:
+            print exc.message
+            # clean up
+            for path in glob.glob(os.path.join(outdir, "%s*" % stand['standid'])):
+                os.remove(path)
 
-        make_fvsfile(stand, outdir, treelistdb, variant)
-        make_stdinfofile(stand, outdir, treelistdb)
-        make_sitefile(stand, outdir)
-
-    sitecls = get_sitecls(variant)
-    clims = get_climates(climatedb)
-    write_config(sitecls, clims, outdir)
+    write_config(variant, climatedb, outdir)
 
 main('PN')

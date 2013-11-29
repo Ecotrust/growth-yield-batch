@@ -163,6 +163,14 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
                 outfh.write(infh.read())
     print "  FVS run successfully. GZipped FVS .out files in ./final/out/"
 
+    # If we've got svs files, save 'em uncompressed (TODO might want to compress these?)
+    svss = glob.glob(os.path.join(work, '*.svs'))
+    svsfiledir = os.path.join(final, "svs")
+    for svs in svss:
+        if not os.path.exists(svsfiledir):
+            os.makedirs(svsfiledir)
+        copyfile(svs, os.path.join(svsfiledir, os.path.basename(svs)))
+
     write_final(dirname, work, final, extract_methods)
 
     # If we've gotten this far, we don't need the work directory any longer
