@@ -174,7 +174,7 @@ def make_stdinfofile(stand, outdir, treelistdb):
             age,
             int(stand['aspect']),
             int(stand['slope']),
-            int(stand['elev']),
+            int(round(stand['elev'] / 100.0)),  # elev assumed to be in ft, FVS expects ft/100
             int(stand['lat']),
         ])
 
