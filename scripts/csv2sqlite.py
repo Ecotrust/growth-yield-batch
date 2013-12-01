@@ -38,14 +38,10 @@ def create_table_sql(csv_path, table):
     return sql
 
 
-
 if __name__ == "__main__":
     INCSV = sys.argv[1]
     DATABASE = sys.argv[2]
     TABLE = sys.argv[3]
-
-    if os.path.exists(DATABASE):
-        raise Exception("""database already exists: %s""" % DATABASE)
 
     if not os.path.exists(INCSV):
         raise Exception("%s doesn't exist" % INCSV)
@@ -53,12 +49,19 @@ if __name__ == "__main__":
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
 
-    print "Creating table"
-    sql = create_table_sql(INCSV, TABLE)
-    cur.execute(sql)
+    table_query = """SELECT name FROM sqlite_master WHERE type='table' AND name='%s';""" % (TABLE,)
+    cur.execute(table_query)
+    table_exists = len(cur.fetchall())
 
-    columnsQuery = "PRAGMA table_info(%s)" % TABLE
-    cur.execute(columnsQuery)
+    if table_exists == 0:
+        print "Creating table"
+        sql = create_table_sql(INCSV, TABLE)
+        cur.execute(sql)
+    else:
+        print "Table exists; Trying to insert into existing table"
+
+    columns_query = "PRAGMA table_info(%s)" % TABLE
+    cur.execute(columns_query)
     numcol = len(cur.fetchall())
 
     print "Inserting data into table"

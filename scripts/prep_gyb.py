@@ -170,7 +170,7 @@ def make_stdinfofile(stand, outdir, treelistdb):
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
             stand['location'],
-            '',
+            stand['habitat'],
             age,
             int(stand['aspect']),
             int(stand['slope']),
@@ -261,13 +261,19 @@ def get_climates(climatedb):
     return scenarios
 
 
-def stand_iter(shp):
-    import shapefile
-    sf = shapefile.Reader(shp)
-    fields = [x[0] for x in sf.fields[1:]]
-    for record in sf.iterRecords():
-        dd = dict(zip(fields, record))
-        yield dd      
+def stand_iter(batch):
+    # import shapefile
+    # sf = shapefile.Reader(shp)
+    # fields = [x[0] for x in sf.fields[1:]]
+    # for record in sf.iterRecords():
+    #     dd = dict(zip(fields, record))
+    #     yield dd      
+    with sqlite3.connect('master.sqlite') as con:
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        sql = """SELECT * FROM stands WHERE batch='%s'""" % batch  #TODO unsafe 
+        for i, row in enumerate(cur.execute(sql)):
+            yield dict(zip(row.keys(), row))  
 
 
 def write_config(variant, climatedb, outdir):
@@ -288,16 +294,17 @@ def write_config(variant, climatedb, outdir):
 #------------------------------------------------------------------------------#
 
 
-def main(variant, shp='stands_aea_join.shp'):
-    treelistdb = ('treelist.db', 'treelive')
-    climatedb = ('sample.db', 'fvsclimattrs')
-    #climatedb = ('climate.db', 'fvsclimattrs')
+def main(variant, batch):
+    treelistdb = ('master.sqlite', 'treelist')
+    climatedb = ('master.sqlite', 'climate')
 
-    outdir = "./output"
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
+    outdir = "./%s_cond" % batch
+    if os.path.exists(outdir):
+        import shutil
+        shutil.rmtree(outdir)
+    os.makedirs(outdir)
 
-    for stand in stand_iter(shp):
+    for stand in stand_iter(batch):
         try:
             make_climatefile(stand, outdir, climatedb)
             make_fvsfile(stand, outdir, treelistdb, variant)
@@ -305,10 +312,11 @@ def main(variant, shp='stands_aea_join.shp'):
             make_sitefile(stand, outdir)
         except Exception as exc:
             print exc.message
-            # clean up
+            # clean up and just skip it
             for path in glob.glob(os.path.join(outdir, "%s*" % stand['standid'])):
                 os.remove(path)
 
     write_config(variant, climatedb, outdir)
 
-main('PN')
+main('PN', 'PN1A')
+main('PN', 'PN1B')
