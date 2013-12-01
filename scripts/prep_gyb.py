@@ -9,6 +9,8 @@ import sqlite3
 import json
 import glob
 
+class GYBError(Exception):
+    pass
 
 TF = [
     # See "G:\projects\projects2011\LandOwnerTools\util\scripts\FVS TREEFMT Details.xlsx"
@@ -41,7 +43,7 @@ TF = [
     ("Tree Age", "Tree_Age", "F3.0", "float", 3, 65, 0), 
 ]
 
-def make_fvsfile(stand, outdir, treelistdb, variant):
+def make_fvsfile(stand, outdir, con, variant):
     # query treelist.db for the condid
     # construct lines and write to file
     # make sure you've got an index on the standid column
@@ -55,69 +57,68 @@ def make_fvsfile(stand, outdir, treelistdb, variant):
     cols = [x[1].replace("{{variant}}", variant) for x in TF if x[1] is not None]
 
     with open(path, 'w') as fh:
-        with sqlite3.connect(treelistdb[0]) as con:
-            con.row_factory = sqlite3.Row
-            cur = con.cursor()
-            sql = """SELECT %s
-                     FROM %s
-                     WHERE GNN_FCID = %d;""" % (', '.join(cols), treelistdb[1], fcid)
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        sql = """SELECT %s
+                 FROM treelist
+                 WHERE GNN_FCID = %d;""" % (', '.join(cols), fcid)
 
-            for i, row in enumerate(cur.execute(sql)):
-                #line = " ".join([str(x) for x in row])
-                line = ''
-                for item in TF:
-                    col = item[1]
-                    if col is not None:
-                        col = col.replace("{{variant}}", variant)
-                    valtype = item[3]
-                    valwidth = item[4]
-                    dec = item[6]
+        for i, row in enumerate(cur.execute(sql)):
+            #line = " ".join([str(x) for x in row])
+            line = ''
+            for item in TF:
+                col = item[1]
+                if col is not None:
+                    col = col.replace("{{variant}}", variant)
+                valtype = item[3]
+                valwidth = item[4]
+                dec = item[6]
 
-                    if item[0] == "Plot ID": # special case
-                        val = standid
-                    elif col is None:
-                        val = ''
-                        valtype = 'str'
-                    else:
-                        val = row[col]
+                if item[0] == "Plot ID": # special case
+                    val = standid
+                elif col is None:
+                    val = ''
+                    valtype = 'str'
+                else:
+                    val = row[col]
 
-                    if valtype == "str":
+                if valtype == "str":
+                    # assert len(val.strip()) <= valwidth, (col, val, valwidth)
+                    pass
+                elif valtype == "int":
+                    # special case, convert to code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+                    # THIS SHOULD BE DONE IN THE ACCESS DB QUERY
+                    if col == "Crown":
+                        val = 1 + int( (val-1) / 10)
+                        if val > 9:
+                            val = 9
+
+                    if val != '':
+                        val = str(int(val))
+                        if col == "TreeID":  # special case, just use autonum
+                            val = str(i)
                         # assert len(val.strip()) <= valwidth, (col, val, valwidth)
-                        pass
-                    elif valtype == "int":
-                        # special case, convert to code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-                        # THIS SHOULD BE DONE IN THE ACCESS DB QUERY
-                        if col == "Crown":
-                            val = 1 + int( (val-1) / 10)
-                            if val > 9:
-                                val = 9
+                elif valtype == "float":
+                    if val != '':
+                        val = float(val)
+                        mult = 10 ** dec
+                        val = val * mult
+                        val = str(int(round(val)))
+                        # assert len(val.strip()) <= valwidth, (col, val, valwidth)
 
-                        if val != '':
-                            val = str(int(val))
-                            if col == "TreeID":  # special case, just use autonum
-                                val = str(i)
-                            # assert len(val.strip()) <= valwidth, (col, val, valwidth)
-                    elif valtype == "float":
-                        if val != '':
-                            val = float(val)
-                            mult = 10 ** dec
-                            val = val * mult
-                            val = str(int(round(val)))
-                            # assert len(val.strip()) <= valwidth, (col, val, valwidth)
+                fmt = '{0: >%d}' % valwidth
+                fval = fmt.format(val)
 
-                    fmt = '{0: >%d}' % valwidth
-                    fval = fmt.format(val)
-
-                    if len(fval) > valwidth:
-                        print "WARNING: %s is '%s' should only be %d wide!!" % (col,
-                            val, valwidth)
-                    line += fval[-1 * valwidth:]  # Just take the trailing chars 
-                #print line
-                fh.write(line)
-                fh.write("\n")
+                if len(fval) > valwidth:
+                    print "WARNING: %s is '%s' should only be %d wide!!" % (col,
+                        val, valwidth)
+                line += fval[-1 * valwidth:]  # Just take the trailing chars 
+            #print line
+            fh.write(line)
+            fh.write("\n")
 
 
-def make_stdinfofile(stand, outdir, treelistdb):
+def make_stdinfofile(stand, outdir, con):
     '''
     field 1: Numeric Region and National Forest code where stand is located.
     RFF where R = region, FF = 2-digit forest code
@@ -152,20 +153,19 @@ def make_stdinfofile(stand, outdir, treelistdb):
     fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.std" % standid)
 
-    with sqlite3.connect(treelistdb[0]) as con:
-        cur = con.cursor()
-        sql = """SELECT TPA, Tree_Age, Tree_Age * TPA as MULT
-                 FROM %s
-                 WHERE GNN_FCID = %d;""" % (treelistdb[1], fcid)
+    cur = con.cursor()
+    sql = """SELECT TPA, Tree_Age, Tree_Age * TPA as MULT
+             FROM treelist
+             WHERE GNN_FCID = %d;""" % (fcid, )
 
-        data = list(cur.execute(sql))
-        if len(data) == 0:
-            warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
-            raise Exception(warn)
-            return
-        sumtpa = sum([d[0] for d in data])
-        summult = sum([d[2] for d in data])
-        age = int(summult/sumtpa)
+    data = list(cur.execute(sql))
+    if len(data) == 0:
+        warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
+        raise GYBError(warn)
+        return
+    sumtpa = sum([d['TPA'] for d in data])
+    summult = sum([d['MULT'] for d in data])
+    age = int(summult/sumtpa)
 
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
@@ -190,7 +190,7 @@ def concat_fvs_line(keyword, fields):
     return line
 
 
-def make_climatefile(stand, outdir, climatedb):
+def make_climatefile(stand, outdir, con):
     # query climate.db
     # write to .cli
     # return available climates
@@ -213,22 +213,24 @@ def make_climatefile(stand, outdir, climatedb):
     with open(path, 'w') as fh:
         fh.write(header)
         fh.write("\n")
-        with sqlite3.connect(climatedb[0]) as con:
-            #con.row_factory = sqlite3.Row
-            cur = con.cursor()
 
-            # TODO until we get the new fvs climate data associated with standids
-            # grab a random id  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            import random
-            standid = random.choice([1, 7, 10])
+        con.row_factory = None
+        cur = con.cursor()
 
-            sql = """SELECT %s
-                     FROM %s
-                     WHERE StandID = %d;""" % (header, climatedb[1], standid)
-            for i, row in enumerate(cur.execute(sql)):
-                # TODO when fixed ... fh.write(",".join([str(x) for x in row]))
-                fh.write(",".join([str(orig_standid)] + [str(x) for x in row[1:]]))
-                fh.write("\n")
+        # TODO until we get the new fvs climate data associated with standids
+        # grab a random id  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        import random
+        standid = random.choice([1, 7, 10])
+
+        sql = """SELECT %s
+                 FROM climate
+                 WHERE StandID = %d;""" % (header, standid)
+        for i, row in enumerate(cur.execute(sql)):
+            # TODO when fixed ... fh.write(",".join([str(x) for x in row]))
+            fh.write(",".join([str(orig_standid)] + [str(x) for x in row[1:]]))
+            fh.write("\n")
+
+    con.row_factory = sqlite3.Row
 
 
 def make_sitefile(stand, outdir):
@@ -251,36 +253,32 @@ def get_sitecls(variant):
     return sitecls
 
 
-def get_climates(climatedb):
+def get_climates(con):
     # connect to climatedb and find all unique climate names
-    with sqlite3.connect(climatedb[0]) as con:
-        cur = con.cursor()
-        sql = """SELECT DISTINCT Scenario
-                 FROM %s""" % (climatedb[1], )
-        scenarios = [x[0] for x in cur.execute(sql)]
+    cur = con.cursor()
+    sql = """SELECT DISTINCT Scenario FROM climate"""
+    scenarios = [x[0] for x in cur.execute(sql)]
     return scenarios
 
 
-def stand_iter(batch):
+def stand_iter(batch, con):
     # import shapefile
     # sf = shapefile.Reader(shp)
     # fields = [x[0] for x in sf.fields[1:]]
     # for record in sf.iterRecords():
     #     dd = dict(zip(fields, record))
     #     yield dd      
-    with sqlite3.connect('master.sqlite') as con:
-        con.row_factory = sqlite3.Row
-        cur = con.cursor()
-        sql = """SELECT * FROM stands WHERE batch='%s'""" % batch  #TODO unsafe 
-        for i, row in enumerate(cur.execute(sql)):
-            yield dict(zip(row.keys(), row))  
+    cur = con.cursor()
+    sql = """SELECT * FROM stands WHERE batch='%s'""" % batch  #TODO unsafe 
+    for i, row in enumerate(cur.execute(sql)):
+        yield dict(zip(row.keys(), row))  
 
 
-def write_config(variant, climatedb, outdir):
+def write_config(variant, con, outdir):
     # write config.json 
     # default to 0, 5, 10, 15 offsets
     sitecls = get_sitecls(variant)
-    clims = get_climates(climatedb)
+    clims = get_climates(con)
     data = {
       "climate_scenarios": clims,
       "sites": sitecls,
@@ -295,28 +293,34 @@ def write_config(variant, climatedb, outdir):
 
 
 def main(variant, batch):
-    treelistdb = ('master.sqlite', 'treelist')
-    climatedb = ('master.sqlite', 'climate')
+    print "Starting %s %s" % (variant, batch)
 
-    outdir = "./%s_cond" % batch
+    outdir = "./%s/cond" % batch
     if os.path.exists(outdir):
         import shutil
         shutil.rmtree(outdir)
     os.makedirs(outdir)
+    print "Writing to %s" % outdir
 
-    for stand in stand_iter(batch):
+    conn = sqlite3.connect('master.sqlite')
+    conn.row_factory = sqlite3.Row
+
+    for stand in stand_iter(batch, conn):
         try:
-            make_climatefile(stand, outdir, climatedb)
-            make_fvsfile(stand, outdir, treelistdb, variant)
-            make_stdinfofile(stand, outdir, treelistdb)
+            make_climatefile(stand, outdir, conn)
+            make_fvsfile(stand, outdir, conn, variant)
+            make_stdinfofile(stand, outdir, conn)
             make_sitefile(stand, outdir)
-        except Exception as exc:
-            print exc.message
+            print "\t", stand['standid'], "complete"
+        except GYBError as exc:
+            print "\t", exc.message
             # clean up and just skip it
             for path in glob.glob(os.path.join(outdir, "%s*" % stand['standid'])):
                 os.remove(path)
 
-    write_config(variant, climatedb, outdir)
+    write_config(variant, conn, os.path.join(outdir, '..'))
+    print "DONE"
+
 
 main('PN', 'PN1A')
 main('PN', 'PN1B')
