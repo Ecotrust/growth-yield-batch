@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
                     out = "var%s_rx%s_cond%s_site%s_clim%s" % (
                         variant, rx, condid, site_class, climate_safe)
-                    print "\t", out
+                    #print "\t", out
                     outdir = os.path.join(plotsdir, out)
                     os.makedirs(outdir)
 
