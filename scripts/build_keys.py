@@ -33,6 +33,7 @@ from shutil import copyfile, rmtree
 import os
 import glob
 import json
+from jinja2 import Template
 
 
 def check_indir(indir):
@@ -108,6 +109,9 @@ if __name__ == "__main__":
             variant = variant.replace('var','')
             rx = rx.replace('rx','')
 
+            with open(basekey, 'r') as fh:
+                template = Template(fh.read())
+
             for site_class, sitecode in sites.items():
 
                 for climate in conf['climate_scenarios']:
@@ -133,9 +137,6 @@ if __name__ == "__main__":
                         keyout = out + "_off%s.key" % (offset, )
                         keyoutpath = os.path.join(outdir, keyout)
 
-                        from jinja2 import Template
-                        with open(basekey, 'r') as fh:
-                            template = Template(fh.read())
                         content = template.render(locals())
 
                         with open(keyoutpath, 'w') as fh:
