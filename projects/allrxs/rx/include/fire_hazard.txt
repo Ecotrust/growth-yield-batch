@@ -1,3 +1,11 @@
+COMMENT
+Fire hazard rating based on Hugget, Abt, and Shepperd (2008):
+0 = very low risk
+1 = low risk
+2 = medium risk
+3 = medium-high risk
+4 = high risk
+END
 IF
 EVPHASE EQ 2
 THEN
