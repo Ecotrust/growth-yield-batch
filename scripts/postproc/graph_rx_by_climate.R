@@ -78,7 +78,37 @@ d <- runsql("select 'rx' || rx as rx, rx as rxnum, climate, count(rx) as rxcount
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 d$circ = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 1))
 
-hp <- ggplot(d, aes(x=rx, y=rxcount, fill=rx)) + geom_bar(stat="identity") +
+d[d$climate == "NoClimate", ]$rcp <- "rcp45"
+
+d$climfact <- factor(d$climate, levels=c(
+    "CCSM4-rcp45", 
+    "Ensemble-rcp45",  
+    "GFDLCM3-rcp45",
+    "HadGEM2ES-rcp45", 
+
+    "CCSM4-rcp60",     
+    "Ensemble-rcp60", 
+    "GFDLCM3-rcp60",
+    "HadGEM2ES-rcp60",
+
+    "CCSM4-rcp85",
+    "Ensemble-rcp85",
+    "GFDLCM3-rcp85",
+    "HadGEM2ES-rcp85",
+
+    "NoClimate"
+    ), ordered=TRUE)
+
+d$rxfact <- factor(d$rx, levels=c(
+    "rx3",  
+    "rx8",
+    "rx13", 
+    "rx20",     
+    "rx25", 
+    "rx1"
+    ), ordered=TRUE)
+
+bar <- ggplot(d, aes(x=rx, y=rxcount, fill=rx)) + geom_bar(stat="identity") +
       facet_grid(circ ~ rcp) +
       theme(axis.text.x=element_blank(),
         axis.text.y=element_blank(),
@@ -87,9 +117,48 @@ hp <- ggplot(d, aes(x=rx, y=rxcount, fill=rx)) + geom_bar(stat="identity") +
         plot.background = element_rect(color="white"),
         plot.margin = unit(c(0.5,0,0,0), "cm"),
         panel.border=element_blank(),
-        axis.title.x=element_blank())     
+        legend.position="none", # TODO 
+        axis.title.x=element_blank()) +
+       scale_fill_brewer(palette="Spectral")
+
+stacked <- ggplot(d, aes(x=climfact, y=rxcount, fill=rx)) + geom_bar(stat="identity") +
+      theme(axis.text.x=element_blank(),
+        axis.ticks=element_blank(),
+        strip.background=element_rect(fill="white", colour="white"),
+        plot.background = element_rect(color="white"),
+        plot.margin = unit(c(0.5,0,0,0), "cm"),
+        panel.border=element_blank(),
+        legend.position="none", # TODO 
+        axis.title.x=element_blank()) +
+       scale_fill_brewer(palette="Spectral") +
+        coord_flip()
 
       #scale_fill_manual(values=c("blue", "cyan4"))
       #facet_grid(. ~ climate)
 
-hp
+pie <- ggplot(d, aes(x="", y=rxcount, fill=rxfact)) + geom_bar(stat="identity") +
+      facet_grid(circ ~ rcp) +
+      theme(axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        strip.background=element_rect(fill="white", colour="white"),
+        plot.background = element_rect(color="white"),
+        plot.margin = unit(c(0.5,0,0,0), "cm"),
+        panel.border=element_blank(),
+        axis.title.x=element_blank(),
+        legend.position="right", # TODO 
+        legend.direction="vertical",
+        axis.title.y=element_blank()) +
+       coord_polar(theta="y") + 
+       scale_fill_brewer(palette="YlGn", name="Rx",
+                         labels=c(
+                          "40 year", 
+                          "60 year",
+                          "60 year w/ PCT", 
+                          "75 year", 
+                          "20 year thin", 
+                          "Grow only"
+                          )) 
+
+# multiplot(bar, stacked, pie, cols=3)
+print(pie)
