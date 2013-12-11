@@ -3,7 +3,8 @@ library('Cairo')
 library(grid)
 library(RSQLite)
 
-runsql <- function(sql, dbname="E:/workspace/gnn_build/master.sqlite"){
+#runsql <- function(sql, dbname="E:/workspace/gnn_build/master.sqlite"){
+runsql <- function(sql, dbname="E:/workspace/gnn_build/try1.db"){
   require(RSQLite)
   driver <- dbDriver("SQLite")
   connect <- dbConnect(driver, dbname=dbname);
@@ -56,23 +57,24 @@ theme_set(theme_bw())
 
 
 # d <- runsql( 
-#     "SELECT fvs.year as year, fvs.climate as climate, 
-#             sum(calc_carbon) as carbon, sum(after_total_ft3) as volume,
-#             sum(removed_merch_bdft) as timber, avg(FIREHZD) as fire,
-#             avg(NSONEST) as owl
-#             -- todo sum(NSONEST + acres)
-#     FROM fvsaggregate AS fvs
-#     JOIN optimalrx AS opt
-#     ON fvs.cond = opt.stand
-#     -- todo join with stands to get acres
-#     WHERE calc_carbon IS NOT NULL
-#     AND opt.rx = fvs.rx
-#     AND opt.offset = fvs.offset
-#     GROUP BY fvs.year, fvs.climate")
+    # "SELECT fvs.year as year, fvs.climate as climate, 
+    #         sum(calc_carbon) as carbon, sum(after_total_ft3) as volume,
+    #         sum(removed_merch_bdft) as timber, avg(FIREHZD) as fire,
+    #         avg(NSONEST) as owl
+    #         -- todo sum(NSONEST + acres)
+    # FROM fvsaggregate AS fvs
+    # JOIN optimalrx AS opt
+    # ON fvs.cond = opt.stand
+    # -- todo join with stands to get acres
+    # WHERE calc_carbon IS NOT NULL
+    # AND opt.rx = fvs.rx
+    # AND opt.offset = fvs.offset
+    # GROUP BY fvs.year, fvs.climate")
 
 # write.csv(d, 'output2.csv')
 
-d <- read.csv('output2.csv')
+#d <- read.csv('output2.csv')
+d <- runsql("select * from try1")
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 
 # scale some units
