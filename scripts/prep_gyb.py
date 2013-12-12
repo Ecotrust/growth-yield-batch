@@ -159,7 +159,7 @@ def make_stdinfofile(stand, outdir, con):
         warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
         raise GYBError(warn)
         return
-    # Basal Area weighted 
+    # Basal Area weighted of live trees only
     sumba = float(sum([d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
     summult = float(sum([d['Tree_Age'] * d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
     age = int(round(summult/sumba))
