@@ -144,28 +144,25 @@ def make_stdinfofile(stand, outdir, con):
     #    It drives site tree/index and max density but we override the first two anyways
     #    LEAVE BLANK AND USE DEFUALT FOR NOW - ie accept the default max stand density !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    # and 3 (stand age) could be derived from the data in the treelist?
-    #    for now, just do TPA-weighted average of ALL live trees?
-    #    ONLY dominiant species? 
-    # Should we just join with sppz_attr_all and use age_dom_no_rem? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-
     standid = stand['standid']
     fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.std" % standid)
 
     cur = con.cursor()
-    sql = """SELECT TPA, Tree_Age, Tree_Age * TPA as MULT
+    sql = """SELECT TPA, DBH, Tree_Age
              FROM treelist
-             WHERE GNN_FCID = %d;""" % (fcid, )
+             WHERE GNN_FCID = %d
+             AND TreeHist = 1;""" % (fcid, )
 
     data = list(cur.execute(sql))
     if len(data) == 0:
         warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
         raise GYBError(warn)
         return
-    sumtpa = sum([d['TPA'] for d in data])
-    summult = sum([d['MULT'] for d in data])
-    age = int(summult/sumtpa)
+    # Basal Area weighted 
+    sumba = float(sum([d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
+    summult = float(sum([d['Tree_Age'] * d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
+    age = int(round(summult/sumba))
 
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
