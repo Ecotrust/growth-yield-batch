@@ -44,15 +44,34 @@ TF = [
     ("Tree Age", "Tree_Age", "F3.0", "float", 3, 65, 0), 
 ]
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# TODO fill in all site classes for all variants
-SITE_CLASSES =  {
-    "WC": {
+'''
+Site Class for DF
+Base Age    1   2   3   4   5   Relevant Variants
+100 210 - 190   180 - 160   150 - 130   120 - 100   90 - 70 WC
+50  160 – 136   134 – 116   114 – 96    94 – 76 74 - 50 PN, SO, CA, NC, EC, BM
+'''
+standard = {
+      "1": "SiteCode          DF       148         1",
       "2": "SiteCode          DF       125         1",
-      "3": "SiteCode          DF       105         1"
+      "3": "SiteCode          DF       105         1",
+      "4": "SiteCode          DF        85         1",
+      "5": "SiteCode          DF        62         1"}
+
+SITE_CLASSES =  {
+    "PN": standard,
+    "SO": standard,
+    "CA": standard,
+    "NC": standard,
+    "EC": standard,
+    "BM": standard,
+    "WC": {
+      "1": "SiteCode          DF       200         1",
+      "2": "SiteCode          DF       170         1",
+      "3": "SiteCode          DF       140         1",
+      "4": "SiteCode          DF       110         1",
+      "5": "SiteCode          DF        80         1"
     }
 }
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 def make_fvsfile(stand, outdir, con, variant):
     # query treelist.db for the condid
