@@ -3,9 +3,11 @@
     "Ensemble_rcp45",
     "NoClimate"
   ],
-  "sites": {
-    "2": "SiteCode          DF       125         1",
-    "3": "SiteCode          DF       105         1"
+  "site_classes": {
+    "WC": {
+      "2": "SiteCode          DF       125         1",
+      "3": "SiteCode          DF       105         1"
+    }
   },
   "offsets": [
     0,

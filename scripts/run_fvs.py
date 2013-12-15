@@ -191,7 +191,7 @@ def exectute_fvs(key):
     
     if os.name == 'posix':
         fvsbin_dir = '/usr/local/bin'
-        extension = 'c'  # dunno why but fvs has recently added c to end, e.g. FVSpnc
+        extension = 'c'  # open-fvs added c to end, e.g. FVSpnc
     elif os.name == 'nt':
         fvsbin_dir = 'C:\\FVSbin'
         extension = ".exe"

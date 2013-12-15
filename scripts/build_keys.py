@@ -66,7 +66,7 @@ if __name__ == "__main__":
         conf = json.loads(fh.read())
         assert sorted([
             'climate_scenarios', 
-            'sites', 
+            'site_classes', 
             'offsets']) == sorted(conf.keys())
 
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
@@ -84,23 +84,26 @@ if __name__ == "__main__":
 
         cli = fvs.replace('.fvs','.cli')
         std = fvs.replace('.fvs','.std')
+        rxfile = fvs.replace('.fvs','.rx')
 
         stdinfo_path = fvs.replace(".fvs", ".std")
         stdinfo = open(stdinfo_path, 'r').read().strip()
 
+        if os.path.exists(rxfile):
+            with open(rxfile, 'r') as fh:
+                var_rxs = [x.split(",") for x in fh.readlines()]
+        else:
+            var_rxs = None  # implies ALL rxs get run
+
         cli = fvs.replace(".fvs", ".cli")
         assert os.path.exists(cli)
 
-        site_override = fvs.replace(".fvs", ".site")
-        if os.path.exists(site_override):
-            try:
-                with open(site_override, 'r') as fh:
-                    sitecls = fh.readlines()[0].strip()
-                sites = {sitecls: conf['sites'][sitecls]}
-            except:
-                sites = conf['sites']
+        sitecls_override = fvs.replace(".fvs", ".site")
+        if os.path.exists(sitecls_override):
+            with open(sitecls_override, 'r') as fh:
+                site_class = fh.readlines()[0].strip()
         else:
-            sites = conf['sites']
+            site_class = "2"  # default
 
         for basekey in basekeys:
             key_prefix = os.path.splitext(os.path.basename(basekey))[0]
@@ -108,39 +111,42 @@ if __name__ == "__main__":
 
             variant = variant.replace('var','')
             rx = rx.replace('rx','')
+            if var_rxs and (variant, rx) not in var_rxs:
+                print "\tSkipping variant/rx", variant, rx
+                continue
+
+            sitecode = conf['site_classes'][variant][site_class]
 
             with open(basekey, 'r') as fh:
                 template = Template(fh.read())
 
-            for site_class, sitecode in sites.items():
+            for climate in conf['climate_scenarios']:
 
-                for climate in conf['climate_scenarios']:
+                climate_safe = climate.replace("_", '-')  # no underscores
 
-                    climate_safe = climate.replace("_", '-')  # no underscores
+                out = "var%s_rx%s_cond%s_site%s_clim%s" % (
+                    variant, rx, condid, site_class, climate_safe)
+                #print "\t", out
+                outdir = os.path.join(plotsdir, out)
+                os.makedirs(outdir)
 
-                    out = "var%s_rx%s_cond%s_site%s_clim%s" % (
-                        variant, rx, condid, site_class, climate_safe)
-                    #print "\t", out
-                    outdir = os.path.join(plotsdir, out)
-                    os.makedirs(outdir)
+                copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
+                copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
+                copyfile(std, os.path.join(outdir, os.path.basename(std)))
 
-                    copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
-                    copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
-                    copyfile(std, os.path.join(outdir, os.path.basename(std)))
+                for offset in conf['offsets']:
 
-                    for offset in conf['offsets']:
+                    if rx == '1' and offset > 0:
+                        # special case
+                        continue
 
-                        if rx == '1' and offset > 0:
-                            # special case
-                            continue
+                    keyout = out + "_off%s.key" % (offset, )
+                    keyoutpath = os.path.join(outdir, keyout)
 
-                        keyout = out + "_off%s.key" % (offset, )
-                        keyoutpath = os.path.join(outdir, keyout)
+                    content = template.render(locals())
 
-                        content = template.render(locals())
-
-                        with open(keyoutpath, 'w') as fh:
-                            fh.write(content)
+                    with open(keyoutpath, 'w') as fh:
+                        fh.write(content)
 
     print
     print "Batch keyfile directory output to", plotsdir

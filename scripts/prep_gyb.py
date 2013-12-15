@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 '''
 See GDoc "Prepare GYB"
+This data-prep script MUST be modified for the needs of each project
 
 Requires stands.shp + treeslist.db + climate.db
 '''
@@ -42,6 +43,16 @@ TF = [
     ("Plot site preparation code", None, "I1", "int", 1, 62, None), 
     ("Tree Age", "Tree_Age", "F3.0", "float", 3, 65, 0), 
 ]
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# TODO fill in all site classes for all variants
+SITE_CLASSES =  {
+    "WC": {
+      "2": "SiteCode          DF       125         1",
+      "3": "SiteCode          DF       105         1"
+    }
+}
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 def make_fvsfile(stand, outdir, con, variant):
     # query treelist.db for the condid
@@ -86,8 +97,7 @@ def make_fvsfile(stand, outdir, con, variant):
                     # assert len(val.strip()) <= valwidth, (col, val, valwidth)
                     pass
                 elif valtype == "int":
-                    # special case, convert to code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-                    # THIS SHOULD BE DONE IN THE ACCESS DB QUERY
+                    # special case, convert pct to crown code
                     if col == "Crown":
                         val = 1 + int( (val-1) / 10)
                         if val > 9:
@@ -139,10 +149,15 @@ def make_stdinfofile(stand, outdir, con):
     '''
     # 1, 4, 5, 6, 7 from shapefile; field names = ['location', 'aspect', 'slope', 'elev', 'lat']
 
+
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     # 2 (habitat code) is hard to determine.
     #    (may be able to construct via GNN stand-level forest types?)
     #    It drives site tree/index and max density but we override the first two anyways
-    #    LEAVE BLANK AND USE DEFUALT FOR NOW - ie accept the default max stand density !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #    LEAVE BLANK AND USE DEFUALT FOR NOW - ie accept the default max stand density 
+
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     standid = stand['standid']
     fcid = stand['gnnfcid']
@@ -214,11 +229,6 @@ def make_climatefile(stand, outdir, con):
         con.row_factory = None
         cur = con.cursor()
 
-        # TODO until we get the new fvs climate data associated with standids
-        # grab a random id  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        import random
-        standid = random.choice([1, 7, 10])
-
         sql = """SELECT %s
                  FROM climate
                  WHERE StandID = %d;""" % (header, standid)
@@ -240,14 +250,21 @@ def make_sitefile(stand, outdir):
         fh.write("\n")
 
 
-def get_sitecls(variant):
-    #TODO more site classes and variants !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if variant in ['PN', 'WC', 'CA']:
-        sitecls = {
-            "2": "SiteCode          DF       125         1",
-            "3": "SiteCode          DF       105         1"
-        }
-    return sitecls
+def make_rxfile(stand, outdir):
+    # read variant and rxs from stand
+    # write to file in csv format, no header. return them
+    standid = stand['standid']
+    variant = stand['variant']
+    rxtxt = stand['rx']
+    rxs = [int(x) for x in rxtxt.split(",")]
+
+    path = os.path.join(outdir, "%d.rx" % standid)
+    with open(path, 'w') as fh:
+        for rx in rxs:
+            fh.write("%s,%d" % (variant, rx))
+            fh.write("\n")
+
+    return variant, rxs
 
 
 def get_climates(con):
@@ -271,14 +288,13 @@ def stand_iter(batch, con):
         yield dict(zip(row.keys(), row))  
 
 
-def write_config(variant, con, outdir):
+def write_config(con, outdir):
     # write config.json 
     # default to 0, 5, 10, 15 offsets
-    sitecls = get_sitecls(variant)
     clims = get_climates(con)
     data = {
       "climate_scenarios": clims,
-      "sites": sitecls,
+      "site_classes": SITE_CLASSES,
       "offsets": [0, 5, 10, 15]
     }
     with open(os.path.join(outdir, 'config.json'), 'w') as fh:
@@ -289,8 +305,8 @@ def write_config(variant, con, outdir):
 #------------------------------------------------------------------------------#
 
 
-def main(variant, batch):
-    print "Starting %s %s" % (variant, batch)
+def main(batch):
+    print "Starting to prepare GYB batch (%s)"
 
     outdir = "./%s/cond" % batch
     if os.path.exists(outdir):
@@ -305,9 +321,10 @@ def main(variant, batch):
     for stand in stand_iter(batch, conn):
         try:
             make_climatefile(stand, outdir, conn)
-            make_fvsfile(stand, outdir, conn, variant)
             make_stdinfofile(stand, outdir, conn)
             make_sitefile(stand, outdir)
+            variant, _ = make_rxfile(stand, outdir)
+            make_fvsfile(stand, outdir, conn, variant)
             print "\t", stand['standid'], "complete"
         except GYBError as exc:
             print "\t", exc.message
@@ -315,9 +332,8 @@ def main(variant, batch):
             for path in glob.glob(os.path.join(outdir, "%s*" % stand['standid'])):
                 os.remove(path)
 
-    write_config(variant, conn, os.path.join(outdir, '..'))
+    write_config(conn, os.path.join(outdir, '..'))
     print "DONE"
 
 
-main('PN', 'PN1A')
-main('PN', 'PN1B')
+main('PN1B')
