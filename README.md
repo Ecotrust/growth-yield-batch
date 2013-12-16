@@ -55,7 +55,7 @@ project_directory
 
 ##### config.json
 JSON formatted file with variables that define the "multipliers"; e.g. variables
-for which we're calculate all permutations for each condition. Currently that is
+for which we calculate all permutations for each condition. Currently that is
 just climate scenarios and offsets. (management prescriptions are the other multiplier
 as defined in the `rx` directory)
 
