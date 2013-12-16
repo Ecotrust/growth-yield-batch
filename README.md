@@ -60,8 +60,8 @@ just climate scenarios and offsets. (management prescriptions are the other mult
 as defined in the `rx` directory)
 
 Note: The `site_classes` object is *not* a multiplier; it is merely a lookup for 
-the SITECODE keyword by variant as specified by the .site file (defaults to "2" 
-if not specified)
+the SITECODE keyword for variants where you want to override the default site
+classes. For example, Western Cascades (WC) variant uses a 100 year based index.
 
 ```
 {
@@ -73,9 +73,12 @@ if not specified)
   ],
   "site_classes": {
     "WC": {
-      "2": "SiteCode          DF       125         1",
-      "3": "SiteCode          DF       105         1"
-    }
+      "1": "SITECODE          DF       200         1",
+      "2": "SITECODE          DF       170         1",
+      "3": "SITECODE          DF       140         1",
+      "4": "SITECODE          DF       110         1",
+      "5": "SITECODE          DF        80         1"
+    } 
   },
   "offsets": [
     0,
@@ -103,8 +106,19 @@ plot location, slope, aspect, etc. See FVS manual for more details.
 ##### cond/<condid>.site
 
 *Optionally* include a .site file to specify a single site class on which to run this 
-particular condition. Must match one of the site classes specified in config.json.
-If not provided, site class "2" will be used by default.
+particular condition. This must match one of the site classes specified for the variant 
+in config.json *or* must be a number 1 through 5 corresponding to the default 
+50 year Douglas Fir-based site classes:
+
+**Default SITECODEs**
+```
+"1": "SITECODE          DF       148         1"
+"2": "SITECODE          DF       125         1"
+"3": "SITECODE          DF       105         1"
+"4": "SITECODE          DF        85         1"
+"5": "SITECODE          DF        62         1"
+```
+If .site file is not provided, site class "2" will be used by default.
 
 ##### cond/<condid>.rx
 

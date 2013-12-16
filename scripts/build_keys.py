@@ -66,7 +66,7 @@ if __name__ == "__main__":
         conf = json.loads(fh.read())
         assert sorted([
             'climate_scenarios', 
-            'site_classes', 
+            # 'site_classes',   # optional
             'offsets']) == sorted(conf.keys())
 
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
         if os.path.exists(rxfile):
             with open(rxfile, 'r') as fh:
-                var_rxs = [x.strip().split(",") for x in fh.readlines()]
+                var_rxs = [tuple(x.strip().split(",")) for x in fh.readlines()]
         else:
             var_rxs = None  # implies ALL rxs get run
 
@@ -113,10 +113,19 @@ if __name__ == "__main__":
             rx = rx.replace('rx','')
             if var_rxs and \
                (variant, rx) not in var_rxs and (variant, "*") not in var_rxs:
-                print "\tSkipping variant/rx", variant, rx
-                continue
+                continue  # Skip it
 
-            sitecode = conf['site_classes'][variant][site_class]
+            try:
+                sitecode = conf['site_classes'][variant][site_class]
+            except KeyError:
+                # Default site classes based on DF 50yr
+                default_site_classes = { 
+                  "1": "SITECODE          DF       148         1",
+                  "2": "SITECODE          DF       125         1",
+                  "3": "SITECODE          DF       105         1",
+                  "4": "SITECODE          DF        85         1",
+                  "5": "SITECODE          DF        62         1"}
+                sitecode = default_site_classes[site_class]
 
             with open(basekey, 'r') as fh:
                 template = Template(fh.read())

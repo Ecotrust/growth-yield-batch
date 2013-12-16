@@ -27,7 +27,7 @@ try:
     from pandas.io import sql as sqlio
 except ImportError:
     # pandas is probably not available
-    print "  Unable to extract data from .out file. Import failed, installing pandas should fix."
+    print "\t WARNING: Unable to extract data from .out file. Import failed, installing pandas should fix."
     extract_data = None
 
 
@@ -60,7 +60,7 @@ def write_final(dirname, work, final, extract_methods):
         csv = os.path.join(final, dirname + ".csv")
         df = extract_data(work)
         df.to_csv(csv, index=False, header=True)
-        print "  EXTRACTED data from .out file. CSV written to ./final/%s.csv" % dirname
+        print "\tSUCCESS: Extracted data from .out file. CSV written to ./final/%s.csv" % dirname
 
     if 'sqlite3' in extract_methods:
         df = extract_data(work)
@@ -85,7 +85,7 @@ def write_final(dirname, work, final, extract_methods):
 
                 res = cursor.execute(delete_sql)
                 if res.rowcount > 0:
-                    print "  WARNING: Deleting %d old rows from ./final/data.db" % res.rowcount
+                    print "\tNOTICE : Deleting %d old rows from ./final/data.db" % res.rowcount
 
                 # try again
                 sqlio.write_frame(df, name='trees_fvsaggregate',
@@ -98,7 +98,7 @@ def write_final(dirname, work, final, extract_methods):
 
         conn.commit()
         conn.close()
-        print "  EXTRACTED data from .out file. Row appended to ./final/data.db"
+        print "\tSUCCESS: Extracted data from .out file. Row appended to ./final/data.db"
 
 
 def apply_fvs_to_plotdir(plotdir, extract_methods=None):
@@ -132,20 +132,23 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     for key in keys:
         try:
             fvsout, fvswarn = exectute_fvs(key)
-            print
-            print fvsout
-            print
-            print fvswarn
-            print
+            if fvsout:
+              print fvsout
+
+            warnfile = os.path.join(final, os.path.basename(key).replace(".key", ".warn"))
+            with open(warnfile, 'w') as fh:
+                fh.write(fvswarn)
+            print "\tWARNING: fvs warnings written to ./final/%s" % \
+                  os.path.basename(key).replace(".key", ".warn")
         except FVSError as exc:
             outfile = key.replace(".key", ".out")
-            print "  FVS failed. OUT file at ./final/out/%s" % os.path.basename(outfile)
+            print "\tFVS failed. OUT file at ./final/out/%s" % os.path.basename(outfile)
             copyfile(outfile, os.path.join(outfiledir, os.path.basename(outfile)))
 
             err = os.path.join(final, dirname + ".err")
             with open(err, 'w') as fh:
                 fh.write("key:\n" + key + "\n" + exc.message)
-            print "  ERROR written to ./final/%s.err" % dirname
+            print "\tERROR written to ./final/%s.err" % dirname
 
             # leave work dir around after failure, just delete the big old .trl files
             trls = glob.glob(os.path.join(work, '*.trl'))
@@ -161,7 +164,7 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
         with gzip.open(outpath, 'wb') as outfh:
             with open(fvsworkfile, 'r') as infh:
                 outfh.write(infh.read())
-    print "  FVS run successfully. GZipped FVS .out files in ./final/out/"
+    print "\tSUCCESS: All offsets completed. GZipped FVS .out files in ./final/out/"
 
     # If we've got svs files, save 'em uncompressed (TODO might want to compress these?)
     svss = glob.glob(os.path.join(work, '*.svs'))
@@ -177,7 +180,7 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     try:
         rmtree(work)
     except:
-        print "  NOTE unable to delete work directory"
+        print "\tNOTICE : unable to delete work directory"
 
     return True
 
