@@ -43,6 +43,7 @@ project_directory
 |   |-- 31566.cli
 |   |-- 31566.fvs
 |   |-- 31566.site
+|   |-- 31566.rx
 |   `-- 31566.std
 `-- rx
     |-- varWC_rx1.key
@@ -54,7 +55,13 @@ project_directory
 
 ##### config.json
 JSON formatted file with variables that define the "multipliers"; e.g. variables
-for which we're calculate all permutations for each condition.
+for which we're calculate all permutations for each condition. Currently that is
+just climate scenarios and offsets. (management prescriptions are the other multiplier
+as defined in the `rx` directory)
+
+Note: The `site_classes` object is *not* a multiplier; it is merely a lookup for 
+the SITECODE keyword by variant as specified by the .site file (defaults to "2" 
+if not specified)
 
 ```
 {
@@ -64,9 +71,11 @@ for which we're calculate all permutations for each condition.
     "Ensemble_rcp85",
     "NoClimate"
   ],
-  "sites": {
-    "2": "SiteCode          DF       125         1",
-    "3": "SiteCode          DF       105         1"
+  "site_classes": {
+    "WC": {
+      "2": "SiteCode          DF       125         1",
+      "3": "SiteCode          DF       105         1"
+    }
   },
   "offsets": [
     0,
@@ -84,17 +93,35 @@ Climate file as per the [FVS climate extension](http://www.fs.fed.us/fmsc/fvs/wh
 
 ##### cond/<condid>.fvs
 
-FVS input tree lists
+FVS input tree lists, formatted according to the TREEFMT expected by your keyfiles.
 
 ##### cond/<condid>.std
 
 Single line representing the FVS STDINFO keyword entry. Contains information about
-plot location, slope, aspect, etc.
+plot location, slope, aspect, etc. See FVS manual for more details.
 
 ##### cond/<condid>.site
 
 *Optionally* include a .site file to specify a single site class on which to run this 
-particular condition. Must match one of the site classes specified in config.json
+particular condition. Must match one of the site classes specified in config.json.
+If not provided, site class "2" will be used by default.
+
+##### cond/<condid>.rx
+
+*Optionally* include a .rx file to specify which variants and prescriptions to run 
+for each condition. The format is comma-delimited, no header, `variant,rxnum`:
+
+```
+PN,1
+PN,22
+PN,23
+```
+Or specify a wildcard to run every rx for a given variant.
+```
+PN,*
+```
+If a <condid>.rx file is not included, that condition will be run under every 
+key file defined in the `rx` directory. 
 
 ##### rx/*.key files
 
