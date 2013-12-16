@@ -193,7 +193,7 @@ def make_stdinfofile(stand, outdir, con):
         warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
         raise GYBError(warn)
         return
-    # Basal Area weighted of live trees only
+    # Basal Area weighted average age of live trees only
     sumba = float(sum([d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
     summult = float(sum([d['Tree_Age'] * d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
     age = int(round(summult/sumba))
@@ -274,8 +274,11 @@ def make_rxfile(stand, outdir):
     # write to file in csv format, no header. return them
     standid = stand['standid']
     variant = stand['variant']
-    rxtxt = stand['rx']
-    rxs = [int(x) for x in rxtxt.split(",")]
+    rxtxt = stand['rx'].strip()
+    if rxtxt == "":
+        rxs = ["*"]
+    else:
+        rxs = [int(x) for x in rxtxt.split(",")]
 
     path = os.path.join(outdir, "%d.rx" % standid)
     with open(path, 'w') as fh:

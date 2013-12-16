@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
         if os.path.exists(rxfile):
             with open(rxfile, 'r') as fh:
-                var_rxs = [x.split(",") for x in fh.readlines()]
+                var_rxs = [x.strip().split(",") for x in fh.readlines()]
         else:
             var_rxs = None  # implies ALL rxs get run
 
@@ -111,7 +111,8 @@ if __name__ == "__main__":
 
             variant = variant.replace('var','')
             rx = rx.replace('rx','')
-            if var_rxs and (variant, rx) not in var_rxs:
+            if var_rxs and \
+               (variant, rx) not in var_rxs and (variant, "*") not in var_rxs:
                 print "\tSkipping variant/rx", variant, rx
                 continue
 
