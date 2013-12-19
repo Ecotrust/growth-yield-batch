@@ -184,6 +184,18 @@ def make_stdinfofile(stand, outdir, con):
     fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.std" % standid)
 
+    variant = stand['variant']
+
+    default_habitat = {
+        'PN': '40', # CHS133
+        'WC': '52', # CFS551
+        'NC': 'CWC221', # 
+        'CA': '46', #  CWC221
+        'SO': '49', #  CPS111
+        'EC': '114'
+    }
+    habitat = default_habitat.get(variant.upper(), "")
+
     cur = con.cursor()
     sql = """SELECT TPA, DBH, Tree_Age
              FROM treelist
@@ -203,7 +215,7 @@ def make_stdinfofile(stand, outdir, con):
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
             stand['location'],
-            '', #  TODO stand['habitat'],
+            habitat,
             age,
             int(stand['aspect']),
             int(stand['slope']),
