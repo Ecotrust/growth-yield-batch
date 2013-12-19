@@ -3,12 +3,13 @@
 See GDoc "Prepare GYB"
 This data-prep script MUST be modified for the needs of each project
 
-Requires stands.shp + treeslist.db + climate.db
+Requires stands, treeslist and climate tables
 '''
 import os
 import sqlite3
 import json
 import glob
+import sys
 
 class GYBError(Exception):
     pass
@@ -44,12 +45,6 @@ TF = [
     ("Tree Age", "Tree_Age", "F3.0", "float", 3, 65, 0), 
 ]
 
-'''
-Site Class for DF
-Base Age    1   2   3   4   5   Relevant Variants
-100 210 - 190   180 - 160   150 - 130   120 - 100   90 - 70 WC
-50  160 – 136   134 – 116   114 – 96    94 – 76 74 - 50 PN, SO, CA, NC, EC, BM
-'''
 # these are built into build_keys.py, no need to specify
 # unless you want to override them
 default_site_classes = {  
@@ -101,7 +96,8 @@ def make_fvsfile(stand, outdir, con, variant):
             for item in TF:
                 col = item[1]
                 if col is not None:
-                    col = col.replace("{{variant}}", variant)
+                    col = str(col.replace("{{variant}}", variant))
+
                 valtype = item[3]
                 valwidth = item[4]
                 dec = item[6]
@@ -120,9 +116,13 @@ def make_fvsfile(stand, outdir, con, variant):
                 elif valtype == "int":
                     # special case, convert pct to crown code
                     if col == "Crown":
-                        val = 1 + int( (val-1) / 10)
-                        if val > 9:
-                            val = 9
+                        try:
+                            val = int(val)
+                            val = 1 + int( (val - 1) / 10)
+                            if val > 9:
+                                val = 9
+                        except ValueError:
+                            val = ''
 
                     if val != '':
                         val = str(int(val))
@@ -203,7 +203,7 @@ def make_stdinfofile(stand, outdir, con):
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
             stand['location'],
-            stand['habitat'],
+            '', #  TODO stand['habitat'],
             age,
             int(stand['aspect']),
             int(stand['slope']),
@@ -239,7 +239,7 @@ def make_climatefile(stand, outdir, con):
     "QUCH2,QUDO,QUEM,QUGA,QUGA4,QUHY,QUKE,QULO,QUOB,QUWI2,RONE,SALIX,SEGI2,TABR2," \
     "THPL,TSHE,TSME,UMCA,pSite,DEmtwm,DEmtcm,DEdd5,DEsdi,DEdd0,DEpdd5"
 
-    standid = orig_standid = stand['standid']
+    standid = original_standid = stand['standid']
     #fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.cli" % standid)
 
@@ -250,13 +250,23 @@ def make_climatefile(stand, outdir, con):
         con.row_factory = None
         cur = con.cursor()
 
+        # TODO until we get the new fvs climate data associated with standids
+        # grab a random id  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        import random
+        standid = random.choice([1, 3, 7, 8, 10, 11, 14, 15, 16, 17])
+
         sql = """SELECT %s
                  FROM climate
                  WHERE StandID = %d;""" % (header, standid)
+
+        i = None
         for i, row in enumerate(cur.execute(sql)):
-            # TODO when fixed ... fh.write(",".join([str(x) for x in row]))
-            fh.write(",".join([str(orig_standid)] + [str(x) for x in row[1:]]))
+            #  TODO fh.write(",".join([str(x) for x in row])) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            fh.write(",".join([str(original_standid)] + [str(x) for x in row[1:]]))
             fh.write("\n")
+        if not i:
+            raise Exception("No climate data for standid %s" % standid)
+
 
     con.row_factory = sqlite3.Row
 
@@ -276,16 +286,16 @@ def make_rxfile(stand, outdir):
     # write to file in csv format, no header. return them
     standid = stand['standid']
     variant = stand['variant']
-    rxtxt = stand['rx'].strip()
-    if rxtxt == "":
-        rxs = ["*"]
+    rxtxt = stand['rx']
+    if rxtxt:
+        rxs = [int(x) for x in rxtxt.strip().split(",")]
     else:
-        rxs = [int(x) for x in rxtxt.split(",")]
+        rxs = ["*"]
 
     path = os.path.join(outdir, "%d.rx" % standid)
     with open(path, 'w') as fh:
         for rx in rxs:
-            fh.write("%s,%d" % (variant, rx))
+            fh.write("%s,%s" % (variant, rx))
             fh.write("\n")
 
     return variant, rxs
@@ -319,7 +329,7 @@ def write_config(con, outdir):
     data = {
       "climate_scenarios": clims,
       "site_classes": SITE_CLASSES,
-      "offsets": [0, 5, 10, 15]
+      "offsets": [0, 10]
     }
     with open(os.path.join(outdir, 'config.json'), 'w') as fh:
         fh.write(json.dumps(data, indent=2))
@@ -330,7 +340,7 @@ def write_config(con, outdir):
 
 
 def main(batch):
-    print "Starting to prepare GYB batch (%s)"
+    print "Starting to prepare GYB batch (%s)" % batch
 
     outdir = "./%s/cond" % batch
     if os.path.exists(outdir):
@@ -360,4 +370,5 @@ def main(batch):
     print "DONE"
 
 
-main('PN1B')
+batch = sys.argv[1]
+main(batch)

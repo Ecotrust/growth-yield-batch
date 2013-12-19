@@ -64,10 +64,6 @@ if __name__ == "__main__":
 
     with open(os.path.join(indir, 'config.json'), 'r') as fh:
         conf = json.loads(fh.read())
-        assert sorted([
-            'climate_scenarios', 
-            # 'site_classes',   # optional
-            'offsets']) == sorted(conf.keys())
 
     basekeys = glob.glob(os.path.join(indir, 'rx', '*.key'))
 
