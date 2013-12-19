@@ -1,0 +1,13 @@
+COMMENT
+Set Maximum Stand Density Index across all species.  CA variant.
+Where >100 GNN plots in the variant had single dominant species, 
+95th percentile of observed SDI assumed to represent 55% of 
+theoretical maximum SDI (full stocking vs. theoretical maximum).
+END
+SDIMAX          All       642
+SDIMAX           WF       580
+SDIMAX           MA       633
+SDIMAX           TO       880
+SDIMAX           PP       456
+SDIMAX           DF       647
+SDIMAX           WO       351
