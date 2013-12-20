@@ -184,6 +184,18 @@ def make_stdinfofile(stand, outdir, con):
     fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.std" % standid)
 
+    variant = stand['variant']
+
+    default_habitat = {
+        'PN': '40', # CHS133
+        'WC': '52', # CFS551
+        'NC': 'CWC221', # 
+        'CA': '46', #  CWC221
+        'SO': '49', #  CPS111
+        'EC': '114'
+    }
+    habitat = default_habitat.get(variant.upper(), "")
+
     cur = con.cursor()
     sql = """SELECT TPA, DBH, Tree_Age
              FROM treelist
@@ -203,7 +215,7 @@ def make_stdinfofile(stand, outdir, con):
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
             stand['location'],
-            '', #  TODO stand['habitat'],
+            habitat,
             age,
             int(stand['aspect']),
             int(stand['slope']),
@@ -230,42 +242,50 @@ def make_climatefile(stand, outdir, con):
     # make sure you've got an index on the standid column
     #  CREATE INDEX stand_idx ON fvsclimattrs(StandID);
 
-    header = "StandID,Scenario,Year,mat,map,gsp,mtcm,mmin,mtwm,mmax,sday," \
-    "ffp,dd5,gsdd5,d100,dd0,smrpb,smrsprpb,sprp,smrp,winp,ABAM,ABCO,ABGR,ABLA," \
-    "ABLAA,ABMA,ABPR,ABSH,ACGL,ACGR3,ACMA3,AECA,ALRH2,ALRU2,ARME,BEPA,BEPAC," \
-    "CADE27,CELE3,CHCH7,CHLA,CHNO,CONU4,FRLA,JUCO11,JUDE2,JUMO,JUOC,JUOS,JUSC2," \
-    "LALY,LAOC,LIDE3,OLTE,PIAL,PIAR,PIAT,PIBR,PICO,PICO3,PIED,PIEN,PIFL2,PIJE," \
-    "PILA,PILO,PIMO,PIMO3,PIPO,PIPU,PISI,PIST3,PODEM,POTR5,PROSO,PRUNU,PSME,QUAG," \
-    "QUCH2,QUDO,QUEM,QUGA,QUGA4,QUHY,QUKE,QULO,QUOB,QUWI2,RONE,SALIX,SEGI2,TABR2," \
-    "THPL,TSHE,TSME,UMCA,pSite,DEmtwm,DEmtcm,DEdd5,DEsdi,DEdd0,DEpdd5"
-
-    standid = original_standid = stand['standid']
+    standid = stand['standid']
     #fcid = stand['gnnfcid']
     path = os.path.join(outdir, "%d.cli" % standid)
+
+    con.row_factory = None
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+
+    columns_query = "PRAGMA table_info(climate)"
+    cur.execute(columns_query)
+    header = ','.join([x['name'] for x in cur.fetchall()])
 
     with open(path, 'w') as fh:
         fh.write(header)
         fh.write("\n")
-
-        con.row_factory = None
-        cur = con.cursor()
-
-        # TODO until we get the new fvs climate data associated with standids
-        # grab a random id  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        import random
-        standid = random.choice([1, 3, 7, 8, 10, 11, 14, 15, 16, 17])
 
         sql = """SELECT %s
                  FROM climate
                  WHERE StandID = %d;""" % (header, standid)
 
         i = None
+        noclim = None
         for i, row in enumerate(cur.execute(sql)):
-            #  TODO fh.write(",".join([str(x) for x in row])) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            fh.write(",".join([str(original_standid)] + [str(x) for x in row[1:]]))
+            if row['Year'] == 1990 and row['Scenario'] == "Ensemble_rcp60":
+                # grab the line for NoClimate
+                noclim = list(row)
+            fh.write(",".join([str(x) for x in row]))
             fh.write("\n")
+
         if not i:
-            raise Exception("No climate data for standid %s" % standid)
+            warn = "WARNING, Climate data missing for standid %s (skipping)" % standid
+            raise GYBError(warn)
+
+        if not noclim:
+            warn = "WARNING, Could not find the 1990 ensemble rcp60 scenario to use as NoClimate %s (skipping)" % standid
+            raise GYBError(warn)
+
+        # write noclim
+        noclim[1] = "NoClimate"
+        for year in [1990, 2030, 2060, 2090]:
+            noclim[2] = year
+            fh.write(",".join([str(x) for x in noclim]))
+            fh.write("\n")
+
 
 
     con.row_factory = sqlite3.Row
@@ -359,13 +379,14 @@ def main(batch):
             make_sitefile(stand, outdir)
             variant, _ = make_rxfile(stand, outdir)
             make_fvsfile(stand, outdir, conn, variant)
-            print "\t", stand['standid'], "complete"
+            # print "\t", stand['standid'], "complete"
         except GYBError as exc:
             print "\t", exc.message
             # clean up and just skip it
             for path in glob.glob(os.path.join(outdir, "%s*" % stand['standid'])):
                 os.remove(path)
 
+    print "Writing config"
     write_config(conn, os.path.join(outdir, '..'))
     print "DONE"
 
