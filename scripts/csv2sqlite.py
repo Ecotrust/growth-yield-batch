@@ -21,6 +21,11 @@ def create_table_sql(csv_path, table):
         # just check first row
         for i, val in enumerate(cr.next()):
             key = header[i]
+
+            # special case, stupid headers on fvsclimattrs 
+            if key.startswith("20") and key.endswith("PST"):
+                key = "StandID"
+
             try:
                 Decimal(val)
                 nt = 'REAL'
