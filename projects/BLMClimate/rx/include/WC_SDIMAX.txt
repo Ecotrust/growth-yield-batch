@@ -9,7 +9,7 @@ SDIMAX           SF       823
 SDIMAX           GF       545
 SDIMAX           NF       655
 SDIMAX           RA       510
-SDIMAX           MA       619
+SDIMAX           WA       619
 SDIMAX           LP       679
 SDIMAX           PP       446
 SDIMAX           DF       622
