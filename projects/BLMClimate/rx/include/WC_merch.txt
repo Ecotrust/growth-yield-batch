@@ -3,7 +3,7 @@ COMMENT
 Define merchantable species and sizes for West-side Cascades (WC) variant.
 VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
 END
-VOLUME             0       All       999       999         1        80
+VOLUME             0       All       999       999
 VOLUME             0        DF       3.2         2
 VOLUME             0        BM       3.2         2
 VOLUME             0        RA       3.2         2
@@ -16,7 +16,7 @@ VOLUME             0        RF       3.2         2
 VOLUME             0        SF       3.2         2
 VOLUME             0        WF       3.2         2
 VOLUME             0        WH       3.2         2
-BFVOLUME           0       All       999       999         1        80
+BFVOLUME           0       All       999       999
 BFVOLUME           0        RC       6.2         5
 BFVOLUME           0        DF       6.2         5
 BFVOLUME           0        BM       5.7         5
