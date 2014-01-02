@@ -1,4 +1,5 @@
 
+
 COMMENT
 Define merchantable species and sizes for Pacific coast (PN) variant.
 VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  

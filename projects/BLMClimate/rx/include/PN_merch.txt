@@ -1,3 +1,8 @@
+COMMENT
+Change WH to different cubic volume equation to avoid weird calculation errors 
+found when using BLM default equation.
+END
+VOLEQNUM          WH632BEHW263
 
 COMMENT
 Define merchantable species and sizes for Pacific coast (PN) variant.
