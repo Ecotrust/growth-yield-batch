@@ -1,9 +1,13 @@
+import sys
 import os
 
-#### DEPRECATED .. see build_cond_dir.py
+master_climate = sys.argv[1]
+outdir = sys.argv[2]
 
-master_climate = "C:/Users/mperry/Desktop/FVSClimAttrs_NoClimateAdded.csv"
-outdir = "E:/workspace/testout"
+if os.path.exists(outdir):
+    raise Exception(outdir + " already exists!")
+
+os.mkdir(outdir)
 
 if __name__ == "__main__":
     header = None
@@ -11,10 +15,16 @@ if __name__ == "__main__":
     lines = []
     with open(master_climate, 'r') as fh:
         for line in fh:
+
+            # Get the header and stash it away
             if not header:
                 header = line
                 continue
 
+            # start collecting the lines
+            lines.append(line)
+
+            # Grab condition id
             condid = line.split(",")[0]
             if not current_id:
                 current_id = condid
@@ -26,8 +36,11 @@ if __name__ == "__main__":
                     out.write(header)
                     out.writelines(lines)
                 current_id = condid
-                # clear 
+                # and clear 
                 lines = []
 
-            lines.append(line)
-            print condid
+    # save the final one
+    with open(os.path.join(outdir, current_id + ".cli"), 'w') as out:
+        out.write(header)
+        out.writelines(lines)
+        current_id = condid
