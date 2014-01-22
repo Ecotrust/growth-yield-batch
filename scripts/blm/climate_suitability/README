@@ -26,17 +26,18 @@ Each suitability value falls into one of 4 categories (defined in start_class.cf
 
 The tifs in change_class/ are the final result when the 1990 classes (10, 20, 30, 40) are compared (added) to the 2060 classes (1, 2, 3, 4). The resulting values give you a grid like below, where Up-Left is "wasn't suitable, and won't be,", Down-Left is "was ideal, will be unsuitable", Up-Right is "wasn't suitable, but will be ideal", and Down-Right is "was and will be ideal".
 
-Add the 1990 raster values to the 2060 raster values: 
-i.e. 'ideal 1990' + 'ideal 2060' -> 40 + 4 = 44 (no change) 
-     'ideal 1990' + 'poor 2060'  -> 40 + 1 = 41 (major regression)
-
 Classes:
-
-    2060
+    2060 --->
 
 1   11  12  13  14
 9   21  22  23  24
 9   31  32  33  34
 0   41  42  43  44
 
-The current style to be used for displaying this in QGIS is saved with them, but the GIS dept should make them pretty.
+Add the 1990 raster values to the 2060 raster values: 
+i.e. 'ideal 1990' + 'ideal 2060' -> 40 + 4 = 44 (no change) 
+     'ideal 1990' + 'poor 2060'  -> 40 + 1 = 41 (major regression)
+
+This can be done either writing a script similar to reclass_raster and using numpy to add the rasters together, or by using the raster calculator built into QGIS, which is what we did this time.
+
+The current style to be used for displaying this in QGIS is saved with them (change_class/change_class_grid_styles.qml), but the GIS dept should make them pretty.
