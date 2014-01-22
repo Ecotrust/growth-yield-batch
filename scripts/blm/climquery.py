@@ -25,8 +25,7 @@ def create_grid_raster(extent,outfile,format,array):
    
     dst_band = dst_ds.GetRasterBand(1)
     dst_band.WriteArray(array,0,0)
-    print
-    print "Created blank output %s at %s" % (format, outfile)
+    print "Created output %s at %s" % (format, outfile)
 
 
 if __name__ == "__main__":
@@ -41,6 +40,7 @@ if __name__ == "__main__":
     YEAR = sys.argv[3]
     METRIC = False
     ID = False
+    INPUTFILE = False
 
     if CLIMATE not in ("CCSM4", "Ensemble", "GFDLCM3", "HadGEM2ES"):
         print 'Available climates include: "CCSM4", "Ensemble", "GFDLCM3", "HadGEM2ES"'
@@ -65,28 +65,40 @@ if __name__ == "__main__":
             sys.exit()
 
     if len(sys.argv) == 6:
-        ID = sys.argv[5]
+        if sys.argv[5].isalpha():
+            INPUTFILE = sys.argv[5]
+        else:
+            ID = sys.argv[5]
 
     SCENARIO = "%s_%s" % (CLIMATE, RCP)
 
-    con = sqlite3.connect('/usr/local/apps/OR_Climate_Grid/Data/orclimgrid.sqlite')
-    cur = con.cursor()
+    if INPUTFILE:
+        f = open('%s_%s_%s_resultfile.txt' % (METRIC, SCENARIO, YEAR), 'r')
+        file_text = f.read()
+        f.close()
+        result = eval(file_text)
 
-    if METRIC and ID:
-        table_query = """SELECT %s FROM climattrs WHERE ID='%s' AND Scenario='%s' AND Year=%s ORDER BY ID;""" % (METRIC, ID, SCENARIO, YEAR)
-    elif METRIC:
-        table_query = """SELECT %s FROM climattrs WHERE Scenario='%s' AND Year=%s ORDER BY ID;""" % (METRIC, SCENARIO, YEAR)
-    else:
-        table_query = """SELECT * FROM climattrs WHERE Scenario='%s' AND Year=%s ORDER BY ID;""" % (SCENARIO, YEAR)
+    else:        
+        con = sqlite3.connect('/usr/local/apps/OR_Climate_Grid/Data/orclimgrid.sqlite')
+        cur = con.cursor()
 
-    cur.execute(table_query)
-    result = cur.fetchall()
+        if METRIC and ID:
+            table_query = """SELECT %s FROM climattrs WHERE ID='%s' AND Scenario='%s' AND Year=%s ORDER BY ID;""" % (METRIC, ID, SCENARIO, YEAR)
+        elif METRIC:
+            table_query = """SELECT %s FROM climattrs WHERE Scenario='%s' AND Year=%s ORDER BY ID;""" % (METRIC, SCENARIO, YEAR)
+        else:
+            table_query = """SELECT * FROM climattrs WHERE Scenario='%s' AND Year=%s ORDER BY ID;""" % (SCENARIO, YEAR)
 
-    f = open('resultfile', 'w')
-    f.write(str(result))
-    f.close()
+        cur.execute(table_query)
+        result = cur.fetchall()
+
+        f = open('%s_%s_%s_resultfile.txt' % (METRIC, SCENARIO, YEAR), 'w')
+        f.write(str(result))
+        f.close()
+
     np_array = np.fromiter((x[0] for x in result), float)
-    two_d_array = np.reshape(np_array, [516,686])
+    two_d_array = np.flipud(np.reshape(np_array, [516,686]))
+    # The 'flipud' is necessary as the tif is built from bottom to top, so [0][0] is bottom left corner.
 
     extent = [-396304.91, 421638.32, 289695.09, 937638.32]
     #cellsize = 1
