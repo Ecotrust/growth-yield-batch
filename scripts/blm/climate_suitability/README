@@ -2,25 +2,25 @@ README
 
 ---WHERE TO GET THE DATA---
 If the CSVs don't exist, and you want to start from scratch, they can be found at:
+projects/projects/2013/BLMForestTool/Data/Source/climate/Climate-FVS/OR_Climate_Grid/FVSClimAttrs_xof4.csv (where x is in [1,2,3,4])
 
 If You don't want to build the DB, find it zipped (with indexing) at:
+projects/projects/2013/BLMForestTool/Data/Source/climate/Climate-FVS/OR_Climate_Grid/orclimgrid_indexed.sqlite.bz2
 
 If you just want the Geotifs of the current and estimated suitability values, go here:
+projects/projects/2013/BLMForestTool/Data/Processed/climate/usfw_viability/xxxxxxxx.tif
 
 If you want the Geotifs of the current and estimated suitability categories:
+projects/projects/2013/BLMForestTool/Data/Processed/climate/usfw_viability_reclass/xxxxxxx_classed.tif
 
 If you want the final Geotifs mapping the change between major categories from 1990 to 2060:
-
+projects/projects/2013/BLMForestTool/Data/Processed/climate/usfw_viability_delta/xxxxxxx_change.tif
 
 ---WHERE THIS DATA CAME FROM---
 Unzip the csvs tar in the csvs folder.
 Run csv2sqlite.py on each to collect them all in one sqlite database.
 
 Once you know which climate, rcp, and year you're interested in creating a geotiff for, use the climquery.py program to create these* (see make_tifs.sh for examples).
-
-*NOTES - if the 5th argument to this script is non-numeric (text instead of an ID number), it assumes that the queries have been performed and that a 'resultfile' exists. Since this script was written, the resultfiles were moved into the directory "query_results". 
-	- Update the script to point to this folder upon reading or writing these files. 
-	- Update the usage text to explain this case
 
 Each suitability value falls into one of 4 categories (defined in start_class.cfg and end_class.cfg). To create a geotiff of just the categories, run reclass_raster.py with the approprite cfg (see create_class_rasters.sh).
 
