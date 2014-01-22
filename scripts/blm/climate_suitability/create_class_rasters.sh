@@ -1,0 +1,26 @@
+#!/bin/bash
+
+python reclass_raster.py ABCO_Ensemble_rcp45_1990.tif start_class.cfg categorize/ABCO_Ensemble_rcp45_1990_classed.tif
+python reclass_raster.py ABCO_Ensemble_rcp45_2060.tif end_class.cfg categorize/ABCO_Ensemble_rcp45_2060_classed.tif
+python reclass_raster.py ABCO_Ensemble_rcp85_1990.tif start_class.cfg categorize/ABCO_Ensemble_rcp85_1990_classed.tif
+python reclass_raster.py ABCO_Ensemble_rcp85_2060.tif end_class.cfg categorize/ABCO_Ensemble_rcp85_2060_classed.tif
+
+python reclass_raster.py ALRU2_Ensemble_rcp45_1990.tif start_class.cfg categorize/ALRU2_Ensemble_rcp45_1990_classed.tif
+python reclass_raster.py ALRU2_Ensemble_rcp45_2060.tif end_class.cfg categorize/ALRU2_Ensemble_rcp45_2060_classed.tif
+python reclass_raster.py ALRU2_Ensemble_rcp85_1990.tif start_class.cfg categorize/ALRU2_Ensemble_rcp85_1990_classed.tif
+python reclass_raster.py ALRU2_Ensemble_rcp85_2060.tif end_class.cfg categorize/ALRU2_Ensemble_rcp85_2060_classed.tif
+
+python reclass_raster.py PIPO_Ensemble_rcp45_1990.tif start_class.cfg categorize/PIPO_Ensemble_rcp45_1990_classed.tif
+python reclass_raster.py PIPO_Ensemble_rcp45_2060.tif end_class.cfg categorize/PIPO_Ensemble_rcp45_2060_classed.tif
+python reclass_raster.py PIPO_Ensemble_rcp85_1990.tif start_class.cfg categorize/PIPO_Ensemble_rcp85_1990_classed.tif
+python reclass_raster.py PIPO_Ensemble_rcp85_2060.tif end_class.cfg categorize/PIPO_Ensemble_rcp85_2060_classed.tif
+
+python reclass_raster.py PSME_Ensemble_rcp45_1990.tif start_class.cfg categorize/PSME_Ensemble_rcp45_1990_classed.tif
+python reclass_raster.py PSME_Ensemble_rcp45_2060.tif end_class.cfg categorize/PSME_Ensemble_rcp45_2060_classed.tif
+python reclass_raster.py PSME_Ensemble_rcp85_1990.tif start_class.cfg categorize/PSME_Ensemble_rcp85_1990_classed.tif
+python reclass_raster.py PSME_Ensemble_rcp85_2060.tif end_class.cfg categorize/PSME_Ensemble_rcp85_2060_classed.tif
+
+python reclass_raster.py TSHE_Ensemble_rcp45_1990.tif start_class.cfg categorize/TSHE_Ensemble_rcp45_1990_classed.tif
+python reclass_raster.py TSHE_Ensemble_rcp45_2060.tif end_class.cfg categorize/TSHE_Ensemble_rcp45_2060_classed.tif
+python reclass_raster.py TSHE_Ensemble_rcp85_1990.tif start_class.cfg categorize/TSHE_Ensemble_rcp85_1990_classed.tif
+python reclass_raster.py TSHE_Ensemble_rcp85_2060.tif end_class.cfg categorize/TSHE_Ensemble_rcp85_2060_classed.tif

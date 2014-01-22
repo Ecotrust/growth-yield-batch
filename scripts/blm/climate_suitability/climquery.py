@@ -32,7 +32,8 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 3:
         print 'please include at least the climate, rcp, and year:'
-        print 'USAGE: python climquery.py CLIMATE RCP YEAR [METRIC] [ID]'
+        print 'USAGE: python climquery.py CLIMATE RCP YEAR [METRIC] [ID/infile]'
+        print 'Where if you enter text instead of ID a resultfile will replace DB Queries'
         sys.exit()
 
     CLIMATE = sys.argv[1]
@@ -73,12 +74,17 @@ if __name__ == "__main__":
     SCENARIO = "%s_%s" % (CLIMATE, RCP)
 
     if INPUTFILE:
-        f = open('%s_%s_%s_resultfile.txt' % (METRIC, SCENARIO, YEAR), 'r')
-        file_text = f.read()
-        f.close()
-        result = eval(file_text)
+        try:
+            f = open('query_results/%s_%s_%s_resultfile.txt' % (METRIC, SCENARIO, YEAR), 'r')
+            file_text = f.read()
+            f.close()
+            result = eval(file_text)
+        except:
+            INPUTFILE = False
+            print "No result file found. Querying Database..."
+            pass
 
-    else:        
+    if not INPUTFILE:        
         con = sqlite3.connect('/usr/local/apps/OR_Climate_Grid/Data/orclimgrid.sqlite')
         cur = con.cursor()
 
@@ -92,7 +98,7 @@ if __name__ == "__main__":
         cur.execute(table_query)
         result = cur.fetchall()
 
-        f = open('%s_%s_%s_resultfile.txt' % (METRIC, SCENARIO, YEAR), 'w')
+        f = open('query_results/%s_%s_%s_resultfile.txt' % (METRIC, SCENARIO, YEAR), 'w')
         f.write(str(result))
         f.close()
 

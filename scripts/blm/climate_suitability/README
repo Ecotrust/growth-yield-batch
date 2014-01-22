@@ -1,0 +1,42 @@
+README
+
+---WHERE TO GET THE DATA---
+If the CSVs don't exist, and you want to start from scratch, they can be found at:
+
+If You don't want to build the DB, find it zipped (with indexing) at:
+
+If you just want the Geotifs of the current and estimated suitability values, go here:
+
+If you want the Geotifs of the current and estimated suitability categories:
+
+If you want the final Geotifs mapping the change between major categories from 1990 to 2060:
+
+
+---WHERE THIS DATA CAME FROM---
+Unzip the csvs tar in the csvs folder.
+Run csv2sqlite.py on each to collect them all in one sqlite database.
+
+Once you know which climate, rcp, and year you're interested in creating a geotiff for, use the climquery.py program to create these* (see make_tifs.sh for examples).
+
+*NOTES - if the 5th argument to this script is non-numeric (text instead of an ID number), it assumes that the queries have been performed and that a 'resultfile' exists. Since this script was written, the resultfiles were moved into the directory "query_results". 
+	- Update the script to point to this folder upon reading or writing these files. 
+	- Update the usage text to explain this case
+
+Each suitability value falls into one of 4 categories (defined in start_class.cfg and end_class.cfg). To create a geotiff of just the categories, run reclass_raster.py with the approprite cfg (see create_class_rasters.sh).
+
+The tifs in change_class/ are the final result when the 1990 classes (10, 20, 30, 40) are compared (added) to the 2060 classes (1, 2, 3, 4). The resulting values give you a grid like below, where Up-Left is "wasn't suitable, and won't be,", Down-Left is "was ideal, will be unsuitable", Up-Right is "wasn't suitable, but will be ideal", and Down-Right is "was and will be ideal".
+
+Add the 1990 raster values to the 2060 raster values: 
+i.e. 'ideal 1990' + 'ideal 2060' -> 40 + 4 = 44 (no change) 
+     'ideal 1990' + 'poor 2060'  -> 40 + 1 = 41 (major regression)
+
+Classes:
+
+    2060
+
+1   11  12  13  14
+9   21  22  23  24
+9   31  32  33  34
+0   41  42  43  44
+
+The current style to be used for displaying this in QGIS is saved with them, but the GIS dept should make them pretty.
