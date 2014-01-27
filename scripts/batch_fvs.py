@@ -7,13 +7,14 @@ and runs all the key files withing the plot dir (output to `work` directory)
 and compiles their results to a csv (`final` directory)
 
 Usage:
-    batch_fvs.py [BATCHDIR]
+    batch_fvs.py [BATCHDIR] [--cores=<cpus>]
     batch_fvs.py (-h | --help)
     batch_fvs.py --version
 
 Options:
-    -h --help     Show this screen.
-    --version     Show version.
+    -h --help       Show this screen.
+    --version       Show version.
+    --cores=<cpus>  Number of CPU Cores [default: 1]
 """
 from docopt import docopt
 import os
@@ -28,6 +29,7 @@ if __name__ == "__main__":
     args = docopt(__doc__, version='FVS Batch 1.0')
 
     batchdir = args['BATCHDIR']
+    cores = int(args['--cores'])
     if not batchdir:
         batchdir = os.path.curdir
     batchdir = os.path.abspath(batchdir)
@@ -41,8 +43,22 @@ if __name__ == "__main__":
         print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    for datadir in datadirs:
-        plotdir = os.path.join(plotsdir, datadir) 
-        apply_fvs_to_plotdir(plotdir)
+    plotdirs = [os.path.join(plotsdir, x) for x in datadirs]
+
+    if cores == 1:
+        # Single core
+        # equivalent to:
+        # for plotdir in plotdirs:
+        #     apply_fvs_to_plotdir(plotdir)
+        map(apply_fvs_to_plotdir, plotdirs)
+    elif cores > 1:
+        # Multicore
+        from multiprocessing import Pool
+        pool = Pool(cores)
+        pool.map(apply_fvs_to_plotdir, plotdirs)
+        pool.close()
+        pool.join()
+    else:
+        raise Exception("cores must be >= 1")
 
     print "DONE!"

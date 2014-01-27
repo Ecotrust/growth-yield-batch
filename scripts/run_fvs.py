@@ -38,7 +38,14 @@ class FVSError(Exception):
 def prep_final(plotdir, extract_methods):
     final = os.path.abspath(os.path.join(plotdir, "..", "..", "final"))
     if not os.path.exists(final):
-        os.makedirs(final)
+        try:
+            os.makedirs(final)
+        except OSError as exc:
+            # For thread saftey
+            import errno
+            if exc.errno == errno.EEXIST and os.path.isdir(final):
+                pass
+
 
     if 'sqlite3' in extract_methods:
         db_path = os.path.join(final, "data.db")
