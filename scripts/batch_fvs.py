@@ -7,14 +7,15 @@ and runs all the key files withing the plot dir (output to `work` directory)
 and compiles their results to a csv (`final` directory)
 
 Usage:
-    batch_fvs.py [BATCHDIR] [--cores=<cpus>]
+    batch_fvs.py [options] [BATCHDIR] 
     batch_fvs.py (-h | --help)
     batch_fvs.py --version
 
 Options:
-    -h --help       Show this screen.
-    --version       Show version.
-    --cores=<cpus>  Number of CPU Cores [default: 1]
+    -h --help        Show this screen.
+    --version        Show version.
+    --cores=<cpus>   Number of CPU Cores [default: 1]
+    --failures-only  Start a new batch to rerun previously failed plots
 """
 from docopt import docopt
 import os
@@ -30,6 +31,7 @@ if __name__ == "__main__":
 
     batchdir = args['BATCHDIR']
     cores = int(args['--cores'])
+    failures_only = bool(args['--failures-only'])
     if not batchdir:
         batchdir = os.path.curdir
     batchdir = os.path.abspath(batchdir)
@@ -43,7 +45,14 @@ if __name__ == "__main__":
         print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    plotdirs = [os.path.join(plotsdir, x) for x in datadirs]
+    if not failures_only:
+        plotdirs = [os.path.join(plotsdir, x) for x in datadirs]
+    else:
+        import glob
+        errs = [os.path.splitext(os.path.basename(x))[0] for x in glob.glob(os.path.join("final", "*.err"))]
+        print "removing %s error files" % len(errs)
+        map(os.remove, [os.path.join(batchdir, "final", "%s.err" % x) for x in errs])
+        plotdirs = [os.path.join(plotsdir, x) for x in datadirs if x in errs]
 
     if cores == 1:
         # Single core
