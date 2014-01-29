@@ -7,13 +7,15 @@ and runs all the key files withing the plot dir (output to `work` directory)
 and compiles their results to a csv (`final` directory)
 
 Usage:
-    batch_fvs.py [BATCHDIR]
+    batch_fvs.py [options] [BATCHDIR] 
     batch_fvs.py (-h | --help)
     batch_fvs.py --version
 
 Options:
-    -h --help     Show this screen.
-    --version     Show version.
+    -h --help        Show this screen.
+    --version        Show version.
+    --cores=<cpus>   Number of CPU Cores [default: 1]
+    --failures-only  Start a new batch to rerun previously failed plots
 """
 from docopt import docopt
 import os
@@ -28,6 +30,8 @@ if __name__ == "__main__":
     args = docopt(__doc__, version='FVS Batch 1.0')
 
     batchdir = args['BATCHDIR']
+    cores = int(args['--cores'])
+    failures_only = bool(args['--failures-only'])
     if not batchdir:
         batchdir = os.path.curdir
     batchdir = os.path.abspath(batchdir)
@@ -41,8 +45,29 @@ if __name__ == "__main__":
         print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    for datadir in datadirs:
-        plotdir = os.path.join(plotsdir, datadir) 
-        apply_fvs_to_plotdir(plotdir)
+    if not failures_only:
+        plotdirs = [os.path.join(plotsdir, x) for x in datadirs]
+    else:
+        import glob
+        errs = [os.path.splitext(os.path.basename(x))[0] for x in glob.glob(os.path.join("final", "*.err"))]
+        print "removing %s error files" % len(errs)
+        map(os.remove, [os.path.join(batchdir, "final", "%s.err" % x) for x in errs])
+        plotdirs = [os.path.join(plotsdir, x) for x in datadirs if x in errs]
+
+    if cores == 1:
+        # Single core
+        # equivalent to:
+        # for plotdir in plotdirs:
+        #     apply_fvs_to_plotdir(plotdir)
+        map(apply_fvs_to_plotdir, plotdirs)
+    elif cores > 1:
+        # Multicore
+        from multiprocessing import Pool
+        pool = Pool(cores)
+        pool.map(apply_fvs_to_plotdir, plotdirs)
+        pool.close()
+        pool.join()
+    else:
+        raise Exception("cores must be >= 1")
 
     print "DONE!"

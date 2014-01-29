@@ -20,6 +20,7 @@ import glob
 from shutil import copytree, rmtree, copyfile
 from subprocess import Popen, PIPE
 import gzip
+import errno
 
 try:
     from extract import extract_data
@@ -38,7 +39,12 @@ class FVSError(Exception):
 def prep_final(plotdir, extract_methods):
     final = os.path.abspath(os.path.join(plotdir, "..", "..", "final"))
     if not os.path.exists(final):
-        os.makedirs(final)
+        try:
+            os.makedirs(final)
+        except OSError as exc:
+            # For thread saftey
+            if exc.errno == errno.EEXIST and os.path.isdir(final):
+                pass
 
     if 'sqlite3' in extract_methods:
         db_path = os.path.join(final, "data.db")
@@ -118,11 +124,21 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
 
     outfiledir = os.path.join(final, "out")
     if not os.path.exists(outfiledir):
-        os.makedirs(outfiledir)
+        try:
+            os.makedirs(outfiledir)
+        except OSError as exc:
+            # For thread saftey
+            if exc.errno == errno.EEXIST and os.path.isdir(final):
+                pass
 
     work_base = os.path.abspath(os.path.join(plotdir, "..", "..", "work"))
     if not os.path.exists(work_base):
-        os.makedirs(work_base)
+        try:
+            os.makedirs(work_base)
+        except OSError as exc:
+            # For thread saftey
+            if exc.errno == errno.EEXIST and os.path.isdir(final):
+                pass
     work = os.path.join(work_base, dirname)
     if os.path.exists(work):
         rmtree(work)
@@ -135,10 +151,10 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
             if fvsout:
               print fvsout
 
-            warnfile = os.path.join(final, os.path.basename(key).replace(".key", ".warn"))
+            warnfile = os.path.join(final, "out", os.path.basename(key).replace(".key", ".warn"))
             with open(warnfile, 'w') as fh:
                 fh.write(fvswarn)
-            print "\tWARNING: fvs warnings written to ./final/%s" % \
+            print "\tWARNING: fvs warnings written to ./final/out/%s" % \
                   os.path.basename(key).replace(".key", ".warn")
         except FVSError as exc:
             outfile = key.replace(".key", ".out")
@@ -171,7 +187,12 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     svsfiledir = os.path.join(final, "svs")
     for svs in svss:
         if not os.path.exists(svsfiledir):
-            os.makedirs(svsfiledir)
+            try:
+                os.makedirs(svsfiledir)
+            except OSError as exc:
+                # For thread saftey
+                if exc.errno == errno.EEXIST and os.path.isdir(final):
+                    pass
         copyfile(svs, os.path.join(svsfiledir, os.path.basename(svs)))
 
     write_final(dirname, work, final, extract_methods)

@@ -245,7 +245,16 @@ $ build_keys.py
 $ batch_fvs.py
 ```
 
+`batch_fvs.py` also accepts a `--cores=<numcores>` parameter to provide *experimental* support 
+for running batches on multiple cores in parallel. Testing indicates that adding cores will 
+speed batch runs significantly though the return diminish as you increase the number. The
+optimal value will be equal to or slightly below the total number of cpu cores available on 
+the system.
+
+
 ##### 4. Run all the project's plots in asynchronous batch mode
+
+The prefered way to acheive parallel procesing is using the asych batch mode. 
 
 This only works if you're running through the virtual machine or on a Linux-based server
 instance. First you may need to confirm that celery is up and running
