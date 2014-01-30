@@ -247,8 +247,8 @@ $ batch_fvs.py
 
 `batch_fvs.py` also accepts a `--cores=<numcores>` parameter to provide *experimental* support 
 for running batches on multiple cores in parallel. Testing indicates that adding cores will 
-speed batch runs significantly though the return diminish as you increase the number. The
-optimal value will be equal to or slightly below the total number of cpu cores available on 
+speed batch runs significantly, though the returns are not linear and diminish as you increase cores.
+The optimal value will be equal to or slightly below the total number of cpu cores available on 
 the system.
 
 
