@@ -1,6 +1,8 @@
 #!/bin/bash
 
-./make_tifs.sh
+echo '---GETTING COMBOS AND QUERYING---'
+# ./make_tifs.sh
+python get_species_climate_combos.py
 # ./create_class_rasters.sh
 
 #Apply classes to cells in the rasters

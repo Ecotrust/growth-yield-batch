@@ -36,17 +36,18 @@ def create_grid_raster(extent,outdir,outfile,format,array):
     print "Created output %s at %s" % (format, outfile)
 
 
-if __name__ == "__main__":
+def the_stuff(args):
+    
 
-    if len(sys.argv) < 3:
+    if len(args) < 3:
         print 'please include at least the climate, rcp, and year:'
         print 'USAGE: python climquery.py CLIMATE RCP YEAR [METRIC] [ID/infile]'
         print 'Where if you enter text instead of ID a resultfile will replace DB Queries'
         sys.exit()
 
-    CLIMATE = sys.argv[1]
-    RCP = sys.argv[2]
-    YEAR = sys.argv[3]
+    CLIMATE = args[1]
+    RCP = args[2]
+    YEAR = args[3]
     METRIC = False
     ID = False
     INPUTFILE = False
@@ -66,18 +67,18 @@ if __name__ == "__main__":
         print 'USAGE: python climquery.py CLIMATE RCP YEAR [METRIC] [ID]'
         sys.exit()
 
-    if len(sys.argv) > 4:
-        METRIC = sys.argv[4]
+    if len(args) > 4:
+        METRIC = args[4]
         if METRIC not in ("mat","map","gsp","mtcm","mmin","mtwm","mmax","sday","ffp","dd5","gsdd5","d100","dd0","smrpb","smrsprpb","sprp","smrp","winp","ABAM","ABCO","ABGR","ABLA","ABLAA","ABMA","ABPR","ABSH","ACGL","ACGR3","ACMA3","AECA","ALRH2","ALRU2","ARME","BEPA","BEPAC","CADE27","CELE3","CHCH7","CHLA","CHNO","CONU4","FRLA","JUCO11","JUDE2","JUMO","JUOC","JUOS","JUSC2","LALY","LAOC","LIDE3","OLTE","PIAL","PIAT","PIBR","PICO","PICO3","PIED","PIEN","PIFL2","PIJE","PILA","PILO","PIMO","PIMO3","PIPO","PIPU","PISI","PIST3","PODEM","POTR5","PROSO","PRUNU","PSME","QUAG","QUCH2","QUDO","QUEM","QUGA","QUGA4","QUHY","QUKE","QULO","QUOB","QUWI2","RONE","SALIX","SEGI2","TABR2","THPL","TSHE","TSME","UMCA","pSite","DEmtwm","DEmtcm","DEdd5","DEsdi","DEdd0","DEpdd5"):
             print 'Available metrics for query include: "mat","map","gsp","mtcm","mmin","mtwm","mmax","sday","ffp","dd5","gsdd5","d100","dd0","smrpb","smrsprpb","sprp","smrp","winp","ABAM","ABCO","ABGR","ABLA","ABLAA","ABMA","ABPR","ABSH","ACGL","ACGR3","ACMA3","AECA","ALRH2","ALRU2","ARME","BEPA","BEPAC","CADE27","CELE3","CHCH7","CHLA","CHNO","CONU4","FRLA","JUCO11","JUDE2","JUMO","JUOC","JUOS","JUSC2","LALY","LAOC","LIDE3","OLTE","PIAL","PIAT","PIBR","PICO","PICO3","PIED","PIEN","PIFL2","PIJE","PILA","PILO","PIMO","PIMO3","PIPO","PIPU","PISI","PIST3","PODEM","POTR5","PROSO","PRUNU","PSME","QUAG","QUCH2","QUDO","QUEM","QUGA","QUGA4","QUHY","QUKE","QULO","QUOB","QUWI2","RONE","SALIX","SEGI2","TABR2","THPL","TSHE","TSME","UMCA","pSite","DEmtwm","DEmtcm","DEdd5","DEsdi","DEdd0","DEpdd5"'
             print 'USAGE: python climquery.py CLIMATE RCP YEAR [METRIC] [ID]'
             sys.exit()
 
-    if len(sys.argv) == 6:
-        if sys.argv[5].isalpha():
-            INPUTFILE = sys.argv[5]
+    if len(args) == 6:
+        if args[5].isalpha():
+            INPUTFILE = args[5]
         else:
-            ID = sys.argv[5]
+            ID = args[5]
 
     SCENARIO = "%s_%s" % (CLIMATE, RCP)
 
@@ -123,3 +124,7 @@ if __name__ == "__main__":
     # outfile = "%s_%s_%s.tif" % (METRIC, SCENARIO, YEAR)
 
     create_grid_raster(extent, outdir, outfile, format, two_d_array)
+
+
+if __name__ == "__main__":
+    the_stuff(sys.argv)

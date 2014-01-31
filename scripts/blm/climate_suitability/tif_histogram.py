@@ -71,11 +71,11 @@ if __name__ == "__main__":
 		print "Good: %s" % good
 		print "Bad: %s\n" % bad
 
-		csv_rows.append(fn_print.split("_") + [good, bad, 
-			classes[0], classes[1], classes[2], classes[3], 
-			classes[4], classes[5], classes[6], classes[7], 
-			classes[8], classes[9], classes[10], classes[11], 
-			classes[12], classes[13], classes[14], classes[15]
+		csv_rows.append(fn_print.split("_") + [good/100, bad/100, 
+			classes[0]/100, classes[1]/100, classes[2]/100, classes[3]/100, 
+			classes[4]/100, classes[5]/100, classes[6]/100, classes[7]/100, 
+			classes[8]/100, classes[9]/100, classes[10]/100, classes[11]/100, 
+			classes[12]/100, classes[13]/100, classes[14]/100, classes[15]/100
 		])
 
 	write_csv(fileLocation, csv_rows)
