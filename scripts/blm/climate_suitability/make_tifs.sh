@@ -1,22 +1,22 @@
 #!/bin/bash
 
 echo "Starting PSME"
-python climquery.py Ensemble rcp45 1990 PSME
+python climquery.py Ensemble rcp45 1990 PSME file
 echo "rcp45 1990 done."
-python climquery.py Ensemble rcp45 2060 PSME
+python climquery.py Ensemble rcp45 2060 PSME file
 echo "rcp45 2060 done."
-python climquery.py Ensemble rcp85 1990 PSME
+python climquery.py Ensemble rcp85 1990 PSME file
 echo "rcp85 1990 done."
-python climquery.py Ensemble rcp85 2060 PSME 
+python climquery.py Ensemble rcp85 2060 PSME file
 echo "rcp85 2060 done."
 echo "Finishing PSME"
 
 echo "Starting TSHE"
-python climquery.py Ensemble rcp45 1990 TSHE
+python climquery.py Ensemble rcp45 1990 TSHE file
 echo "rcp45 1990 done."
-python climquery.py Ensemble rcp45 2060 TSHE
+python climquery.py Ensemble rcp45 2060 TSHE file
 echo "rcp45 2060 done."
-python climquery.py Ensemble rcp85 1990 TSHE
+python climquery.py Ensemble rcp85 1990 TSHE file
 echo "rcp85 1990 done."
 python climquery.py Ensemble rcp85 2060 TSHE file
 echo "rcp85 2060 done."

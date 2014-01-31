@@ -1,20 +1,26 @@
 import sqlite3, sys, os, csv
-from osgeo import gdal
+from osgeo import gdal, osr
 import numpy as np
 
-def create_grid_raster(extent,outfile,format,array):
+def create_grid_raster(extent,outdir,outfile,format,array):
     ydist = extent[3] - extent[1]
     xdist = extent[2] - extent[0]
-    #xcount = int((xdist/cellsize)+1)
-    xcount = 686
-    #ycount = int((ydist/cellsize)+1)
-    ycount = 516
 
+    xcount = 686       
+    ycount = 516
     cellsize = float(xdist)/float(xcount)       #This should == 1000
 
     # Create output raster  
     driver = gdal.GetDriverByName( format )
-    dst_ds = driver.Create( outfile, xcount, ycount, 1, gdal.GDT_Float32 )
+    dst_ds = driver.Create( outdir + outfile, xcount, ycount, 1, gdal.GDT_Float32 )
+
+    proj = osr.SpatialReference()  
+
+    # import ipdb
+    # ipdb.set_trace()
+
+    proj.ImportFromEPSG(3309)  
+    dst_ds.SetProjection(proj.ExportToWkt()) 
 
     # This is bizzarly complicated
     # the GT(2) and GT(4) coefficients are zero,    
@@ -25,6 +31,9 @@ def create_grid_raster(extent,outfile,format,array):
    
     dst_band = dst_ds.GetRasterBand(1)
     dst_band.WriteArray(array,0,0)
+
+    del dst_ds
+
     print "Created output %s at %s" % (format, outfile)
 
 
@@ -108,7 +117,10 @@ if __name__ == "__main__":
 
     extent = [-396304.91, 421638.32, 289695.09, 937638.32]
     #cellsize = 1
-    outfile = "%s_%s_%s.tif" % (METRIC, SCENARIO, YEAR)
-    format = "GTiff"
+    outdir = "./rasters/"
+    outfile = "%s_%s_%s.img" % (METRIC, SCENARIO, YEAR)
+    format = "HFA"
+    # format = "GTiff"
+    # outfile = "%s_%s_%s.tif" % (METRIC, SCENARIO, YEAR)
 
-    create_grid_raster(extent, outfile, format, two_d_array)
+    create_grid_raster(extent, outdir, outfile, format, two_d_array)
