@@ -1,7 +1,28 @@
 #!/bin/bash
 
 ./make_tifs.sh
-./create_class_rasters.sh
+# ./create_class_rasters.sh
+
+#Apply classes to cells in the rasters
+echo ''
+echo '---RASTER CLASS ASSIGNMENT---'
+for f in `ls rasters | grep '1990.img$'`; do
+	echo ''
+	count=`expr ${#f} - 4`
+	name=`echo ${f:0:$count}`
+	rm 'categorize/'$name'_classed.img'
+	python reclass_raster.py 'rasters/'$name'.img' \
+	start_class.cfg 'categorize/'$name'_classed.img'
+done
+
+for f in `ls rasters | grep '2060.img$'`; do
+	echo ''
+	count=`expr ${#f} - 4`
+	name=`echo ${f:0:$count}`
+	rm 'categorize/'$name'_classed.img'
+	python reclass_raster.py 'rasters/'$name'.img' \
+	end_class.cfg 'categorize/'$name'_classed.img'
+done
 
 #Do raster calc on all rasters in ./categorize/
 echo ''
@@ -38,7 +59,7 @@ for f in `ls change_class | grep '_100s.img$'`; do
     count=`expr ${#f} - 9`
     name=`echo ${f:0:$count}`
     echo "$name"
-    rm 'clipped_deltas/'$name'_100s.img'
+    rm 'clipped_deltas/'$name'_clipped.img'
     gdalwarp -q -cutline shapefiles/BLM_district_land_3309.shp \
     -crop_to_cutline -of HFA 'change_class/'$f 'clipped_deltas/'$name'_clipped.img'
 done

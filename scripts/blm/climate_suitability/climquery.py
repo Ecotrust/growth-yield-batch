@@ -5,9 +5,11 @@ import numpy as np
 def create_grid_raster(extent,outdir,outfile,format,array):
     ydist = extent[3] - extent[1]
     xdist = extent[2] - extent[0]
-
+    # xcount = int((xdist/cellsize)+1)
     xcount = 686       
+    # ycount = int((ydist/cellsize)+1)
     ycount = 516
+
     cellsize = float(xdist)/float(xcount)       #This should == 1000
 
     # Create output raster  
@@ -15,9 +17,6 @@ def create_grid_raster(extent,outdir,outfile,format,array):
     dst_ds = driver.Create( outdir + outfile, xcount, ycount, 1, gdal.GDT_Float32 )
 
     proj = osr.SpatialReference()  
-
-    # import ipdb
-    # ipdb.set_trace()
 
     proj.ImportFromEPSG(3309)  
     dst_ds.SetProjection(proj.ExportToWkt()) 
