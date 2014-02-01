@@ -10,9 +10,17 @@ echo "Complete" $good
 bad=`find final -type f -print | grep 'var.*err' | wc -l`
 echo "Failures" $bad
 
-total=`find plots -type d -print | grep var | wc -l`
+if [ -f plots/.count ]; then
+    total=`cat plots/.count`    
+else
+    total=`find plots -type d -print | grep var | wc -l`
+    echo $total > plots/.count
+fi
 todo=`echo "$total - $good - $bad" | bc`
 echo "To do   " $todo
 echo "-------------------"
 echo "Total   " $total
+
+echo
+echo $(echo "scale=2;100.0 - (100.0*$todo/$total)" | bc) "% done"
 
