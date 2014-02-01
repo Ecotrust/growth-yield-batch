@@ -195,7 +195,13 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
                     pass
         copyfile(svs, os.path.join(svsfiledir, os.path.basename(svs)))
 
-    write_final(dirname, work, final, extract_methods)
+    try:
+        write_final(dirname, work, final, extract_methods)
+    except Exception as exc:
+        err = os.path.join(final, dirname + ".err")
+        with open(err, 'w') as fh:
+            fh.write(exc.message)
+        print "\tERROR in write_final; written to ./final/%s.err" % dirname
 
     # If we've gotten this far, we don't need the work directory any longer
     try:
