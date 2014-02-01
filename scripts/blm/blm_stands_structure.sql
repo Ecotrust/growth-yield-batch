@@ -1,9 +1,6 @@
 CREATE TABLE "stands" (
   OGC_FID INTEGER PRIMARY KEY,
   GEOMETRY BLOB , 
-  area FLOAT, 
-  perimeter FLOAT, 
-  inside INTEGER, 
   slope FLOAT, 
   aspect FLOAT, 
   elev FLOAT, 
@@ -16,31 +13,42 @@ CREATE TABLE "stands" (
   variant VARCHAR(3), 
   rx VARCHAR(128), 
   batch VARCHAR(10),
-  mgmtgrp TEXT)
+  mgmtgrp TEXT);
 
 -- modify to map the stands_orig structure to this
--- e.g.   PrjID as standid, 
 
-INSERT INTO stands (OGC_FID, GEOMETRY, area, perimeter, inside, slope, 
+--PrjID       standid     unique across study area
+--AvgElevM    elev        meters, mean
+--b_slope     slope       median/mean
+--b_aspect    aspect      majority based on classified slope map?
+--SiteClass   sitecls     numeric site class code  corresponds to a site tree/index combo
+--acres       acres    
+--GNN_FCID    gnnfcid     zonal majority
+--LocCode     location    3 digit location or region code, based on our hand-drawn map
+--LAT         lat  
+--          batch       LEAVE BLANK FOR NOW (a code to divide up the FVS runs)
+--          rx      LEAVE BLANK FOR NOW (a comma-delimited list of valid rxs)
+--Variant                variant     based on our hand drawn map
+--DIST_NAME   district     
+--Category    mgmtgrp         BLM, NSOW, GO (Exclusion/GrowOnly)
+
+INSERT INTO stands (OGC_FID, GEOMETRY, slope, 
                     aspect, elev, gnnfcid, sitecls, acres, standid, 
                     location, lat, variant, rx, batch, mgmtgrp)
 SELECT 
 	OGC_FID as OGC_FID,
 	GEOMETRY as GEOMETRY,
-    area as area, 
-    perimeter as permimeter, 
-    inside as inside,
-    slope as slope,
-    aspect as aspect,
-    elev as elev,
-    gnnfcid as gnnfcid,
-    sitecls as sitecls,
+    b_slope as slope,
+    b_aspect as aspect,
+    AvgElevM as elev,
+    GNN_FCID as gnnfcid,
+    SiteClass as sitecls,
     acres as acres,
-    standid as standid,
-    location as location,
-    lat as lat,
-    variant as variant,
-    rx as rx,
-    batch as batch,
-    mgmtgrp as mgmtgrp
-FROM stands_orig
+    PrjID as standid,
+    LocCode as location,
+    LAT as lat,
+    Variant as variant,
+    "" as rx,
+    "" as batch,
+    Category as mgmtgrp
+FROM stands_orig;

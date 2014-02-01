@@ -4,27 +4,25 @@ DATABASE = "master.sqlite"
 
 rxs = {
     # All available rxs
-    # explicitly list all? Or just keep blank????????????????????????????????????????????
-    (u'BLM', u'PN'): "",
-    (u'BLM', u'WC'): "",
-    (u'BLM', u'NC'): "",
-    (u'BLM', u'CA'): "",
-    (u'BLM', u'SO'): "",
+    (u'BLM', u'PN'): "1,2,3,4,5,6,7",
+    (u'BLM', u'WC'): "1,2,3,4,5,6,7",
+    (u'BLM', u'NC'): "1,4,5,6,7,8,9",
+    (u'BLM', u'CA'): "1,4,5,6,7,8,9",
+    (u'BLM', u'SO'): "1,4,5,6,7,8,9",
 
     # Grow only
-    (u'GO', u'PN'): "1",
-    (u'GO', u'WC'): "1",
-    (u'GO', u'NC'): "1",
-    (u'GO', u'CA'): "1",
-    (u'GO', u'SO'): "1",
+    (u'Exclusion or Stream Buffer', u'PN'): "1",
+    (u'Exclusion or Stream Buffer', u'WC'): "1",
+    (u'Exclusion or Stream Buffer', u'NC'): "1",
+    (u'Exclusion or Stream Buffer', u'CA'): "1",
+    (u'Exclusion or Stream Buffer', u'SO'): "1",
 
     # limited thinning due to spotted owl
-    ######################################################### TODO 
-    (u'NSOW', u'PN'): "1,8,9",
-    (u'NSOW', u'WC'): "1,8,9",
-    (u'NSOW', u'NC'): "1,8,9",
-    (u'NSOW', u'CA'): "1,14,15",
-    (u'NSOW', u'SO'): "1,14,15",
+    (u'NSOW', u'PN'): "1,6,7",
+    (u'NSOW', u'WC'): "1,6,7",
+    (u'NSOW', u'NC'): "1,6,7",
+    (u'NSOW', u'CA'): "1,6,7",
+    (u'NSOW', u'SO'): "1,6,7",
 }
 
 if __name__ == "__main__":

@@ -3,13 +3,20 @@ import math
 import random
 
 DATABASE = "master.sqlite"
-RATIO = 0.1
-SAMPLE_NAME = 'sample'
+RATIO = 0.05
+SAMPLE_NAME = 'sample2'
+
 
 if __name__ == "__main__":
 
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
+
+    # UPDATE all rows
+    query = """UPDATE stands SET batch = 'all';"""
+    print query
+    cur.execute(query)
+    print
 
     table_query = """SELECT mgmtgrp, variant, location, count(standid)
         FROM stands 

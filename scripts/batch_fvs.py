@@ -54,11 +54,11 @@ if __name__ == "__main__":
         print "removing %s error files" % len(errs)
         map(os.remove, [os.path.join(batchdir, "final", "%s.err" % x) for x in errs])
 
-        print "calculating diff of all plots vs successes...",
+        print "calculating diff of all plots vs successes..."
         # Assume that the csv exists (may want to query the db instead?)
         good = [os.path.splitext(os.path.basename(x))[0] for x in glob.glob(os.path.join("final", "*.csv"))]
         plotdirs = [os.path.join(plotsdir, x) for x in datadirs if x not in good]
-        print len(plotdirs)
+        print "\t", len(plotdirs)
 
     if cores == 1:
         # Single core
