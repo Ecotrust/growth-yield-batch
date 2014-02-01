@@ -1,7 +1,8 @@
 #!/bin/bash
 
-for f in `ls geotifs/change_class/ | grep .tif$ | grep clipped`; do
-    echo ""
-    echo "$f"
-    python tif_histogram.py geotifs/change_class/$f
+list=''
+for f in `ls clipped_deltas/ | grep .img$`; do
+    list=$list' '$f
 done
+# echo 'List is: '$list
+'python tif_histogram.py'$list

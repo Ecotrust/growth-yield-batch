@@ -23,11 +23,22 @@ projects/projects/2013/BLMForestTool/Data/Processed/polit/BLM_district_land_4326
 Unzip the csvs tar in the csvs folder.
 Run csv2sqlite.py on each to collect them all in one sqlite database.
 
-Once you know which climate, rcp, and year you're interested in creating a geotiff for, use the climquery.py program to create these* (see make_tifs.sh for examples).
+###NOTE###
+# From here, the work was all done by the create_class_resample_clip.sh script. It uses:
+#     -get_species_climate_combos.py
+#     -climquery.py
+#     -reclass_raster.py
+#     -tiff_histogram.py
+# Any scripts listed below may be a better starting point if you want to do something 
+#   specific, but not for general population, and may be based on obsolete folder 
+#   organization.
+###END NOTE###
 
-Each suitability value falls into one of 4 categories (defined in start_class.cfg and end_class.cfg). To create a geotiff of just the categories, run reclass_raster.py with the approprite cfg (see create_class_rasters.sh).
+Once you know which climate, rcp, and year you're interested in creating a raster for, use the climquery.py program to create these* (see make_tifs.sh for examples).
 
-The tifs in change_class/ are the final result when the 1990 classes (10, 20, 30, 40) are compared (added) to the 2060 classes (1, 2, 3, 4). The resulting values give you a grid like below, where Up-Left is "wasn't suitable, and won't be,", Down-Left is "was ideal, will be unsuitable", Up-Right is "wasn't suitable, but will be ideal", and Down-Right is "was and will be ideal".
+Each suitability value falls into one of 4 categories (defined in start_class.cfg and end_class.cfg). To create a raster of just the categories, run reclass_raster.py with the approprite cfg (see create_class_rasters.sh).
+
+The rasters in change_class/ are the final result when the 1990 classes (10, 20, 30, 40) are compared (added) to the 2060 classes (1, 2, 3, 4). The resulting values give you a grid like below, where Up-Left is "wasn't suitable, and won't be,", Down-Left is "was ideal, will be unsuitable", Up-Right is "wasn't suitable, but will be ideal", and Down-Right is "was and will be ideal".
 
 Classes:
     2060 --->
@@ -45,9 +56,12 @@ This can be done either writing a script similar to reclass_raster and using num
 
 The current style to be used for displaying this in QGIS is saved with them (change_class/change_class_grid_styles.qml), but the GIS dept should make them pretty.
 
-To clip all of the tifs to the BLM land, we first reprojected the BLM shapefile to match the 3309 projection of the Tifs. Then we ran:
-gdalwarp -q -cutline BLM_district_land_4326.shp -crop_to_cutline -of GTiff original.tif clipped.tif
+Resample the rasters to 100m^2 blocks, i.e.
+gdalwarp -of HFA -tr 100 100 PSME_Ensemble_rcp45_1990.img out.img
 
-The script clip_all_tifs.sh will do this for all geotifs found in geotifs/change_class assuming there's the BLM shapefile in there with them.
+To clip all of the rasters to the BLM land, we first reprojected the BLM shapefile to match the 3309 projection of the rasters. Then we ran:
+gdalwarp -q -cutline BLM_district_land_4326.shp -crop_to_cutline -of HFA original.img clipped.img
 
-The script "run_all_tifs.sh" will take all of the clipped tifs and run them through tif_histogram.py to report the number of pixels that were above 0.5 suitability and stayed above 0.5, and how many dropped below 0.5 ("good" and "bad" respectively).
+The script clip_all_tifs.sh will do this for all rasters found in geotifs/change_class assuming there's the BLM shapefile in there with them.
+
+The script "run_all_tifs.sh" will take all of the clipped rasters and run them through tif_histogram.py to report the number of pixels that were above 0.5 suitability and stayed above 0.5, and how many dropped below 0.5 ("good" and "bad" respectively).

@@ -31,3 +31,14 @@ projects/*/final
 projects/*/work
 projects/*/cond
 scripts/blm/climate_suitability/geotifs
+scripts/blm/climate_suitability/change_class/*
+scripts/blm/climate_suitability/categorize/*
+scripts/blm/climate_suitability/clipped_deltas/*
+scripts/blm/climate_suitability/query_results/*
+scripts/blm/climate_suitability/rasters/*
+scripts/blm/climate_suitability/shapefiles/*
+scripts/blm/climate_suitability/*.img
+scripts/blm/climate_suitability/*.tif
+scripts/blm/climate_suitability/*.tif.aux.xml
+scripts/blm/climate_suitability/test
+
