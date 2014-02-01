@@ -1,9 +1,8 @@
 #!/bin/bash
 
+#Query for all Tree Species, create rasters from DB
 echo '---GETTING COMBOS AND QUERYING---'
-# ./make_tifs.sh
 python get_species_climate_combos.py
-# ./create_class_rasters.sh
 
 #Apply classes to cells in the rasters
 echo ''
@@ -26,7 +25,7 @@ for f in `ls rasters | grep '2060.img$'`; do
 	end_class.cfg 'categorize/'$name'_classed.img'
 done
 
-#Do raster calc on all rasters in ./categorize/
+#Calculate Delta between years and generate rasters of the change
 echo ''
 echo '---RASTER CLASS CALCULATION---'
 for f in `ls categorize | grep 1990`; do
@@ -66,7 +65,7 @@ for f in `ls change_class | grep '_100s.img$'`; do
     -crop_to_cutline -of HFA 'change_class/'$f 'clipped_deltas/'$name'_clipped.img'
 done
 
-#Create a report of the climate change data for the BLM Land
+#Create a report of the climate change data for the BLM Land in km^2
 echo ''
 echo '---REPORTING---'
 list=''

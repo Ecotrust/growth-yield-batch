@@ -23,6 +23,17 @@ projects/projects/2013/BLMForestTool/Data/Processed/polit/BLM_district_land_4326
 Unzip the csvs tar in the csvs folder.
 Run csv2sqlite.py on each to collect them all in one sqlite database.
 
+###NOTE###
+# From here, the work was all done by the create_class_resample_clip.sh script. It uses:
+#     -get_species_climate_combos.py
+#     -climquery.py
+#     -reclass_raster.py
+#     -tiff_histogram.py
+# Any scripts listed below may be a better starting point if you want to do something 
+#   specific, but not for general population, and may be based on obsolete folder 
+#   organization.
+###END NOTE###
+
 Once you know which climate, rcp, and year you're interested in creating a raster for, use the climquery.py program to create these* (see make_tifs.sh for examples).
 
 Each suitability value falls into one of 4 categories (defined in start_class.cfg and end_class.cfg). To create a raster of just the categories, run reclass_raster.py with the approprite cfg (see create_class_rasters.sh).
