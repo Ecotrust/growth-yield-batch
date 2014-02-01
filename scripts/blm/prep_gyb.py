@@ -346,6 +346,7 @@ def write_config(con, outdir):
     # write config.json 
     # default to 0, 5, 10, 15 offsets
     clims = get_climates(con)
+    clims.append("NoClimate")
     data = {
       "climate_scenarios": clims,
       "site_classes": SITE_CLASSES,
