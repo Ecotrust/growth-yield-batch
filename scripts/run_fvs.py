@@ -156,7 +156,7 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
                 fh.write(fvswarn)
             print "\tWARNING: fvs warnings written to ./final/out/%s" % \
                   os.path.basename(key).replace(".key", ".warn")
-        except FVSError as exc:
+        except Exception as exc:
             outfile = key.replace(".key", ".out")
             print "\tFVS failed. OUT file at ./final/out/%s" % os.path.basename(outfile)
             copyfile(outfile, os.path.join(outfiledir, os.path.basename(outfile)))
