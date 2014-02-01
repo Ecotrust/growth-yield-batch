@@ -21,10 +21,12 @@ from docopt import docopt
 import os
 import sys
 from run_fvs import apply_fvs_to_plotdir
+import glob
 
 
 def get_immediate_subdirectories(dir):
     return [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
+
 
 if __name__ == "__main__":
     args = docopt(__doc__, version='FVS Batch 1.0')
@@ -45,14 +47,18 @@ if __name__ == "__main__":
         print "ERROR:: Plots directory '%s' doesn't contain any subdirectories" % batchdir
         sys.exit(1)
 
-    if not failures_only:
-        plotdirs = [os.path.join(plotsdir, x) for x in datadirs]
-    else:
-        import glob
+    plotdirs = [os.path.join(plotsdir, x) for x in datadirs]
+
+    if failures_only:
         errs = [os.path.splitext(os.path.basename(x))[0] for x in glob.glob(os.path.join("final", "*.err"))]
         print "removing %s error files" % len(errs)
         map(os.remove, [os.path.join(batchdir, "final", "%s.err" % x) for x in errs])
-        plotdirs = [os.path.join(plotsdir, x) for x in datadirs if x in errs]
+
+        print "calculating diff of all plots vs successes...",
+        # Assume that the csv exists (may want to query the db instead?)
+        good = [os.path.splitext(os.path.basename(x))[0] for x in glob.glob(os.path.join("final", "*.csv"))]
+        plotdirs = [os.path.join(plotsdir, x) for x in datadirs if x not in good]
+        print len(plotdirs)
 
     if cores == 1:
         # Single core
