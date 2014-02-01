@@ -1,11 +1,18 @@
 #!/bin/bash
-# good=`find final -type f -print | grep 'var.*csv' | wc -l`
-if [ ! -f final/data.db ]; then
-    echo "final/data.db not found!"
-    exit 1
-fi
+good=`find final -type f -print | grep 'var.*csv' | wc -l`
+#if [ ! -f final/data.db ]; then
+#    echo "final/data.db not found!"
+#    exit 1
+#fi
+#good=`ls final/data.db && sqlite3 final/data.db "select var, rx, cond, site, climate from trees_fvsaggregate group by var, rx, cond, site, climate;" | wc -l`
+echo "Complete" $good
 
-good=`ls final/data.db && sqlite3 final/data.db "select var, rx, cond, site, climate from trees_fvsaggregate group by var, rx, cond, site, climate;" | wc -l`
 bad=`find final -type f -print | grep 'var.*err' | wc -l`
+echo "Failures" $bad
+
 total=`find plots -type d -print | grep var | wc -l`
-echo $good "out of" $total "completed (plus" $bad "failures)"
+todo=`echo "$total - $good - $bad" | bc`
+echo "To do   " $todo
+echo "-------------------"
+echo "Total   " $total
+
