@@ -57,7 +57,9 @@ if __name__ == "__main__":
         print "calculating diff of all plots vs successes..."
         # Assume that the csv exists (may want to query the db instead?)
         good = [os.path.splitext(os.path.basename(x))[0] for x in glob.glob(os.path.join("final", "*.csv"))]
-        plotdirs = [os.path.join(plotsdir, x) for x in datadirs if x not in good]
+        import ipdb; ipdb.set_trace()
+        bad = set(datadirs) - set(good)
+        plotdirs = [os.path.join(plotsdir, x) for x in bad] 
         print "\t", len(plotdirs)
 
     if cores == 1:
