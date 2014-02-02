@@ -15,7 +15,7 @@ Options:
     -h --help        Show this screen.
     --version        Show version.
     --cores=<cpus>   Number of CPU Cores [default: 1]
-    --failures-only  Start a new batch to rerun previously failed plots
+    --fix            Start a new batch to rerun previously failed or otherwise incomplete plots
 """
 from docopt import docopt
 import os
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     batchdir = args['BATCHDIR']
     cores = int(args['--cores'])
-    failures_only = bool(args['--failures-only'])
+    failures_only = bool(args['--fix'])
     if not batchdir:
         batchdir = os.path.curdir
     batchdir = os.path.abspath(batchdir)
