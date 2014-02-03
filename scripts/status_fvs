@@ -1,6 +1,6 @@
 #!/bin/bash
 echo
-good=`find final -type f -print | grep 'var.*csv' | wc -l`
+good=`find final -maxdepth 1 -type f -name 'var*csv' | wc -l`
 #if [ ! -f final/data.db ]; then
 #    echo "final/data.db not found!"
 #    exit 1
@@ -8,13 +8,15 @@ good=`find final -type f -print | grep 'var.*csv' | wc -l`
 #good=`ls final/data.db && sqlite3 final/data.db "select var, rx, cond, site, climate from trees_fvsaggregate group by var, rx, cond, site, climate;" | wc -l`
 echo "Complete" $good
 
-bad=`find final -type f -print | grep 'var.*err' | wc -l`
+bad=`find final -maxdepth 1 -type f -name 'var*err' | wc -l`
 echo "Failures" $bad
 
 if [ -f plots/.count ]; then
     total=`cat plots/.count`    
 else
-    total=`find plots -type d -print | grep var | wc -l`
+    echo "finding total..."
+    #total=`find plots -type d -print | grep var | wc -l`
+    total=`find plots -maxdepth 1 -type d -name 'var*' | wc -l`
     echo $total > plots/.count
 fi
 todo=`echo "$total - $good - $bad" | bc`
@@ -26,4 +28,3 @@ echo
 echo $(echo "scale=2;100.0 - (100.0*$todo/$total)" | bc) "% done"
 echo $(echo "scale=2;100.0*$bad/$good" | bc) "% failure rate"
 echo
-
