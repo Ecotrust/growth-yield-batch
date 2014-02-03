@@ -14,7 +14,6 @@ echo "Failures" $bad
 if [ -f plots/.count ]; then
     total=`cat plots/.count`    
 else
-    echo "finding total..."
     #total=`find plots -type d -print | grep var | wc -l`
     total=`find plots -maxdepth 1 -type d -name 'var*' | wc -l`
     echo $total > plots/.count
