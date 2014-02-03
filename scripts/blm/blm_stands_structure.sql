@@ -1,3 +1,5 @@
+DROP table stands;
+
 CREATE TABLE "stands" (
   OGC_FID INTEGER PRIMARY KEY,
   GEOMETRY BLOB , 
@@ -10,9 +12,10 @@ CREATE TABLE "stands" (
   standid INTEGER, 
   location INTEGER, 
   lat FLOAT, 
-  variant VARCHAR(3), 
-  rx VARCHAR(128), 
   batch VARCHAR(10),
+  rx VARCHAR(128), 
+  variant VARCHAR(3), 
+  district VARCHAR(30),
   mgmtgrp TEXT);
 
 -- modify to map the stands_orig structure to this
@@ -34,7 +37,7 @@ CREATE TABLE "stands" (
 
 INSERT INTO stands (OGC_FID, GEOMETRY, slope, 
                     aspect, elev, gnnfcid, sitecls, acres, standid, 
-                    location, lat, variant, rx, batch, mgmtgrp)
+                    location, lat, batch, rx, variant, district, mgmtgrp)
 SELECT 
 	OGC_FID as OGC_FID,
 	GEOMETRY as GEOMETRY,
@@ -47,8 +50,9 @@ SELECT
     PrjID as standid,
     LocCode as location,
     LAT as lat,
-    Variant as variant,
+    "all" as batch,
     "" as rx,
-    "" as batch,
+    Variant as variant,
+    DIST_NAME as district,
     Category as mgmtgrp
 FROM stands_orig;

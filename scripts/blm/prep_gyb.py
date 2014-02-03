@@ -141,8 +141,14 @@ def make_fvsfile(stand, outdir, con, variant):
                 fval = fmt.format(val)
 
                 if len(fval) > valwidth:
-                    print "WARNING: %s is '%s' should only be %d wide!!" % (col,
-                        val, valwidth)
+                    if col == 'Tree_Age':
+                        # special case, tree age >= 1000 gets assigned to 999
+                        val = '999'
+                        fval = '999'
+                        print "WARNING: Tree Age is '%s', setting to 999" % (val, )
+                    else:
+                        print "WARNING: %s is '%s' should only be %d wide!!" % (col,
+                            val, valwidth)
                 line += fval[-1 * valwidth:]  # Just take the trailing chars 
             #print line
             fh.write(line)

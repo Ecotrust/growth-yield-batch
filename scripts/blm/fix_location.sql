@@ -21,3 +21,9 @@ and variant = 'WC';
 update stands_orig
 set loccode = 612
 WHERE variant = 'PN';
+
+
+-- Set sitecls 0 to default of 2
+update stands_orig
+set sitecls = 2 
+where sitecls = 0;
