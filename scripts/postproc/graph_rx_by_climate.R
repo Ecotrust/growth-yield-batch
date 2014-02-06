@@ -56,24 +56,24 @@ theme_set(theme_bw())
 # CairoWin()
 
 
-# d <- runsql( 
-    # "SELECT fvs.year as year, fvs.climate as climate, 
-    #         sum(calc_carbon) as carbon, sum(after_total_ft3) as volume,
-    #         sum(removed_merch_bdft) as timber, avg(FIREHZD) as fire,
-    #         avg(NSONEST) as owl
-    #         -- todo sum(NSONEST + acres)
-    # FROM fvsaggregate AS fvs
-    # JOIN optimalrx AS opt
-    # ON fvs.cond = opt.stand
-    # -- todo join with stands to get acres
-    # WHERE calc_carbon IS NOT NULL
-    # AND opt.rx = fvs.rx
-    # AND opt.offset = fvs.offset
-    # GROUP BY fvs.year, fvs.climate")
+d <- runsql( 
+    "SELECT fvs.year as year, fvs.climate as climate, 
+            sum(calc_carbon) as carbon, sum(after_total_ft3) as volume,
+            sum(removed_merch_bdft) as timber, avg(FIREHZD) as fire,
+            avg(NSONEST) as owl
+            -- todo sum(NSONEST + acres)
+    FROM fvsaggregate AS fvs
+    JOIN optimalrx AS opt
+    ON fvs.cond = opt.stand
+    -- todo join with stands to get acres
+    WHERE calc_carbon IS NOT NULL
+    AND opt.rx = fvs.rx
+    AND opt.offset = fvs.offset
+    GROUP BY fvs.year, fvs.climate")
 
 # write.csv(d, 'output2.csv')
 
-#d <- read.csv('output2.csv')
+# d <- read.csv('output2.csv')
 d <- runsql("select 'rx' || rx as rx, rx as rxnum, climate, count(rx) as rxcount from optimalrx group by rx, climate order by rxnum")
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 d$circ = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 1))
