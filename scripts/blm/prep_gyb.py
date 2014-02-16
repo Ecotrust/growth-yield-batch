@@ -143,9 +143,9 @@ def make_fvsfile(stand, outdir, con, variant):
                 if len(fval) > valwidth:
                     if col == 'Tree_Age':
                         # special case, tree age >= 1000 gets assigned to 999
+                        print "WARNING: Tree Age is '%s', setting to 999" % (val, )
                         val = '999'
                         fval = '999'
-                        print "WARNING: Tree Age is '%s', setting to 999" % (val, )
                     else:
                         print "WARNING: %s is '%s' should only be %d wide!!" % (col,
                             val, valwidth)
@@ -203,26 +203,49 @@ def make_stdinfofile(stand, outdir, con):
     habitat = default_habitat.get(variant.upper(), "")
 
     cur = con.cursor()
-    sql = """SELECT TPA, DBH, Tree_Age
+    sql = """SELECT TPA, DBH, HT_ft, Tree_Age
              FROM treelist
              WHERE GNN_FCID = %d
              AND TreeHist = 1;""" % (fcid, )
 
-    data = list(cur.execute(sql))
-    if len(data) == 0:
+    treedata = list(cur.execute(sql))
+    if len(treedata) == 0:
         warn = "WARNING, no treelist data for standid %s, fcid %s (skipping)" % (standid, fcid)
         raise GYBError(warn)
         return
-    # Basal Area weighted average age of live trees only
-    sumba = float(sum([d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
-    summult = float(sum([d['Tree_Age'] * d['TPA'] * d['DBH'] * d['DBH'] for d in data]))
-    age = int(round(summult/sumba))
+
+    # TODO age_dom or age_dom_no_rem ?? 
+    sql = """SELECT AGE_DOM_NO_REM as age
+             FROM SPPSZ_ATTR_ALL
+             WHERE FCID = %d;""" % (fcid, )
+    data = list(cur.execute(sql))
+    age = float(data[0]['age'])
+
+    if age == 0:
+        # GNN AGE has failed us, try to apply a simple linear regression to guess age
+
+        # TPA-weighted averages of live trees only
+        avght = float(sum([d['HT_ft'] * d['TPA'] for d in treedata])) / float(sum([d['TPA'] for d in treedata]))
+        avgdbh = float(sum([d['DBH'] * d['TPA'] for d in treedata])) / float(sum([d['TPA'] for d in treedata]))
+        
+        # convert back to metric as that's what the regression coefficients are based on
+        avght = avght / 3.28084
+        avgdbh = avgdbh / 0.3937
+
+        # apply regression coefficients, no intercept, R2 = 0.77
+        age = (avgdbh * 2.879453) + (avght * -0.783109)
+        if age < 0:
+            age = 0
+
+        #print fcid, avgdbh, avght, age
+        #with open("ages.csv", 'a') as fh:
+        #    fh.write("%s,%s,%s,%s,%s\n" % (fcid, age, age, avght, avgdbh))
 
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
             stand['location'],
             habitat,
-            age,
+            int(age),
             int(stand['aspect']),
             int(stand['slope']),
             int(round(stand['elev'] / 100.0)),  # elev assumed to be in ft, FVS expects ft/100
@@ -376,7 +399,7 @@ def main(batch):
     os.makedirs(outdir)
     print "Writing to %s" % outdir
 
-    conn = sqlite3.connect('master.sqlite')
+    conn = sqlite3.connect('/home/mperry/projects/BLM_climate/Batch1/master.sqlite')
     conn.row_factory = sqlite3.Row
 
     for stand in stand_iter(batch, conn):
