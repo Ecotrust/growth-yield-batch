@@ -215,31 +215,59 @@ def make_stdinfofile(stand, outdir, con):
         return
 
     # TODO age_dom or age_dom_no_rem ?? 
-    sql = """SELECT AGE_DOM_NO_REM as age
+    sql = """SELECT AGE_DOM_NO_REM as age, SDI_REINEKE, QMDA_DOM, HCB, OGSI
              FROM SPPSZ_ATTR_ALL
              WHERE FCID = %d;""" % (fcid, )
     data = list(cur.execute(sql))
     age = float(data[0]['age'])
 
     if age == 0:
-        # GNN AGE has failed us, try to apply a simple linear regression to guess age
+        """
+        GNN AGE has failed us, try to apply a simple linear regression to guess age
+        Using the 3994 FCIDs on BLM property that had a valid age
+        predict AGE_DOM_NO_REM using AGE_DOM_NO_REM ~ SDI_REINEKE + QMDA_DOM + HCB + OGSI - 1
 
-        # TPA-weighted averages of live trees only
-        avght = float(sum([d['HT_ft'] * d['TPA'] for d in treedata])) / float(sum([d['TPA'] for d in treedata]))
-        avgdbh = float(sum([d['DBH'] * d['TPA'] for d in treedata])) / float(sum([d['TPA'] for d in treedata]))
-        
-        # convert back to metric as that's what the regression coefficients are based on
-        avght = avght / 3.28084
-        avgdbh = avgdbh / 0.3937
+        SDI_REINEKE    0.038342
+        QMDA_DOM       1.257999
+        HCB           -2.183154
+        OGSI           1.213396
 
-        # apply regression coefficients, no intercept, R2 = 0.77
-        age = (avgdbh * 2.879453) + (avght * -0.783109)
+                                    OLS Regression Results                            
+        ==============================================================================
+        Dep. Variable:         AGE_DOM_NO_REM   R-squared:                       0.853
+        Model:                            OLS   Adj. R-squared:                  0.853
+        Method:                 Least Squares   F-statistic:                     6303.
+        Date:                Mon, 17 Feb 2014   Prob (F-statistic):               0.00
+        Time:                        08:53:24   Log-Likelihood:                -22160.
+        No. Observations:                4355   AIC:                         4.433e+04
+        Df Residuals:                    4351   BIC:                         4.435e+04
+        Df Model:                           4                                         
+        ===============================================================================
+                          coef    std err          t      P>|t|      [95.0% Conf. Int.]
+        -------------------------------------------------------------------------------
+        SDI_REINEKE     0.0383      0.004      8.696      0.000         0.030     0.047
+        QMDA_DOM        1.2580      0.045     27.694      0.000         1.169     1.347
+        HCB            -2.1832      0.138    -15.858      0.000        -2.453    -1.913
+        OGSI            1.2134      0.050     24.180      0.000         1.115     1.312
+        ==============================================================================
+        Omnibus:                     1047.808   Durbin-Watson:                   1.752
+        Prob(Omnibus):                  0.000   Jarque-Bera (JB):             6835.787
+        Skew:                           0.984   Prob(JB):                         0.00
+        Kurtosis:                       8.813   Cond. No.                         78.1
+        ==============================================================================
+        """
+        # apply regression coefficients, no intercept
+        try:
+            age = (float(data[0]['SDI_REINEKE']) * 0.038342) + \
+              (float(data[0]['QMDA_DOM']) * 1.257999) + \
+              (float(data[0]['HCB']) * -2.183154) + \
+              (float(data[0]['OGSI']) * 1.213396)
+        except:
+            import ipdb; ipdb.set_trace()
+
         if age < 0:
             age = 0
 
-        #print fcid, avgdbh, avght, age
-        #with open("ages.csv", 'a') as fh:
-        #    fh.write("%s,%s,%s,%s,%s\n" % (fcid, age, age, avght, avgdbh))
 
     with open(path, 'w') as fh:
         line = concat_fvs_line("STDINFO", [
