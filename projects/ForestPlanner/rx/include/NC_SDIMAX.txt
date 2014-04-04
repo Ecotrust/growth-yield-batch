@@ -1,0 +1,9 @@
+COMMENT
+Set Maximum Stand Density Index across all species.  NC variant.
+Where >100 GNN plots in the variant had single dominant species, 
+95th percentile of observed SDI assumed to represent 55% of 
+theoretical maximum SDI (full stocking vs. theoretical maximum).
+END
+SDIMAX          All       655
+SDIMAX           TO       861
+SDIMAX           DF       643

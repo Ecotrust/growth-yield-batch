@@ -1,0 +1,18 @@
+COMMENT
+Fire hazard rating based on Hugget, Abt, and Shepperd (2008):
+0 = very low risk
+1 = low risk
+2 = medium risk
+3 = medium-high risk
+4 = high risk
+END
+IF
+EVPHASE EQ 2
+THEN
+AGPLABEL
+All
+COMPUTE            0
+FIREHZD = BOUND(0,LININT(TORCHIDX,25,25,2,0) + &
+LININT(CROWNIDX,25,25,40,40,3,0,0,-1),4)
+END
+ENDIF
