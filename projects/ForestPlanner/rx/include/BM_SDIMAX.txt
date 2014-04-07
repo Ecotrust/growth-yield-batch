@@ -5,8 +5,9 @@ Where >100 GNN plots in the variant had single dominant species,
 theoretical maximum SDI (full stocking vs. theoretical maximum).
 END
 SDIMAX          All       560
-SDIMAX           WF       577
-SDIMAX           SH       633
+* BM doesn't like these?
+* SDIMAX           WF       577
+* SDIMAX           SH       633
 SDIMAX           WJ       169
 SDIMAX           LP       687
 SDIMAX           PP       422
