@@ -76,12 +76,15 @@ def generate_keyfiles_for_cond(fvs, indir, plotsdir, conf, include):
         var_rxs = None  # implies ALL rxs get run
 
     cli = fvs.replace(".fvs", ".cli")
-    assert os.path.exists(cli)
 
     sitecls_override = fvs.replace(".fvs", ".site")
+    var_sites = None
     if os.path.exists(sitecls_override):
         with open(sitecls_override, 'r') as fh:
-            site_class = fh.readlines()[0].strip()
+            try:
+                var_sites = dict([tuple(x.strip().split(",")) for x in fh.readlines()])
+            except:  # just a single site value
+                site_class = fh.readlines()[0].strip()
     else:
         site_class = "2"  # default
 
@@ -95,10 +98,16 @@ def generate_keyfiles_for_cond(fvs, indir, plotsdir, conf, include):
            (variant, rx) not in var_rxs and (variant, "*") not in var_rxs:
             continue  # Skip it
 
+        if var_sites:
+            # If needed, adjust site class on a per-variant basis
+            try:
+                site_class = var_sites[variant]
+            except:
+                site_class = "2" # revert to default
+
         try:
             sitecode = conf['site_classes'][variant][site_class]
         except KeyError:
-
             sitecode = default_site_classes[site_class]
 
         with open(basekey, 'r') as fh:
@@ -115,7 +124,10 @@ def generate_keyfiles_for_cond(fvs, indir, plotsdir, conf, include):
             os.makedirs(outdir)
 
             copyfile(fvs, os.path.join(outdir, os.path.basename(fvs)))
-            copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
+            try:
+                copyfile(cli, os.path.join(outdir, os.path.basename(cli)))
+            except IOError:
+                pass # not required
             copyfile(std, os.path.join(outdir, os.path.basename(std)))
 
             for offset in conf['offsets']:
