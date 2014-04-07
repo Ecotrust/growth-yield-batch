@@ -6,7 +6,8 @@ theoretical maximum SDI (full stocking vs. theoretical maximum).
 END
 SDIMAX          All       560
 SDIMAX           WF       577
-SDIMAX           SH       633
+* EC doesn't like this one
+* SDIMAX           SH       633
 SDIMAX           WJ       169
 SDIMAX           LP       687
 SDIMAX           PP       422
