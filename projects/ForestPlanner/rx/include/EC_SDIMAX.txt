@@ -1,45 +1,17 @@
 COMMENT
-Set Maximum Stand Density Index across all species.  SO variant.
+Set Maximum Stand Density Index across all species.  EC variant.
 Where >100 GNN plots in the variant had single dominant species, 
 95th percentile of observed SDI assumed to represent 55% of 
 theoretical maximum SDI (full stocking vs. theoretical maximum).
 END
-SDIMAX          All       560
-SDIMAX           WF       577
-* EC doesn't like this one
-* SDIMAX           SH       633
-SDIMAX           WJ       169
-SDIMAX           LP       687
-SDIMAX           PP       422
-SDIMAX           DF       545
-SDIMAX           MH       708
-
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*      TODO : adjust for EC (this is copied from SO)
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
+SDIMAX          All       652
+SDIMAX           SF       933
+SDIMAX           GF       589 
+SDIMAX           AF       901
+SDIMAX           WJ       158
+SDIMAX           WL       763
+SDIMAX           LP       801
+SDIMAX           PP       366
+SDIMAX           DF       587
+SDIMAX           WH       854
+SDIMAX           MH       807

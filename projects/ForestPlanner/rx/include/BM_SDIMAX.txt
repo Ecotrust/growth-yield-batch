@@ -1,45 +1,11 @@
 COMMENT
-Set Maximum Stand Density Index across all species.  SO variant.
+Set Maximum Stand Density Index across all species.  BM variant.
 Where >100 GNN plots in the variant had single dominant species, 
 95th percentile of observed SDI assumed to represent 55% of 
 theoretical maximum SDI (full stocking vs. theoretical maximum).
 END
-SDIMAX          All       560
-* BM doesn't like these?
-* SDIMAX           WF       577
-* SDIMAX           SH       633
+SDIMAX          All       455
 SDIMAX           WJ       169
-SDIMAX           LP       687
-SDIMAX           PP       422
-SDIMAX           DF       545
-SDIMAX           MH       708
-
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*      TODO : adjust for BM  (this is copied from SO)
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
+SDIMAX           LP       627
+SDIMAX           PP       375
+SDIMAX           DF       361
