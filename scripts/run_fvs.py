@@ -21,6 +21,7 @@ from shutil import copytree, rmtree, copyfile
 from subprocess import Popen, PIPE
 import gzip
 import errno
+import time
 
 try:
     from extract import extract_data
@@ -112,6 +113,8 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     from plots/varWC_rx1_cond31566, 
         write working dir to ../../work/varWC_rx1_cond31566
     """
+    start = time.time()
+
     assert os.path.exists(plotdir)
     path = os.path.normpath(plotdir)
     dirname = path.split(os.sep)[-1]
@@ -147,7 +150,7 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     keys = glob.glob(os.path.join(work, '*.key'))
     for key in keys:
         try:
-            fvsout, fvswarn = exectute_fvs(key)
+            fvsout, fvswarn = execute_fvs(key)
             if fvsout:
               print fvsout
 
@@ -209,10 +212,14 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
     except:
         print "\tNOTICE : unable to delete work directory"
 
+    elapsed = time.time() - start
+    with open(os.path.join(final, "timer.txt"), 'a') as fh:
+        fh.write("%s,%f\n" % (os.path.basename(plotdir).replace('_', ','), elapsed))
+
     return True
 
 
-def exectute_fvs(key):
+def execute_fvs(key):
     basename = os.path.basename(key)
     prefix, ext = os.path.splitext(basename)
 
@@ -310,7 +317,7 @@ def create_data_db(db_path):
       "dead" REAL,
       "offset" INTEGER,
       "rx" INTEGER,
-      "site" REAL,
+      "site" INTEGER,
       "total_stand_carbon" REAL,
       "var" TEXT,
       "year" INTEGER,
