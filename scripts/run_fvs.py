@@ -213,7 +213,7 @@ def apply_fvs_to_plotdir(plotdir, extract_methods=None):
         print "\tNOTICE : unable to delete work directory"
 
     elapsed = time.time() - start
-    with open(os.path.join(final, "timer.txt"), 'a') as fh:
+    with open(os.path.join(final, "timer.csv"), 'a') as fh:
         fh.write("%s,%f\n" % (os.path.basename(plotdir).replace('_', ','), elapsed))
 
     return True
