@@ -1,0 +1,78 @@
+COMMENT
+Trigger natural regeneration when SDI falls below 35% of SDIMAX. Composition 
+based on proportion of stocking by species >5"DBH (after thin), inserts up to 
+400 trees based on current SDI as proportion of full stocking (80% of SDIMAX). 
+EC Variant.
+END
+IF                20
+ASDI LE (0.35*BSDIMAX)
+THEN
+AGPLABEL
+All
+ESTAB
+NATURAL            2    Parms(WP, SPMCDBH(11,WP,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WL, SPMCDBH(11,WL,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(DF, SPMCDBH(11,DF,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(SF, SPMCDBH(11,SF,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(RC, SPMCDBH(11,RC,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(GF, SPMCDBH(11,GF,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(LP, SPMCDBH(11,LP,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(ES, SPMCDBH(11,ES,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(AF, SPMCDBH(11,AF,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(PP, SPMCDBH(11,PP,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WH, SPMCDBH(11,WH,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(MH, SPMCDBH(11,MH,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(PY, SPMCDBH(11,PY,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WB, SPMCDBH(11,WB,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(NF, SPMCDBH(11,NF,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WF, SPMCDBH(11,WF,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(LL, SPMCDBH(11,LL,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(YC, SPMCDBH(11,YC,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WJ, SPMCDBH(11,WJ,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(BM, SPMCDBH(11,BM,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(VN, SPMCDBH(11,VN,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(RA, SPMCDBH(11,RA,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(PB, SPMCDBH(11,PB,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(GC, SPMCDBH(11,GC,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(DG, SPMCDBH(11,DG,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(AS, SPMCDBH(11,AS,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(CW, SPMCDBH(11,CW,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WO, SPMCDBH(11,WO,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(PL, SPMCDBH(11,PL,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(WI, SPMCDBH(11,WI,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(OS, SPMCDBH(11,OS,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+NATURAL            2    Parms(OH, SPMCDBH(11,OH,0,5,999)/SPMCDBH(11,0,0,5,999)*&
+(1-(SPMCDBH(11,0,0)/(0.8*ASDIMAX)))*400,100., 2., 0.5, 0)
+END
+ENDIF
