@@ -1,0 +1,55 @@
+COMMENT
+ECON extension used to calculate total boardfoot and cubic foot
+volumes harvested for each merchantable species.  Suitable for 
+calculating pulp and "camp run" sawlog revenues.
+END
+ECON
+STRTECON           1  
+HRVRVN             0         2
+HRVRVN             0         3
+END
+
+COMMENT
+ECON extension used to break harvest volumes into sawlog grades.
+Uses sawlog grades defined in Official Log Scaling Rules (Jan 2011).
+END
+SPGROUP       WHTYPE
+WH WF GF NF YC RW
+SPGROUP       PPTYPE
+PP SP IC JP
+SPGROUP       WPTYPE
+WP LP ES
+SPGROUP       RATYPE
+RA BM WO WA PB GC CH
+ECON
+HRVRVN             0         4         5        DF
+HRVRVN             0         4         6        DF
+HRVRVN             0         4        12        DF
+HRVRVN             0         4        30        DF
+HRVRVN             0         4         5        SS
+HRVRVN             0         4         6        SS
+HRVRVN             0         4        12        SS
+HRVRVN             0         4        24        SS
+HRVRVN             0         4         5        RC
+HRVRVN             0         4         6        RC
+HRVRVN             0         4        20        RC
+HRVRVN             0         4        28        RC
+HRVRVN             0         4         5    WHTYPE
+HRVRVN             0         4         6    WHTYPE
+HRVRVN             0         4        12    WHTYPE
+HRVRVN             0         4        24    WHTYPE
+HRVRVN             0         4         5    PPTYPE
+HRVRVN             0         4         6    PPTYPE
+HRVRVN             0         4        12    PPTYPE
+HRVRVN             0         4        24    PPTYPE
+HRVRVN             0         4        30    PPTYPE
+HRVRVN             0         4         5    WPTYPE
+HRVRVN             0         4         6    WPTYPE
+HRVRVN             0         4        12    WPTYPE
+HRVRVN             0         4        20    WPTYPE
+HRVRVN             0         4        24    WPTYPE
+HRVRVN             0         4         5    RATYPE
+HRVRVN             0         4        10    RATYPE
+HRVRVN             0         4        12    RATYPE
+HRVRVN             0         4        16    RATYPE
+END
