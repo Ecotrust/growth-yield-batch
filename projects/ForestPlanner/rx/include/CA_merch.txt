@@ -1,45 +1,16 @@
+COMMENT
+Define hardwood and softwood species groups.  CA variant.
+END
+SPGROUP       CONSPP
+BR CP DF GP GS IC JP KP LM LP MH MP OS PC PP PY RC RF SH SP WB WF WH WJ WP
+SPGROUP        HWSPP
+LO CY BL EO WO BO VO IO BM BU RA MA GC DG FL WN TO SY AS CW WI CN CL OH
 
 COMMENT
 Define merchantable species and sizes for Klamath Mountains (CA) variant.
 VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
 END
-VOLUME             0       All       999       999
-VOLUME             0        DF       3.2         2
-VOLUME             0        BM       3.2         2
-VOLUME             0        RA       3.2         2
-VOLUME             0        BO       3.2         2
-VOLUME             0        CW       3.2         2
-VOLUME             0        FL       3.2         2
-VOLUME             0        GC       3.2         2
-VOLUME             0        MA       3.2         2
-VOLUME             0        TO       3.2         2
-VOLUME             0        WN       3.2         2
-VOLUME             0        WO       3.2         2
-VOLUME             0        WF       3.2         2
-VOLUME             0        WH       3.2         2
-VOLUME             0        RF       3.2         2
-VOLUME             0        SH       3.2         2
-BFVOLUME           0       All       999       999
-BFVOLUME           0        DF       6.2         5
-BFVOLUME           0        IC       6.2         5
-BFVOLUME           0        PC       6.2         5
-BFVOLUME           0        BM       5.7         5
-BFVOLUME           0        RA       5.7         5
-BFVOLUME           0        LP       6.2         5
-BFVOLUME           0        PY       6.2         5
-BFVOLUME           0        RC       6.2         5
-BFVOLUME           0        WP       6.2         5
-BFVOLUME           0        BO       5.7         5
-BFVOLUME           0        CW       5.7         5
-BFVOLUME           0        FL       5.7         5
-BFVOLUME           0        GC       5.7         5
-BFVOLUME           0        MA       5.7         5
-BFVOLUME           0        TO       5.7         5
-BFVOLUME           0        WN       5.7         5
-BFVOLUME           0        WO       5.7         5
-BFVOLUME           0        JP       6.2         5
-BFVOLUME           0        PP       6.2         5
-BFVOLUME           0        SP       6.2         5
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
 BFVOLUME           0        WJ        10         6
-BFVOLUME           0        WF       6.2         5
-BFVOLUME           0        WH       6.2         5

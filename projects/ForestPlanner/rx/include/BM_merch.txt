@@ -1,22 +1,17 @@
 COMMENT
-Define merchantable species and sizes for Pacific coast (PN) variant.
+Define hardwood and softwood species groups.  BM variant.
+END
+SPGROUP       CONSPP
+AF DF ES GF LM LP MH OS PP PY WB WJ WL WP YC
+SPGROUP        HWSPP
+AS CW OH
+
+COMMENT
+Define merchantable species and sizes for Blue Mountains (BM) variant.
 VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
 END
-VOLUME             0       All       999       999
-VOLUME             0        DF       3.2         2
-VOLUME             0        WL       3.2         2
-VOLUME             0        AF       3.2         2
-VOLUME             0        CW       3.2         2
-VOLUME             0        ES       3.2         2
-VOLUME             0        GF       3.2         2
-BFVOLUME           0       All       999       999
-BFVOLUME           0        DF       6.2         5
-BFVOLUME           0        WL       6.2         5
-BFVOLUME           0        AF       6.2         5
-BFVOLUME           0        PY       6.2         5
-BFVOLUME           0        WP       6.2         5
-BFVOLUME           0        LP       6.2         5
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
 BFVOLUME           0        PP       7.2         6
-BFVOLUME           0        ES       6.2         5
 BFVOLUME           0        WJ        10         6
-BFVOLUME           0        GF       6.2         5

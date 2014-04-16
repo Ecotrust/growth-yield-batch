@@ -1,33 +1,17 @@
 COMMENT
+Define hardwood and softwood species groups.  EC variant.
+END
+SPGROUP       CONSPP
+WP WL DF SF RC GF LP ES AF PP PY WH MH WB NF WF LL YC WJ OS
+SPGROUP        HWSPP
+BM VN RA PB GC DG AS CW WO PL WI OH
+
+COMMENT
 Define merchantable species and sizes for East-side Cascades (EC) variant.  
 VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
 END
-VOLUME             0       All       999       999
-VOLUME             0        DF       3.2         2
-VOLUME             0        WL       3.2         2
-VOLUME             0        WF       3.2         2
-VOLUME             0        WH       3.2         2
-VOLUME             0        BM       3.2         2
-VOLUME             0        GC       3.2         2
-VOLUME             0        PL       3.2         2
-VOLUME             0        RA       3.2         2
-VOLUME             0        WO       3.2         2
-VOLUME             0        ES       3.2         2
-VOLUME             0        GF       3.2         2
-VOLUME             0        NF       3.2         2
-BFVOLUME           0       All       999       999
-BFVOLUME           0        DF       6.2         5
-BFVOLUME           0        WL       6.2         5
-BFVOLUME           0        WF       6.2         5
-BFVOLUME           0        WH       6.2         5
-BFVOLUME           0        BM       5.7         5
-BFVOLUME           0        GC       5.7         5
-BFVOLUME           0        PL       5.7         5
-BFVOLUME           0        RA       5.7         5
-BFVOLUME           0        WO       5.7         5
-BFVOLUME           0        LP       6.2         5
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
 BFVOLUME           0        PP       7.2         6
-BFVOLUME           0        ES       6.2         5
 BFVOLUME           0        WJ        10         6
-BFVOLUME           0        GF       6.2         5
-BFVOLUME           0        NF       6.2         5

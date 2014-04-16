@@ -1,55 +1,15 @@
-COMMENT
-Change WH to different cubic volume equation to avoid weird calculation errors 
-found when using BLM default equation.
+Define hardwood and softwood species groups.  PN variant.
 END
-VOLEQNUM          WH632BEHW263
+SPGROUP       CONSPP
+AF DF ES GF IC JP KP LL LP MH NF PP PY RC RF RW SF SP SS WB WF WH WJ WP YC
+SPGROUP        HWSPP
+BM RA WA PB GC AS CW WO DG HT CH WI OT
 
 COMMENT
 Define merchantable species and sizes for Pacific coast (PN) variant.
 VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
 END
-VOLUME             0       All       999       999
-VOLUME             0        DF       3.2         2
-VOLUME             0        BM       3.2         2
-VOLUME             0        RA       3.2         2
-VOLUME             0        WO       3.2         2
-VOLUME             0        ES       3.2         2
-VOLUME             0        NF       3.2         2
-VOLUME             0        RW       3.2         2
-VOLUME             0        CH       3.2         2
-VOLUME             0        CW       3.2         2
-VOLUME             0        GC       3.2         2
-VOLUME             0        PB       3.2         2
-VOLUME             0        WA       3.2         2
-VOLUME             0        SS       3.2         2
-VOLUME             0        GF       3.2         2
-VOLUME             0        RF       3.2         2
-VOLUME             0        WF       3.2         2
-VOLUME             0        SF       3.2         2
-VOLUME             0        WH       3.2         2
-BFVOLUME           0       All       999       999
-BFVOLUME           0        RC       6.2         5
-BFVOLUME           0        DF       6.2         5
-BFVOLUME           0        BM       5.7         5
-BFVOLUME           0        RA       5.7         5
-BFVOLUME           0        WO       5.7         5
-BFVOLUME           0        ES       6.2         5
-BFVOLUME           0        IC       6.2         5
-BFVOLUME           0        LP       6.2         5
-BFVOLUME           0        NF       6.2         5
-BFVOLUME           0        PP       6.2         5
-BFVOLUME           0        PY       6.2         5
-BFVOLUME           0        RW       6.2         5
-BFVOLUME           0        SP       6.2         5
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
 BFVOLUME           0        WJ        10         6
-BFVOLUME           0        WP       6.2         5
-BFVOLUME           0        YC       6.2         5
-BFVOLUME           0        CH       5.7         5
-BFVOLUME           0        CW       5.7         5
-BFVOLUME           0        GC       5.7         5
-BFVOLUME           0        PB       5.7         5
-BFVOLUME           0        WA       5.7         5
-BFVOLUME           0        SS       6.2         5
-BFVOLUME           0        GF       6.2         5
-BFVOLUME           0        WF       6.2         5
-BFVOLUME           0        WH       6.2         5
