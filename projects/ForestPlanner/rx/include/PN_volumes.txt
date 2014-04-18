@@ -1,4 +1,21 @@
 COMMENT
+Define hardwood and softwood species groups.  PN variant.
+END
+SPGROUP       CONSPP
+AF DF ES GF IC JP KP LL LP MH NF PP PY RC RF RW SF SP SS WB WF WH WJ WP YC
+SPGROUP        HWSPP
+BM RA WA PB GC AS CW WO DG HT CH WI OT
+
+COMMENT
+Define merchantable species and sizes for Pacific coast (PN) variant.
+VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
+END
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
+BFVOLUME           0        WJ        10         6
+
+COMMENT
 Compute harvested boardfoot volumes by species groups.
 END
 COMPUTE            0

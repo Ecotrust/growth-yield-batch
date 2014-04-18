@@ -1,4 +1,22 @@
 COMMENT
+Define hardwood and softwood species groups.  SO variant.
+END
+SPGROUP       CONSPP
+DF ES IC LP MH NF OS PP PY RC SF SH SP WB WF WH WJ WL WP
+SPGROUP        HWSPP
+WA RA BM AS CW CH WO WI GC MC MB OH
+
+COMMENT
+Define merchantable species and sizes for Southern Oregon (SO) variant.  
+VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
+END
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
+BFVOLUME           0        PP       7.2         6
+BFVOLUME           0        WJ        10         6
+
+COMMENT
 Compute harvested boardfoot volumes by species groups.
 END
 COMPUTE            0
