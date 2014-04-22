@@ -1,0 +1,23 @@
+COMMENT
+Combined rating for vulnerability to mountain pine beetle, pine engraver, and 
+western pine beetle to all pine species.  PN Variant.
+Based on Randall et al. (2011):
+0 = Extremely Low
+1 = Low
+2 = Moderate
+3 = High
+END
+IF
+EVPHASE EQ 2
+THEN
+AGPLABEL
+All
+COMPUTE            0
+PINEBTL = LININT(LININT((MAX(SPMCDBH(5,WB,0,5),SPMCDBH(5,SP,0,5),SPMCDBH(5,WP,0&
+,5),SPMCDBH(5,LP,0,5),SPMCDBH(5,PP,0,5),SPMCDBH(5,JP,0,5),SPMCDBH(5,KP,0,5),0))&
+,0.1,0.1,6,6,8,8,0,0.5,0.5,2,2,3)*LININT(ABA,0.1,0.1,80,80,120,120,0,0.5,0.5,2,&
+2,3)*LININT(((SPMCDBH(2,WB,0)+SPMCDBH(2,SP,0)+SPMCDBH(2,WP,0)+SPMCDBH(2,LP,0)+&
+SPMCDBH(2,PP,0)+SPMCDBH(2,JP,0)+SPMCDBH(2,KP,0))/MAX(ABA,1)),0.01,0.01,.25,.25,&
+.5,.5,0,0.5,0.5,2,2,3),0.1,0.1,2,2,18,18,0,1,1,2,2,3)
+END
+ENDIF

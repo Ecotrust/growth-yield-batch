@@ -1,32 +1,20 @@
 COMMENT
-Ratings for spruce beetle hazard (ES_BTL), based on Schmid and Frye (1976)
-and described in User's Guide to Post-Processors for the Forest Vegetation 
-Simulator (Van Dyck 2005):
-4-5   = LOW
-6     = LOW-MODERATE
-7-9   = MODERATE
-10    = MODERATE-HIGH
-11-12 = HIGH
+Ratings for spruce beetle hazard (ES_BTL).
+Based on Randall et al. (2011):
+0 = Extremely Low
+1 = Low
+2 = Moderate
+3 = High
 END
 IF
-EVPHASE EQ 2 AND SPMCDBH(1,All,0) GT 0
+EVPHASE EQ 2
 THEN
 AGPLABEL
 All
 COMPUTE            0
-ES_BTL = LININT(SITE,80,80,1,2)+ LININT(SPMCDBH(5,ES,0,10,999)&
-,12,12,16,16,1,2,2,3) + LININT(ABA,100,100,150,150,1,2,2,3) +&
- LININT((SPMCDBH(1,ES,0,0,999,0.75*ATOPHT,999)&
-/SPMCDBH(1,All,0,0,999,0.75*ATOPHT,999)),0.5,0.5,0.65,0.65,1,2,2,3)
-END
-ENDIF
-IF
-EVPHASE EQ 2 AND SPMCDBH(1,All,0) EQ 0
-THEN
-AGPLABEL
-All
-COMPUTE            0
-PP_BTL = 3
-LP_BTL = 1
+ES_BTL = LININT(LININT(SPMCDBH(5,ES,0,10,999),0.1,0.1,12,12,16,16,0,0.5,0.5,2,2&
+,3)*LININT(ABA,0.1,0.1,100,100,150,150,0,0.5,0.5,2,2,3)*LININT(SPMCDBH(2,ES,0,&
+10,999)/MAX(ABA,1),0.01,0.01,0.5,0.5,0.65,0.65,0,0.5,0.5,2,2,3),0.1,0.1,2,2,18,&
+18,0,1,1,2,2,3)
 END
 ENDIF
