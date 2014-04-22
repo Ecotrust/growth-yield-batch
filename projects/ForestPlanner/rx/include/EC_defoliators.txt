@@ -1,11 +1,11 @@
 COMMENT
 Combined rating for vulnerability to Western spruce budworm and Douglas-fir
 tussock moth.  EC Variant.
-Based on Randall et al. (2011):
-0 = Extremely Low
-1 = Low
-2 = Moderate
-3 = High
+Based on Randall et al. (2011), re-scaled to factor of 10:
+0.0 - 2.5 = Lowest
+2.5 - 5.0 = Low
+5.0 - 7.5 = Moderate
+7.5 - 10.0 = High
 END
 IF
 EVPHASE EQ 2
@@ -17,6 +17,6 @@ DEFOL = LININT((LININT(ABA,0.1,0.1,80,80,100,100,0,0.5,0.5,2,2,3)*LININT((&
 SPMCDBH(2,WL,0,5,999)+SPMCDBH(2,ES,0,5,999)+SPMCDBH(2,AF,0,5,999)+SPMCDBH(2,GF,&
 0,5,999)+SPMCDBH(2,DF,0,5,999)+SPMCDBH(2,WF,0,5,999))/MAX(ABA,1),0.01,0.01,.25,&
 .25,.5,.5,0,0.5,0.5,2,2,3)*LININT(SPMCDBH(1,All,0,5,999),0.1,0.1,50,50,100,100,&
-0,0.5,0.5,2,2,3)),0.1,0.1,2,2,18,18,0,1,1,2,2,3)
+0,0.5,0.5,2,2,3)),0,1,2,18,27,0,2.5,5,7.5,10)
 END
 ENDIF
