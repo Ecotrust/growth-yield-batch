@@ -18,7 +18,7 @@ from collections import defaultdict
 import glob
 import os
 import re
-
+import json
 
 def parse_name(filename):
     """
@@ -232,7 +232,7 @@ def extract_data(indir):
 
         
         for k, v in yeardata.items():
-            data = {'year': k, 'harvest_report': str(v)}
+            data = {'year': k, 'harvest_report': json.dumps(v)}
             data.update(info)
             harvest_rows.append(data)
 
