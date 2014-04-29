@@ -14,6 +14,7 @@ Options:
 """
 from docopt import docopt
 from pandas import DataFrame, merge
+from collections import defaultdict
 import glob
 import os
 import re
@@ -47,11 +48,17 @@ def classify_tree(spz, diam):
     return "%s_%s" % (spz, diam_class)
 
 
-def split_fixed(line, fixed_schema):
+def split_fixed(line, fixed_schema, failsafe=False):
     funcs = {'int': int, 'float': float, 'str': str}
     data = {}
     for var in fixed_schema:
-        data[var[0]] = funcs[var[3]](line[var[1]-1:var[2]])
+        try:
+            data[var[0]] = funcs[var[3]](line[var[1]-1:var[2]])
+        except ValueError as e:
+            if failsafe:
+                data[var[0]] = None
+            else:
+                raise e
     return data
 
 
@@ -60,6 +67,7 @@ def extract_data(indir):
     carbon_rows = []
     harvested_carbon_rows = []
     econ_rows = []
+    harvest_rows = []
     summary_rows = []
     activity_rows = []
 
@@ -172,13 +180,15 @@ def extract_data(indir):
             data.update(info)
             econ_rows.append(data)
 
-        ############# Extract HARVEST VOLUME AND GROSS VALUE REPORT
+        # # ############# Extract HARVEST VOLUME AND GROSS VALUE REPORT
         ready = False
         countdown = None
+        within_year = None
+        yeardata = defaultdict(list)
         blanks = 0
         for line in lines:
             if line.startswith("HARVEST VOLUME AND GROSS VALUE REPORT"):
-                # We've found the econ summary report, data starts 6 lines down
+                # We've found the econ summary report, data starts 2 lines down
                 ready = True
                 countdown = 2
 
@@ -187,25 +197,45 @@ def extract_data(indir):
                     countdown -= 1
                 continue
 
-            print line.strip()
             if line.strip() == "":
                 # 3 blank lines == we're done
                 blanks += 1
                 if blanks == 3:
                     break
+                continue
 
-            # # Got it: this is a data line
-            # fixed_schema = [
-            #     ('year', 1, 5, 'int'),
-            #     ('undiscounted_revenue', 29, 37, 'int'),  # TODO Check all these once DD gets econ reporting in place
-            #     ('econ_removed_merch_ft3', 101, 107, 'int'),
-            #     ('econ_removed_merch_bdft', 108, 114, 'int'),
-            # ]
-            # data = split_fixed(line.strip(), fixed_schema)
+            if line.strip().startswith("-------"):
+                # single blank line == we're done with this TIME PERIOD
+                blanks = 0
+                within_year = None
+                continue
 
-            # # need to include variant?
-            # data.update(info)
-            # econ_rows.append(data)
+            if line.startswith(" YEAR = "):
+                within_year = int(line[8:12])
+                countdown = 3
+                continue
+
+            if not within_year:
+                continue
+       
+            fixed_schema = [
+                ('spp', 1, 8, 'str'),
+                ('mindiam', 11, 16, 'float'),
+                ('maxdiam', 17, 24, 'float'),  # TODO Check all these once DD gets econ reporting in place
+                ('harv_ft3', 69, 76, 'int'),
+                ('harv_bdft', 88, 95, 'int'),
+            ]
+            d = split_fixed(line.strip(), fixed_schema, failsafe=True)
+            d['spp'] = d['spp'].strip()
+
+            yeardata[within_year].append(d)
+
+        
+        for k, v in yeardata.items():
+            data = {'year': k, 'harvest_report': str(v)}
+            data.update(info)
+            harvest_rows.append(data)
+
 
         ############# Extract Summary Statistics
         ready = False
@@ -374,6 +404,7 @@ def extract_data(indir):
     summary_df = DataFrame(summary_rows)
     carbon_df = DataFrame(carbon_rows)
     econ_df = DataFrame(econ_rows)
+    harvest_df = DataFrame(harvest_rows)
 
     harvested_carbon_df = DataFrame(harvested_carbon_rows)
     c_merge = merge(carbon_df, harvested_carbon_df, how='outer',
@@ -382,7 +413,9 @@ def extract_data(indir):
                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
     acs_merge = merge(ac_merge, summary_df, how="outer",
                       on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
-    final_merge = merge(acs_merge, econ_df, how="outer",
+    acsh_merge = merge(acs_merge, harvest_df, how="outer",
+                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+    final_merge = merge(acsh_merge, econ_df, how="outer",
                       on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
 
     # manage types
