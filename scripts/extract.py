@@ -322,12 +322,18 @@ def extract_data(indir):
                     # initialize year with null values for all variables
                     for var in looking_for:
                         data[var] = None
+                    # special case ESTB PLANT keyword
+                    data['PLANT'] = 0
                 else:
                     var = line[24:34].strip()
                     status = line[40:59].strip()  # disregard NOT DONE or DELETED OR CANCELED
                     if status.startswith("DONE IN") and var in looking_for:
                         val = float(line[61:72])  # Is this wide enough??
                         data[var] = val
+                    elif status.startswith("DONE IN") and var == 'PLANT':
+                        # special case ESTB PLANT keyword aggregates second column
+                        val = float(line[73:82])
+                        data[var] += val
 
         ############# Extract Treelist info
         ## TODO: There might be a way to accomplish this WITHOUT parsing the treelists
