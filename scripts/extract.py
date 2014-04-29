@@ -59,6 +59,7 @@ def extract_data(indir):
 
     carbon_rows = []
     harvested_carbon_rows = []
+    econ_rows = []
     summary_rows = []
     activity_rows = []
 
@@ -138,6 +139,38 @@ def extract_data(indir):
                 data.update(info)
                 harvested_carbon_rows.append(data)
 
+        ############# Extract ECONOMIC ANALYSIS SUMMARY REPORT 
+        ready = False
+        countdown = None
+        with open(outfile, 'r') as fh:
+            for line in fh:
+                if line.startswith("ECONOMIC ANALYSIS SUMMARY REPORT"):
+                    # We've found the econ summary report, data starts 6 lines down
+                    ready = True
+                    countdown = 6
+
+                if not ready or countdown > 0:
+                    if countdown:
+                        countdown -= 1
+                    continue
+
+                if line.strip() == "":
+                    # blank line == we're done
+                    break
+
+                # Got it: this is a data line
+                fixed_schema = [
+                    ('year', 1, 5, 'int'),
+                    ('undiscounted_revenue', 29, 37, 'int'),  # TODO Check all these once DD gets econ reporting in place
+                    ('econ_removed_merch_ft3', 101, 107, 'int'),
+                    ('econ_removed_merch_bdft', 108, 114, 'int'),
+                ]
+                data = split_fixed(line.strip(), fixed_schema)
+
+                # need to include variant?
+                data.update(info)
+                econ_rows.append(data)
+
         ############# Extract Summary Statistics
         ready = False
         countdown = None
@@ -178,6 +211,11 @@ def extract_data(indir):
                     ('removed_merch_ft3', 67, 72, 'int'),
                     ('removed_merch_bdft', 73, 78, 'int'),
                     ('after_ba', 79, 82, 'int'),
+                    ('after_sdi', 83, 87, 'int'),
+                    ('after_qmd', 96, 100, 'float'),
+                    ('accretion', 109, 113, 'int'),
+                    ('mortality', 114, 119, 'int'),
+                    ('stand_structure', 132, 134, 'int')
                 ]
                 data = split_fixed(line.strip(), fixed_schema)
 
@@ -192,10 +230,10 @@ def extract_data(indir):
         ############# Extract Activity Summary
         # List of Compute Variables to look for
         looking_for = [
+
+            # Harvest BF by species group
             "PINE_HRV",
             "SPRC_HRV",
-            "PINE_BF",
-            "SPRC_BF",
             "CEDR_HRV",
             "DF_HRV",
             "HW_HRV",
@@ -203,6 +241,10 @@ def extract_data(indir):
             "MNHW_HRV",
             "WJ_HRV",
             "WW_HRV",
+
+            # Standing BF by species group
+            "PINE_BF",
+            "SPRC_BF",
             "CEDR_BF",
             "DF_BF",
             "HW_BF",
@@ -210,7 +252,12 @@ def extract_data(indir):
             "MNHW_BF",
             "WJ_BF",
             "WW_BF",
-            "CUT_TYPE",
+
+            # ??? Are we using these ??
+            "SPPRICH",
+            "SPPSIMP",
+
+            # Cost Model
             "SM_CF",
             "SM_HW",
             "SM_TPA",
@@ -220,15 +267,24 @@ def extract_data(indir):
             "CH_CF",
             "CH_HW",
             "CH_TPA",
+            "CUT_TYPE",
+            # "PLANT" ESTAB PLANT; multiple per year though! 
+
+            # Habitat
             "NSONEST",
             "NSOFRG",
             "NSODIS",
-            "PP_BTL",
-            "LP_BTL",
+
+            # Pests
+            #"PP_BTL",
+            #"LP_BTL",
+            "PINEBTL",
+            "DF_BTL",
             "ES_BTL",
+            "DEFOL",
+
+            # Fire
             "FIREHZD",
-            "SPPRICH",
-            "SPPSIMP"
         ]
 
         ready = False
@@ -334,6 +390,8 @@ def extract_data(indir):
     activity_df = DataFrame(activity_rows)
     summary_df = DataFrame(summary_rows)
     carbon_df = DataFrame(carbon_rows)
+    econ_df = DataFrame(econ_rows)
+
     harvested_carbon_df = DataFrame(harvested_carbon_rows)
     c_merge = merge(carbon_df, harvested_carbon_df, how='outer',
                     on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
@@ -341,14 +399,16 @@ def extract_data(indir):
                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
     acs_merge = merge(ac_merge, summary_df, how="outer",
                       on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+    final_merge = merge(acs_merge, econ_df, how="outer",
+                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
 
     # manage types
-    acs_merge[['offset']] = acs_merge[['offset']].astype(int)
-    acs_merge[['rx']] = acs_merge[['rx']].astype(int)
-    acs_merge[['year']] = acs_merge[['year']].astype(int)
-    acs_merge[['cond']] = acs_merge[['cond']].astype(int)
+    final_merge[['offset']] = final_merge[['offset']].astype(int)
+    final_merge[['rx']] = final_merge[['rx']].astype(int)
+    final_merge[['year']] = final_merge[['year']].astype(int)
+    final_merge[['cond']] = final_merge[['cond']].astype(int)
 
-    return acs_merge
+    return final_merge
 
 
 if __name__ == "__main__":
