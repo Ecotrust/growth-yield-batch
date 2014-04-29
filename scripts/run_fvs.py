@@ -63,15 +63,14 @@ def prep_final(plotdir, extract_methods):
 
 
 def write_final(dirname, work, final, extract_methods):
+    df = extract_data(work)
+
     if 'csv' in extract_methods:
         csv = os.path.join(final, dirname + ".csv")
-        df = extract_data(work)
         df.to_csv(csv, index=False, header=True)
         print "\tSUCCESS: Extracted data from .out file. CSV written to ./final/%s.csv" % dirname
 
     if 'sqlite3' in extract_methods:
-        df = extract_data(work)
-
         db_path = os.path.join(final, "data.db")
         conn = sqlite3.connect(db_path, timeout=10)  # 10 seconds to avoid write deadlock?
         try:
