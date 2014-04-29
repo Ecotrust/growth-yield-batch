@@ -70,162 +70,197 @@ def extract_data(indir):
         ############# Extract Stand Carbon Report
         ready = False
         countdown = None
+
         with open(outfile, 'r') as fh:
-            for line in fh:
-                if "STAND CARBON REPORT" in line:
-                    # We've found the carbon report, data starts 9 lines down
-                    ready = True
-                    countdown = 9
+            lines = fh.readlines()
 
-                if not ready or countdown > 0:
-                    if countdown:
-                        countdown -= 1
-                    continue
+        for line in lines:
+            if "STAND CARBON REPORT" in line:
+                # We've found the carbon report, data starts 9 lines down
+                ready = True
+                countdown = 9
 
-                if line.strip() == "":
-                    # blank line == we're done
-                    break
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
 
-                # Got it: this is a data line
-                """
-                'year', 'agl', 'agl_merch', 'bgl', 'bgd', 'dead', 'ddw', 'floor', 'shbhrb',
-                'total_stand_carbon', 'total_removed_carbon', 'carbon_fire'
-                """
-                fixed_schema = [
-                    ('year', 1, 4, 'int'),
-                    ('agl', 5, 13, 'float'),
-                    ('bgl', 23, 31, 'float'),
-                    ('dead', 41, 49, 'float'),
-                    ('total_stand_carbon', 77, 85, 'float'),
-                ]
-                data = split_fixed(line.strip(), fixed_schema)
+            if line.strip() == "":
+                # blank line == we're done
+                break
 
-                # calculate our own carbon
-                carbon = float(data['agl']) + float(data['bgl']) + float(data['dead'])
-                data['calc_carbon'] = carbon
+            # Got it: this is a data line
+            """
+            'year', 'agl', 'agl_merch', 'bgl', 'bgd', 'dead', 'ddw', 'floor', 'shbhrb',
+            'total_stand_carbon', 'total_removed_carbon', 'carbon_fire'
+            """
+            fixed_schema = [
+                ('year', 1, 4, 'int'),
+                ('agl', 5, 13, 'float'),
+                ('bgl', 23, 31, 'float'),
+                ('dead', 41, 49, 'float'),
+                ('total_stand_carbon', 77, 85, 'float'),
+            ]
+            data = split_fixed(line.strip(), fixed_schema)
 
-                # need to include variant?
-                data.update(info)
-                carbon_rows.append(data)
+            # calculate our own carbon
+            carbon = float(data['agl']) + float(data['bgl']) + float(data['dead'])
+            data['calc_carbon'] = carbon
+
+            # need to include variant?
+            data.update(info)
+            carbon_rows.append(data)
 
         ############# Extract Harvested Carbon Report
         ready = False
         countdown = None
-        with open(outfile, 'r') as fh:
-            for line in fh:
-                if "HARVESTED PRODUCTS REPORT" in line and not line.startswith("CARBCUT"):
-                    # We've found the harvested products carbon report, data starts 9 lines down
-                    ready = True
-                    countdown = 9
+        for line in lines:
+            if "HARVESTED PRODUCTS REPORT" in line and not line.startswith("CARBCUT"):
+                # We've found the harvested products carbon report, data starts 9 lines down
+                ready = True
+                countdown = 9
 
-                if not ready or countdown > 0:
-                    if countdown:
-                        countdown -= 1
-                    continue
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
 
-                if line.strip() == "":
-                    # blank line == we're done
-                    break
+            if line.strip() == "":
+                # blank line == we're done
+                break
 
-                # Got it: this is a data line
-                fixed_schema = [
-                    ('year', 1, 4, 'int'),
-                    ('merch_carbon_stored', 41, 49, 'float'),
-                    ('merch_carbon_removed', 50, 58, 'float'),
-                ]
-                data = split_fixed(line.strip(), fixed_schema)
+            # Got it: this is a data line
+            fixed_schema = [
+                ('year', 1, 4, 'int'),
+                ('merch_carbon_stored', 41, 49, 'float'),
+                ('merch_carbon_removed', 50, 58, 'float'),
+            ]
+            data = split_fixed(line.strip(), fixed_schema)
 
-                # need to include variant?
-                data.update(info)
-                harvested_carbon_rows.append(data)
+            # need to include variant?
+            data.update(info)
+            harvested_carbon_rows.append(data)
 
         ############# Extract ECONOMIC ANALYSIS SUMMARY REPORT 
         ready = False
         countdown = None
-        with open(outfile, 'r') as fh:
-            for line in fh:
-                if line.startswith("ECONOMIC ANALYSIS SUMMARY REPORT"):
-                    # We've found the econ summary report, data starts 6 lines down
-                    ready = True
-                    countdown = 6
+        for line in lines:
+            if line.startswith("ECONOMIC ANALYSIS SUMMARY REPORT"):
+                # We've found the econ summary report, data starts 6 lines down
+                ready = True
+                countdown = 6
 
-                if not ready or countdown > 0:
-                    if countdown:
-                        countdown -= 1
-                    continue
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
 
-                if line.strip() == "":
-                    # blank line == we're done
+            if line.strip() == "":
+                # blank line == we're done
+                break
+
+            # Got it: this is a data line
+            fixed_schema = [
+                ('year', 1, 5, 'int'),
+                ('undiscounted_revenue', 29, 37, 'int'),  # TODO Check all these once DD gets econ reporting in place
+                ('econ_removed_merch_ft3', 101, 107, 'int'),
+                ('econ_removed_merch_bdft', 108, 114, 'int'),
+            ]
+            data = split_fixed(line.strip(), fixed_schema)
+
+            # need to include variant?
+            data.update(info)
+            econ_rows.append(data)
+
+        ############# Extract HARVEST VOLUME AND GROSS VALUE REPORT
+        ready = False
+        countdown = None
+        blanks = 0
+        for line in lines:
+            if line.startswith("HARVEST VOLUME AND GROSS VALUE REPORT"):
+                # We've found the econ summary report, data starts 6 lines down
+                ready = True
+                countdown = 2
+
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
+
+            print line.strip()
+            if line.strip() == "":
+                # 3 blank lines == we're done
+                blanks += 1
+                if blanks == 3:
                     break
 
-                # Got it: this is a data line
-                fixed_schema = [
-                    ('year', 1, 5, 'int'),
-                    ('undiscounted_revenue', 29, 37, 'int'),  # TODO Check all these once DD gets econ reporting in place
-                    ('econ_removed_merch_ft3', 101, 107, 'int'),
-                    ('econ_removed_merch_bdft', 108, 114, 'int'),
-                ]
-                data = split_fixed(line.strip(), fixed_schema)
+            # # Got it: this is a data line
+            # fixed_schema = [
+            #     ('year', 1, 5, 'int'),
+            #     ('undiscounted_revenue', 29, 37, 'int'),  # TODO Check all these once DD gets econ reporting in place
+            #     ('econ_removed_merch_ft3', 101, 107, 'int'),
+            #     ('econ_removed_merch_bdft', 108, 114, 'int'),
+            # ]
+            # data = split_fixed(line.strip(), fixed_schema)
 
-                # need to include variant?
-                data.update(info)
-                econ_rows.append(data)
+            # # need to include variant?
+            # data.update(info)
+            # econ_rows.append(data)
 
         ############# Extract Summary Statistics
         ready = False
         countdown = None
         data = None
-        with open(outfile, 'r') as fh:
-            for line in fh:
-                if "SUMMARY STATISTICS (PER ACRE OR STAND BASED ON TOTAL STAND AREA)" in line:
-                    # We've found the summary stats, data starts 7 lines down
-                    ready = True
-                    countdown = 7
+        for line in lines:
+            if "SUMMARY STATISTICS (PER ACRE OR STAND BASED ON TOTAL STAND AREA)" in line:
+                # We've found the summary stats, data starts 7 lines down
+                ready = True
+                countdown = 7
 
-                if not ready or countdown > 0:
-                    if countdown:
-                        countdown -= 1
-                    continue
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
 
-                if line.strip() == "":
-                    # blank line == we're done
-                    break
+            if line.strip() == "":
+                # blank line == we're done
+                break
 
-                # Got it: this is a data line
-                """
-                'year', 'age', 'num_trees', 'ba', 'sdi', 'ccf', 'top_ht', 'qmd', 'total_ft3',
-                'merch_ft3', 'merch_bdft', 'cut_trees', 'cut_total_ft3', 'cut_merch_ft3', 
-                'cut_merch_bdft', 'after_ba', 'after_sdi', 'after_ccf', 'after_ht', 'after_qmd',
-                'growth_yrs', 'growth_accreper', 'growth_mortyear', 'mai_merch_ft3', 'for_ss_typ_zt'
-                """
-                fixed_schema = [
-                    ('year', 1, 4, 'int'),
-                    ('age', 5, 8, 'int'),
-                    ('start_tpa', 9, 14, 'int'),
-                    ('start_ba', 15, 18, 'int'),
-                    ('start_total_ft3', 37, 42, 'int'),
-                    ('start_merch_ft3', 43, 48, 'int'),
-                    ('start_merch_bdft', 49, 54, 'int'),
-                    ('removed_tpa', 56, 60, 'int'),
-                    ('removed_total_ft3', 61, 66, 'int'),
-                    ('removed_merch_ft3', 67, 72, 'int'),
-                    ('removed_merch_bdft', 73, 78, 'int'),
-                    ('after_ba', 79, 82, 'int'),
-                    ('after_sdi', 83, 87, 'int'),
-                    ('after_qmd', 96, 100, 'float'),
-                    ('accretion', 109, 113, 'int'),
-                    ('mortality', 114, 119, 'int'),
-                    ('stand_structure', 132, 134, 'int')
-                ]
-                data = split_fixed(line.strip(), fixed_schema)
+            # Got it: this is a data line
+            """
+            'year', 'age', 'num_trees', 'ba', 'sdi', 'ccf', 'top_ht', 'qmd', 'total_ft3',
+            'merch_ft3', 'merch_bdft', 'cut_trees', 'cut_total_ft3', 'cut_merch_ft3', 
+            'cut_merch_bdft', 'after_ba', 'after_sdi', 'after_ccf', 'after_ht', 'after_qmd',
+            'growth_yrs', 'growth_accreper', 'growth_mortyear', 'mai_merch_ft3', 'for_ss_typ_zt'
+            """
+            fixed_schema = [
+                ('year', 1, 4, 'int'),
+                ('age', 5, 8, 'int'),
+                ('start_tpa', 9, 14, 'int'),
+                ('start_ba', 15, 18, 'int'),
+                ('start_total_ft3', 37, 42, 'int'),
+                ('start_merch_ft3', 43, 48, 'int'),
+                ('start_merch_bdft', 49, 54, 'int'),
+                ('removed_tpa', 56, 60, 'int'),
+                ('removed_total_ft3', 61, 66, 'int'),
+                ('removed_merch_ft3', 67, 72, 'int'),
+                ('removed_merch_bdft', 73, 78, 'int'),
+                ('after_ba', 79, 82, 'int'),
+                ('after_sdi', 83, 87, 'int'),
+                ('after_qmd', 96, 100, 'float'),
+                ('accretion', 109, 113, 'int'),
+                ('mortality', 114, 119, 'int'),
+                ('stand_structure', 132, 134, 'int')
+            ]
+            data = split_fixed(line.strip(), fixed_schema)
 
-                data['after_tpa'] = data['start_tpa'] - data['removed_tpa']
-                data['after_total_ft3'] = data['start_total_ft3'] - data['removed_total_ft3']
-                data['after_merch_ft3'] = data['start_merch_ft3'] - data['removed_merch_ft3']
-                data['after_merch_bdft'] = data['start_merch_bdft'] - data['removed_merch_bdft']
+            data['after_tpa'] = data['start_tpa'] - data['removed_tpa']
+            data['after_total_ft3'] = data['start_total_ft3'] - data['removed_total_ft3']
+            data['after_merch_ft3'] = data['start_merch_ft3'] - data['removed_merch_ft3']
+            data['after_merch_bdft'] = data['start_merch_bdft'] - data['removed_merch_bdft']
 
-                data.update(info)
-                summary_rows.append(data)
+            data.update(info)
+            summary_rows.append(data)
 
         ############# Extract Activity Summary
         # List of Compute Variables to look for
@@ -291,106 +326,48 @@ def extract_data(indir):
         countdown = None
         within_year = None
         data = {}
-        with open(outfile, 'r') as fh:
-            for line in fh:
-                if "ACTIVITY SUMMARY" in line:
-                    # We've found the summary stats, data starts x lines down
-                    ready = True
-                    countdown = 9
+        for line in lines:
+            if "ACTIVITY SUMMARY" in line:
+                # We've found the summary stats, data starts x lines down
+                ready = True
+                countdown = 9
 
-                if not ready or countdown > 0:
-                    if countdown:
-                        countdown -= 1
-                    continue
+            if not ready or countdown > 0:
+                if countdown:
+                    countdown -= 1
+                continue
 
-                if line.strip() == "":
-                    # blank line == we're done with this TIME PERIOD
-                    within_year = None
-                    activity_rows.append(data)
-                    data = {}
-                    continue
+            if line.strip() == "":
+                # blank line == we're done with this TIME PERIOD
+                within_year = None
+                activity_rows.append(data)
+                data = {}
+                continue
 
-                if line.startswith("-----"):
-                    activity_rows.append(data)
-                    break
+            if line.startswith("-----"):
+                activity_rows.append(data)
+                break
 
-                # This is the start of a time period
-                if not within_year:
-                    within_year = int(line[7:11])
-                    data['year'] = within_year
-                    data.update(info)
-                    # initialize year with null values for all variables
-                    for var in looking_for:
-                        data[var] = None
-                    # special case ESTB PLANT keyword
-                    data['PLANT'] = 0
-                else:
-                    var = line[24:34].strip()
-                    status = line[40:59].strip()  # disregard NOT DONE or DELETED OR CANCELED
-                    if status.startswith("DONE IN") and var in looking_for:
-                        val = float(line[61:72])  # Is this wide enough??
-                        data[var] = val
-                    elif status.startswith("DONE IN") and var == 'PLANT':
-                        # special case ESTB PLANT keyword aggregates second column
-                        val = float(line[73:82])
-                        data[var] += val
-
-        ############# Extract Treelist info
-        ## TODO: There might be a way to accomplish this WITHOUT parsing the treelists
-        ## using compute variables and defining merchantable timber
-        #
-        # data = None
-        # ready = False
-        # with open(outfile.replace(".out", ".trl"), 'r') as fh:
-        #     for line in fh:
-        #         if line[:4] == "-999":
-        #             # We've found a summary stats header
-        #             """
-        #             column 81 has a T, C, D, or A code:
-        #             T = Live trees at beginning of current cycle/end of previous cycle
-        #             D = Dead trees at beginning of current cycle/end of previous cycle
-        #             C = Trees cut during this cycle
-        #             A = Live trees following cutting in current cycle but prior to growth modeling in current cycle
-        #             """
-        #             import json
-        #             # save previous section data
-        #             if data:
-        #                 print json.dumps(data, indent=2, sort_keys=True)
-
-        #             # start new section
-        #             code = line[80]
-        #             year = line[15:19]
-        #             data = None
-
-        #             # We only want cut lists for now
-        #             if code == "C":
-        #                 ready = True
-        #             else:
-        #                 ready = False
-        #                 continue
-
-        #             data = {'year': year, 'code': code}
-        #             data.update(info)
-
-        #         elif ready:
-        #             # we're reading data points within the section
-        #             spz = line[14:16]
-        #             diam = float(line[47:53])
-        #             treeclass = classify_tree(spz, diam)
-
-        #             #tpa = float(line[30:38])
-        #             #dead_tpa = float(line[40:47])
-        #             #merch_ft3 = float(line[101:108])
-        #             #merch_bdft = float(line[108:116])
-        #             total_ft3 = float(line[94:101])
-
-        #             # TODO class by diameter/spz category
-        #             # TODO aggregate by class
-        #             key_tmpl = treeclass + "_cut_total_ft3"
-        #             if key_tmpl in data.keys():
-        #                 data[key_tmpl] += int(total_ft3)
-        #             else:
-        #                 data[key_tmpl] = int(total_ft3)
+            # This is the start of a time period
+            if not within_year:
+                within_year = int(line[7:11])
+                data['year'] = within_year
+                data.update(info)
+                # initialize year with null values for all variables
+                for var in looking_for:
+                    data[var] = None
+                # special case ESTB PLANT keyword
+                data['PLANT'] = 0
+            else:
+                var = line[24:34].strip()
+                status = line[40:59].strip()  # disregard NOT DONE or DELETED OR CANCELED
+                if status.startswith("DONE IN") and var in looking_for:
+                    val = float(line[61:72])  # Is this wide enough??
+                    data[var] = val
+                elif status.startswith("DONE IN") and var == 'PLANT':
+                    # special case ESTB PLANT keyword aggregates second column
+                    val = float(line[73:82])
+                    data[var] += val
 
     # load into pandas dataframes, join
     activity_df = DataFrame(activity_rows)
