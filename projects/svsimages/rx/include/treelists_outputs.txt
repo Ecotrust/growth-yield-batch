@@ -1,0 +1,10 @@
+TREELIST          0.                   1
+TREELIST          0.                   1                   1
+CUTLIST           0.                   1
+ATRTLIST          0.                   1
+STRCLASS           0
+ESTAB
+OUTPUT             0
+END
+DELOTAB            1
+DELOTAB            2

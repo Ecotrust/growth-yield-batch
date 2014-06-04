@@ -1,0 +1,70 @@
+COMMENT
+Compute variables used in Northern spotted owl suitability rating.
+Diameter Diversity Index from McComb, McGrath, Spies, and Vesely (2000) 
+and Franklin, Spies, and Van Pelt (2005).  Other variables defined by
+2011 Revised Recovery Plan for NSO, converted to English units.
+END
+IF
+EVPHASE EQ 2
+THEN
+AGPLABEL
+All
+COMPUTE            0
+DDI = LININT(SPMCDBH(1,All,0,2,9.8),0,81,0,1) + &
+2*LININT(SPMCDBH(1,All,0,9.8,19.7),0,30,0,1) + &
+3*LININT(SPMCDBH(1,All,0,19.7,39.4),0,16,0,1) + &
+4*LININT(SPMCDBH(1,All,0,39.4),0,12,0,1)
+CANCOV_C = SPMCDBH(7,CONSPP,0)
+QMDC_DOM = SPMCDBH(5,CONSPP,0,ASTRDBH,999)
+TPAGE19 = SPMCDBH(1,All,0,19.7)
+BACGE1 = SPMCDBH(2,CONSPP,0,1.2)
+END
+ENDIF
+IF
+EVPHASE EQ 2 AND SPMCDBH(2,All,0,1.2) GT 0
+THEN
+AGPLABEL
+All
+COMPUTE            0
+BAHPROP = 1-(SPMCDBH(2,CONSPP,0,1.2)/SPMCDBH(2,All,0,1.2))
+END
+ENDIF
+IF
+EVPHASE EQ 2 AND SPMCDBH(2,All,0,1.2) EQ 0
+THEN
+AGPLABEL
+All
+COMPUTE            0
+BAHPROP = 0
+END
+ENDIF
+
+COMMENT
+Compute Suitability for Northern Spotted Owl.  Includes ratings for 
+Nesting/Roosting (NSONEST), Foraging (NSOFRG), and Dispersal (NSODIS).
+Stands are rated suitable if they satisfy Klamath Mountains Western OR
+Klamath Mountains Eastern thresholds from 2011 Revised NSO Recovery Plan. 
+Ratings for NSONEST, NSOFRG, and NSODIS:
+0 = not suitable
+1 = suitable
+END
+IF
+EVPHASE EQ 2
+THEN
+AGPLABEL
+All
+COMPUTE            0
+NSONESTW = LININT(LININT(ACANCOV,75,75,0,1)+LININT(DDI,6,6,0,1)&
++LININT(QMDC_DOM,19.7,19.7,0,1),3,3,0,1)
+NSONESTE = LININT(LININT(ACANCOV,65,65,0,1)+LININT(DDI,5.5,5.5,0,1)&
++LININT(QMDC_DOM,16.5,16.5,0,1),3,3,0,1)
+NSONEST = LININT(NSONESTW+NSONESTE,1,1,0,1)
+NSOFRGW = LININT(LININT(DDI,4,4,0,1)+LININT(BACGE1,78,78,0,1)&
++LININT(BAHPROP,0.25,0.25,0.7,0.7,0,1,1,0),3,3,0,1)
+NSOFRGE = LININT(LININT(CANCOV_C,45,45,0,1)+&
+LININT(TPAGE19,9.3,9.3,0,1)+LININT(QMDC_DOM,11.8,11.8,0,1),3,3,0,1)
+NSOFRG = LININT(NSOFRGW+NSOFRGE+NSONEST,1,1,0,1)
+NSODIS = LININT(LININT(LININT(SPMCDBH(5,All,0),11,11,0,1)&
++LININT(CANCOV_C,30,30,0,1),2,2,0,1)+NSOFRG+NSONEST,1,1,0,1)
+END
+ENDIF

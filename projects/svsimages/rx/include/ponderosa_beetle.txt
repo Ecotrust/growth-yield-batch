@@ -1,0 +1,29 @@
+COMMENT
+Ratings for Ponderosa Pine (PP_BTL), based on Munson and Anhold (1995)
+and described in User's Guide to the Post-Processors for the Forest 
+Vegetation Simulator (Van Dyck 2005):
+3-4  = Low
+5-8  = Moderate
+9-11 = High
+END
+IF
+EVPHASE EQ 2 AND SPMCDBH(1,All,0) GT 0
+THEN
+AGPLABEL
+All
+COMPUTE            0
+PP_BTL = LININT(SPMCDBH(5,PP,0,5,999),6,6,12,12,1,2,2,3) + &
+LININT(SPMCDBH(2,All,0,5,999),80,80,120,120,1,2,2,3) + &
+LININT(SPMCDBH(1,PP,0,0,999,0.75*ATOPHT,999)/&
+SPMCDBH(1,All,0,0,999,0.75*ATOPHT,999),0.5,0.5,0.65,0.65,1,2,2,3)
+END
+ENDIF
+IF
+EVPHASE EQ 2 AND SPMCDBH(1,All,0) EQ 0
+THEN
+AGPLABEL
+All
+COMPUTE            0
+PP_BTL = 3
+END
+ENDIF
