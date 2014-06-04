@@ -97,8 +97,9 @@ def generate_keyfiles_for_cond(fvs, indir, plotsdir, conf, include):
         rx = rx.replace('rx','')
         if var_rxs and \
            (variant, rx) not in var_rxs and (variant, "*") not in var_rxs:
-            print "WARNING, skipping basekey, no variant/rxs like", var_rxs
+            # print "WARNING, skipping basekey, no variant/rxs like", (variant, rx), "in", var_rxs
             continue  # Skip it
+        print "\t %s %s" % (variant, rx)
 
         if var_sites:
             # If needed, adjust site class on a per-variant basis

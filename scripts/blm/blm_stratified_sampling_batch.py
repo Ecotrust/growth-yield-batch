@@ -4,7 +4,7 @@ import random
 
 DATABASE = "master.sqlite"
 RATIO = 0.05
-SAMPLE_NAME = 'sample3'
+SAMPLE_NAME = 'sample4'
 
 
 if __name__ == "__main__":
