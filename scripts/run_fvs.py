@@ -308,72 +308,86 @@ def create_data_db(db_path):
     conn = sqlite3.connect(db_path)
 
     create_sql = """CREATE TABLE trees_fvsaggregate (
-      "agl" REAL,
-      "bgl" REAL,
-      "calc_carbon" REAL,
-      "climate" TEXT,
-      "cond" INTEGER,
-      "dead" REAL,
-      "offset" INTEGER,
-      "rx" INTEGER,
-      "site" INTEGER,
-      "total_stand_carbon" REAL,
-      "var" TEXT,
-      "year" INTEGER,
-      "merch_carbon_removed" REAL,
-      "merch_carbon_stored" REAL,
-      "CEDR_BF" REAL,
-      "CEDR_HRV" REAL,
-      "CH_CF" REAL,
-      "CH_HW" REAL,
-      "CH_TPA" REAL,
-      "CUT_TYPE" REAL,
-      "DF_BF" REAL,
-      "DF_HRV" REAL,
-      "ES_BTL" REAL,
-      "FIREHZD" REAL,
-      "HW_BF" REAL,
-      "HW_HRV" REAL,
-      "LG_CF" REAL,
-      "LG_HW" REAL,
-      "LG_TPA" REAL,
-      "LP_BTL" REAL,
-      "MNCONBF" REAL,
-      "MNCONHRV" REAL,
-      "MNHW_BF" REAL,
-      "MNHW_HRV" REAL,
-      "NSODIS" REAL,
-      "NSOFRG" REAL,
-      "NSONEST" REAL,
-      "PINE_BF" REAL,
-      "PINE_HRV" REAL,
-      "PP_BTL" REAL,
-      "SM_CF" REAL,
-      "SM_HW" REAL,
-      "SM_TPA" REAL,
-      "SPPRICH" REAL,
-      "SPPSIMP" REAL,
-      "SPRC_BF" REAL,
-      "SPRC_HRV" REAL,
-      "WJ_BF" REAL,
-      "WJ_HRV" REAL,
-      "WW_BF" REAL,
-      "WW_HRV" REAL,
-      "after_ba" INTEGER,
-      "after_merch_bdft" INTEGER,
-      "after_merch_ft3" INTEGER,
-      "after_total_ft3" INTEGER,
-      "after_tpa" INTEGER,
-      "age" INTEGER,
-      "removed_merch_bdft" INTEGER,
-      "removed_merch_ft3" INTEGER,
-      "removed_total_ft3" INTEGER,
-      "removed_tpa" INTEGER,
-      "start_ba" INTEGER,
-      "start_merch_bdft" INTEGER,
-      "start_merch_ft3" INTEGER,
-      "start_total_ft3" INTEGER,
-      "start_tpa" INTEGER,
+      "accretion" INTEGER, -- int64
+      "after_ba" INTEGER, -- int64
+      "after_merch_bdft" INTEGER, -- int64
+      "after_merch_ft3" INTEGER, -- int64
+      "after_qmd" REAL, -- float64
+      "after_sdi" INTEGER, -- int64
+      "after_total_ft3" INTEGER, -- int64
+      "after_tpa" INTEGER, -- int64
+      "age" INTEGER, -- int64
+      "climate" TEXT, -- object
+      "cond" INTEGER, -- int64
+      "fortype" INTEGER, -- int64
+      "mortality" INTEGER, -- int64
+      "offset" INTEGER, -- int64
+      "removed_merch_bdft" INTEGER, -- int64
+      "removed_merch_ft3" INTEGER, -- int64
+      "removed_total_ft3" INTEGER, -- int64
+      "removed_tpa" INTEGER, -- int64
+      "rx" INTEGER, -- int64
+      "site" INTEGER, -- int64
+      "size_class" INTEGER, -- int64
+      "start_ba" INTEGER, -- int64
+      "start_merch_bdft" INTEGER, -- int64
+      "start_merch_ft3" INTEGER, -- int64
+      "start_total_ft3" INTEGER, -- int64
+      "start_tpa" INTEGER, -- int64
+      "stocking_class" INTEGER, -- int64
+      "var" TEXT, -- object
+      "year" INTEGER, -- int64
+      "CEDR_BF" REAL, -- float64
+      "CEDR_HRV" REAL, -- float64
+      "CH_CF" REAL, -- float64
+      "CH_HW" REAL, -- float64
+      "CH_TPA" REAL, -- float64
+      "CUT_TYPE" REAL, -- float64
+      "DEFOL" REAL, -- object
+      "DF_BF" REAL, -- float64
+      "DF_BTL" REAL, -- object
+      "DF_HRV" REAL, -- float64
+      "ES_BTL" REAL, -- float64
+      "FIREHZD" REAL, -- float64
+      "HW_BF" REAL, -- float64
+      "HW_HRV" REAL, -- float64
+      "LG_CF" REAL, -- float64
+      "LG_HW" REAL, -- float64
+      "LG_TPA" REAL, -- float64
+      "MNCONBF" REAL, -- float64
+      "MNCONHRV" REAL, -- float64
+      "MNHW_BF" REAL, -- float64
+      "MNHW_HRV" REAL, -- float64
+      "NSODIS" REAL, -- float64
+      "NSOFRG" REAL, -- float64
+      "NSONEST" REAL, -- float64
+      "PINEBTL" REAL, -- object
+      "PINE_BF" REAL, -- float64
+      "PINE_HRV" REAL, -- float64
+      "PLANT" REAL, -- float64
+      "SM_CF" REAL, -- float64
+      "SM_HW" REAL, -- float64
+      "SM_TPA" REAL, -- float64
+      "SPPRICH" REAL, -- float64
+      "SPPSIMP" REAL, -- float64
+      "SPRC_BF" REAL, -- float64
+      "SPRC_HRV" REAL, -- float64
+      "WJ_BF" REAL, -- float64
+      "WJ_HRV" REAL, -- float64
+      "WW_BF" REAL, -- float64
+      "WW_HRV" REAL, -- float64
+      "merch_carbon_removed" REAL, -- float64
+      "merch_carbon_stored" REAL, -- float64
+      "agl" REAL, -- float64
+      "bgl" REAL, -- float64
+      "calc_carbon" REAL, -- float64
+      "dead" REAL, -- float64
+      "total_stand_carbon" REAL, -- float64
+      "econ_removed_merch_bdft" REAL, -- float64
+      "econ_removed_merch_ft3" REAL, -- float64
+      "undiscounted_revenue" REAL, -- float64
+      "harvest_report" TEXT, -- object
+
       -- if primary keys change, make sure to update IntegrityError logic above
       PRIMARY KEY ("var", "rx", "cond", "site", "climate", "offset", "year")
     );"""

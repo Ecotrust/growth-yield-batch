@@ -280,7 +280,9 @@ def extract_data(indir):
                 ('after_qmd', 96, 100, 'float'),
                 ('accretion', 109, 113, 'int'),
                 ('mortality', 114, 119, 'int'),
-                ('stand_structure', 132, 134, 'int')
+                ('fortype', 129, 131, 'int'),
+                ('size_class', 133, 133, 'int'),
+                ('stocking_class', 134, 134, 'int')
             ]
             data = split_fixed(line.strip(), fixed_schema)
 
@@ -405,24 +407,45 @@ def extract_data(indir):
     carbon_df = DataFrame(carbon_rows)
     econ_df = DataFrame(econ_rows)
     harvest_df = DataFrame(harvest_rows)
-
     harvested_carbon_df = DataFrame(harvested_carbon_rows)
-    c_merge = merge(carbon_df, harvested_carbon_df, how='outer',
+
+    final_merge = merge(summary_df, activity_df, how='outer',
                     on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
-    ac_merge = merge(c_merge, activity_df, how='outer',
-                     on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
-    acs_merge = merge(ac_merge, summary_df, how="outer",
-                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
-    acsh_merge = merge(acs_merge, harvest_df, how="outer",
-                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
-    final_merge = merge(acsh_merge, econ_df, how="outer",
-                      on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+ 
+    final_merge = merge(final_merge, harvested_carbon_df, how='outer',
+                    on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+
+    final_merge = merge(final_merge, carbon_df, how="outer",
+                    on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+
+    final_merge = merge(final_merge, econ_df, how="outer",
+                    on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
+
+    if len(harvest_rows) > 0:
+        final_merge = merge(final_merge, harvest_df, how="outer",
+                    on=['var', 'rx', 'cond', 'site', 'offset', 'year', 'climate'])
 
     # manage types
     final_merge[['offset']] = final_merge[['offset']].astype(int)
     final_merge[['rx']] = final_merge[['rx']].astype(int)
     final_merge[['year']] = final_merge[['year']].astype(int)
     final_merge[['cond']] = final_merge[['cond']].astype(int)
+
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # IMPORTANT NOTE
+    # The data structure of `final_merge` must match the schema in run_fvs.create_data_db() (~ line 303)
+    # Use the code below to generate a schema
+    # hint, may need to switch some to REAL if nulls exists (which show up as 'object' dtype)
+    # in general there should be very few TEXTs: var, climate and harvest_report being the current ones
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #
+    # for col, dtype in zip(final_merge.columns, final_merge.dtypes):
+    #     if 'int' in str(dtype):
+    #         print '"%s" INTEGER, -- %s' % (col, dtype)
+    #     elif 'float' in str(dtype):
+    #         print '"%s" REAL, -- %s' % (col, dtype)
+    #     else:
+    #         print '"%s" TEXT, -- %s' % (col, dtype)
 
     return final_merge
 

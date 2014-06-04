@@ -81,10 +81,11 @@ def generate_keyfiles_for_cond(fvs, indir, plotsdir, conf, include):
     var_sites = None
     if os.path.exists(sitecls_override):
         with open(sitecls_override, 'r') as fh:
+            lines = fh.readlines()
             try:
-                var_sites = dict([tuple(x.strip().split(",")) for x in fh.readlines()])
+                var_sites = dict([tuple(x.strip().split(",")) for x in lines])
             except:  # just a single site value
-                site_class = fh.readlines()[0].strip()
+                site_class = lines[0].strip()
     else:
         site_class = "2"  # default
 
@@ -96,6 +97,7 @@ def generate_keyfiles_for_cond(fvs, indir, plotsdir, conf, include):
         rx = rx.replace('rx','')
         if var_rxs and \
            (variant, rx) not in var_rxs and (variant, "*") not in var_rxs:
+            print "WARNING, skipping basekey, no variant/rxs like", var_rxs
             continue  # Skip it
 
         if var_sites:
