@@ -1,80 +1,10 @@
 library(ggplot2)
-library('Cairo')
-library(grid)
-library(RSQLite)
-
-#runsql <- function(sql, dbname="E:/workspace/gnn_build/master.sqlite"){
-runsql <- function(sql, dbname="E:/workspace/gnn_build/try1.db"){
-  require(RSQLite)
-  driver <- dbDriver("SQLite")
-  connect <- dbConnect(driver, dbname=dbname);
-  closeup <- function(){
-    sqliteCloseConnection(connect)
-    sqliteCloseDriver(driver)
-  }
-  dd <- tryCatch(dbGetQuery(connect, sql), finally=closeup)
-  return(dd)
-}
-
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  require(grid)
-
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots = length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-
- if (numPlots==1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
-
 theme_set(theme_bw())
-# CairoWin()
 
+source("./utils.r")
 
-# d <- runsql( 
-    # "SELECT fvs.year as year, fvs.climate as climate, 
-    #         sum(calc_carbon) as carbon, sum(after_total_ft3) as volume,
-    #         sum(removed_merch_bdft) as timber, avg(FIREHZD) as fire,
-    #         avg(NSONEST) as owl
-    #         -- todo sum(NSONEST + acres)
-    # FROM fvsaggregate AS fvs
-    # JOIN optimalrx AS opt
-    # ON fvs.cond = opt.stand
-    # -- todo join with stands to get acres
-    # WHERE calc_carbon IS NOT NULL
-    # AND opt.rx = fvs.rx
-    # AND opt.offset = fvs.offset
-    # GROUP BY fvs.year, fvs.climate")
-
-# write.csv(d, 'output2.csv')
-
-#d <- read.csv('output2.csv')
-d <- runsql("select * from try1")
+# See https://github.com/Ecotrust/growth-yield-batch/wiki/Prepping-data-for-blm-project#preprocess-using-sql-query
+d <- runsql("select * from fvs_stands")
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 
 # scale some units
@@ -147,7 +77,7 @@ tp <- ggplot(data=clim, aes(x=year, y=timber)) +
 
 
 fp <- ggplot(data=clim, aes(x=year, y=fire)) +
-      ggtitle("Average Fire Risk") +
+      ggtitle("Acres of High Fire Risk") +
       facet_grid(. ~ rcp) +
       stat_summary(geom="ribbon", fun.ymin="min", fun.ymax="max", alpha=0.25) +
       geom_smooth(data=noclim, aes(x=year, y=fire), se=FALSE, span=0.3) + 
