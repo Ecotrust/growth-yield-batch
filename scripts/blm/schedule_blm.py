@@ -37,7 +37,8 @@ def prep_db2(db="../../master.sqlite", climate="Ensemble-rcp60", cache=None, ver
         axis_map['standids'].append(row['standid'])
 
     # Get all unique mgmts
-    sql = 'SELECT rx, "offset" FROM fvs_stands GROUP BY rx, "offset"'
+    # Do not consider rx 2, 3, 8 (40, 60 and 50 yr rotations)
+    sql = 'SELECT rx, "offset" FROM fvs_stands WHERE rx NOT IN (2, 3, 8) GROUP BY rx, "offset"'
     for row in cursor.execute(sql):
         # mgmt is a tuple of rx and offset
         axis_map['mgmt'].append((row['rx'], row['offset']))
@@ -70,15 +71,9 @@ def prep_db2(db="../../master.sqlite", climate="Ensemble-rcp60", cache=None, ver
             if list2D == []:
                 list2D = [[0.0, 0.0, 0.0, 0.0, 0.0]] * 20
             else:
+                # we assume that if it's in fvs_stands, we consider it
                 temporary_mgmt_list.append(i)
 
-            ## Instead we assume that if it's in fvs_stands, we consider it
-            # if stand['restricted_rxs']:
-            #     if rx in stand['restricted_rxs']:
-            #         temporary_mgmt_list.append(mgmt_id)
-            # else:
-            #     temporary_mgmt_list.append(mgmt_id)
-            #assert len(list2D) == 20
 
             list3D.append(list2D)
 
@@ -90,7 +85,8 @@ def prep_db2(db="../../master.sqlite", climate="Ensemble-rcp60", cache=None, ver
     arr = np.asarray(list4D, dtype=np.float32)
 
     # caching
-    os.makedirs('./cache')
+    if not os.path.exists('.cache'):
+        os.makedirs('.cache')
     np.save('.cache/array.%s' % cache, arr)
     with open('.cache/axis_map.%s.json' % cache, 'w') as fh:
         fh.write(json.dumps(axis_map, indent=2))
@@ -115,7 +111,8 @@ climates = [
 
 # climates = ['NoClimate']
 
-os.makedirs("results")
+if not os.path.exists("results"):
+    os.makedirs("results")
 with open("results/results.csv", 'w') as fh:
     fh.write("year,climate,timber,carbon,owl,fire,cost")
     fh.write("\n")
@@ -161,9 +158,9 @@ for climate in climates:
             'weight': 1.0 },
         {   
             'name': 'fire risk',
-            #'strategy': 'cumulative_minimize',
-            'strategy': 'within_bounds', 
-            'targets': ([0] * 20, [15000] * 20),
+            'strategy': 'cumulative_minimize',
+            #'strategy': 'within_bounds', 
+            #'targets': ([0] * 20, [15000] * 20),
             'weight': 1.0 },
         {   
             'name': 'cost proxy',
@@ -196,12 +193,12 @@ for climate in climates:
         stand_data,
         axis_map,
         valid_mgmts,
-        steps=25500,
+        steps=595000,
         report_interval=5000,
         temp_min=0.00005,
         temp_max=20.0,
         starting_mgmts=best_mgmts,
-        live_plot=True
+        #live_plot=True
     )
 
     #----------- STEP 4: output results ---------------------------------------#,

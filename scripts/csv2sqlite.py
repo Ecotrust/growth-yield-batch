@@ -52,6 +52,9 @@ if __name__ == "__main__":
     if not os.path.exists(INCSV):
         raise Exception("%s doesn't exist" % INCSV)
 
+    if not os.path.exists(DATABASE):
+        raise Exception("%s doesn't exist" % DATABASE)
+
     con = sqlite3.connect(DATABASE)
     cur = con.cursor()
 
