@@ -5,6 +5,7 @@ fvs_stands is derived from the outputs of the growth-yield-batch process and
 is created using the sql query in scripts/prep_scheduler.sql
 """
 import sys
+import os
 sys.path.insert(0, '/usr/local/apps/harvest-scheduler')
 from scheduler.scheduler_graph import schedule
 from scheduler.utils import print_results, write_stand_mgmt_csv
@@ -12,19 +13,20 @@ import sqlite3
 import numpy as np
 import json
  
-def prep_db2(db="./master.sqlite", climate="Ensemble-rcp60", cache=None, verbose=False):
+def prep_db2(db="../../master.sqlite", climate="Ensemble-rcp60", cache=None, verbose=False):
     conn = sqlite3.connect(db)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     # Check cache
     if cache is not None:
         try:
-            stand_data = np.load('cache.array.%s.npy' % cache)
-            axis_map = json.loads(open('cache.axis_map.%s.json' % climate).read())
-            valid_mgmts = json.loads(open('cache.valid_mgmts.%s.json' % climate).read())
+            stand_data = np.load('.cache/array.%s.npy' % cache)
+            axis_map = json.loads(open('.cache/axis_map.%s.json' % climate).read())
+            valid_mgmts = json.loads(open('.cache/valid_mgmts.%s.json' % climate).read())
             print "Using cached data to reduce calculation time..."
             return stand_data, axis_map, valid_mgmts
-        except:
+        except Exception as e:
+            print e
             pass  # calculate it
 
     axis_map = {'mgmt': [], 'standids': []} 
@@ -88,10 +90,11 @@ def prep_db2(db="./master.sqlite", climate="Ensemble-rcp60", cache=None, verbose
     arr = np.asarray(list4D, dtype=np.float32)
 
     # caching
-    np.save('cache.array.%s' % cache, arr)
-    with open('cache.axis_map.%s.json' % cache, 'w') as fh:
+    os.makedirs('./cache')
+    np.save('.cache/array.%s' % cache, arr)
+    with open('.cache/axis_map.%s.json' % cache, 'w') as fh:
         fh.write(json.dumps(axis_map, indent=2))
-    with open('cache.valid_mgmts.%s.json' % cache, 'w') as fh:
+    with open('.cache/valid_mgmts.%s.json' % cache, 'w') as fh:
         fh.write(json.dumps(valid_mgmts, indent=2))
 
     return arr, axis_map, valid_mgmts
@@ -112,7 +115,8 @@ climates = [
 
 # climates = ['NoClimate']
 
-with open("results.csv", 'w') as fh:
+os.makedirs("results")
+with open("results/results.csv", 'w') as fh:
     fh.write("year,climate,timber,carbon,owl,fire,cost")
     fh.write("\n")
 
@@ -121,7 +125,7 @@ for climate in climates:
 
     #----------- STEP 1: Read source data -------------------------------------#
     # 4D: stands, rxs, time periods, variables
-    stand_data, axis_map, valid_mgmts = prep_db2(db="./master.sqlite", 
+    stand_data, axis_map, valid_mgmts = prep_db2(db="../../master.sqlite", 
                                                  climate=climate, cache=climate)
 
     #----------- STEP 2: Identify and configure variables ---------------------#
@@ -192,22 +196,22 @@ for climate in climates:
         stand_data,
         axis_map,
         valid_mgmts,
-        steps=255000,
+        steps=25500,
         report_interval=5000,
         temp_min=0.00005,
         temp_max=20.0,
         starting_mgmts=best_mgmts,
-        live_plot=False
+        live_plot=True
     )
 
     #----------- STEP 4: output results ---------------------------------------#,
     print_results(axis_map, vars_over_time)
 
-    with open("results.csv", 'a') as fh:
+    with open("results/results.csv", 'a') as fh:
         for i, data in enumerate(vars_over_time.tolist()):
             row = [2013 + i*5, climate] + data
             fh.write(",".join([str(x) for x in row]))
             fh.write("\n")
 
-    write_stand_mgmt_csv(optimal_stand_rxs, axis_map, filename="%s_stands_rx.csv" % climate, climate=climate)
+    write_stand_mgmt_csv(optimal_stand_rxs, axis_map, filename="results/%s_stands_rx.csv" % climate, climate=climate)
     #import ipdb; ipdb.set_trace()
