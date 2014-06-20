@@ -33,30 +33,32 @@ d$climfact <- factor(d$climate, levels=c(
 ), ordered=TRUE)
 
 # forest types with present day > 1% 
-d$fortypefact <- factor(d$fortype, levels=c(
-	912,
-	267,
-	301,
-	932,
-	183,
-	941,
-	221,
-	911,
-	923,
-	999,
-	951,
-	201
-	), ordered=TRUE)
+# d$fortypefact <- addNA(factor(d$fortype, levels=c(
+# 	912,
+# 	267,
+# 	301,
+# 	932,
+# 	183,
+# 	941,
+# 	221,
+# 	911,
+# 	923,
+# 	999,
+# 	951,
+# 	201
+# 	), ordered=TRUE))
+d$fortypefact <- factor(d$fortype, ordered=TRUE)
 
 print(d$fortypefact)
 
 
+
 lines <- ggplot(d, aes(x=year, y=acres, group=fortypefact, order=fortypefact, fill=fortypefact)) + 
     facet_grid(rcp ~ circ) + 
-    #geom_line() +
-    geom_bar(stat="identity", width=10) +
+    geom_bar(stat="identity", position="stack", width=5) +
+    ggtitle("Future Forest Types, scheduled") +
+    #geom_text(stat="identity", position="stack", aes(label=fortype), vjust=0) +
     theme(
-    	#axis.text.x=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
         strip.background=element_rect(fill="white", colour="white"),
@@ -64,24 +66,29 @@ lines <- ggplot(d, aes(x=year, y=acres, group=fortypefact, order=fortypefact, fi
         plot.margin = unit(c(0.5,0,0,0), "cm"),
         panel.border=element_blank(),
         #axis.title.x=element_blank(),
-        legend.position="right", # TODO 
-        legend.direction="vertical",
+        legend.position="bottom", # TODO 
+        legend.direction="horizontal",
+        legend.box="vertical",
+        legend.title=element_text("Forest Type"),  # See page 236 in Essential FVS
+        legend.key.size=unit(c(0.5,0.5,0.5,0.5), "cm"),
         axis.title.y=element_blank()) +
-    scale_fill_brewer(palette="Paired", name="Fortype",
-                    labels=c(
-                    	"bigleaf maple",
-						"grand fir",
-						"western hemlock",
-						"canyon live oak",
-						"western juniper",
-						"tanoak",
-						"ponderosa pine",
-						"red alder",
-						"oregon white oak",
-						"not stocked",
-						"madrone",
-						"douglas-fir"
-                    )) 
+    #scale_fill_brewer(palette="Paired", name="Fortype")
+    scale_fill_manual(breaks = levels(factor(d$fortypefact)), values = rainbow(42))
+                #     labels=c(
+                #     	"bigleaf maple",
+          						# "grand fir",
+          						# "western hemlock",
+          						# "canyon live oak",
+          						# "western juniper",
+          						# "tanoak",
+          						# "ponderosa pine",
+          						# "red alder",
+          						# "oregon white oak",
+          						# "not stocked",
+          						# "madrone",
+          						# "douglas-fir"
+                #     )
+                #   ) 
 print(lines)
 # pie <- ggplot(d, aes(x="", y=acres, fill=fortypefact, order=fortypefact)) + geom_bar(stat="identity") +
 #   facet_grid(rcp ~ circ) +

@@ -28,6 +28,19 @@ def svs_to_bmp(svs):
     # os.system(cmd)
 
 
+"""
+montage ../*.bmp -geometry 120x120>+1+1 -tile 21x9 montage_geom.jpg
+
+montage *rx1*.bmp -geometry +1+1 -tile 11x1 svs_rx1_NoClimate.jpg
+montage *rx4*.bmp -geometry +1+1 -tile 13x1 svs_rx4_NoClimate.jpg
+montage *rx5*.bmp -geometry +1+1 -tile 12x1 svs_rx5_NoClimate.jpg
+montage *rx6*.bmp -geometry +1+1 -tile 13x1 svs_rx6_NoClimate.jpg
+montage *rx7*.bmp -geometry +1+1 -tile 12x1 svs_rx7_NoClimate.jpg
+montage *rx8*.bmp -geometry +1+1 -tile 13x1 svs_rx8_NoClimate.jpg
+montage *rx9*.bmp -geometry +1+1 -tile 13x1 svs_rx9_NoClimate.jpg
+montage svs_rx*_NoClimate.jpg -geometry +1+1 -tile 1x7 svs_allrx_NoClimate.jpg
+"""
+
 if __name__ == '__main__':
     cmds = []
 

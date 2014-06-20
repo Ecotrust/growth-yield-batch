@@ -109,7 +109,7 @@ climates = [
     "NoClimate",
     ]
 
-# climates = ['NoClimate']
+climates = ['NoClimate']
 
 if not os.path.exists("results"):
     os.makedirs("results")
@@ -193,12 +193,12 @@ for climate in climates:
         stand_data,
         axis_map,
         valid_mgmts,
-        steps=595000,
+        steps=295000,
         report_interval=5000,
         temp_min=0.00005,
         temp_max=20.0,
         starting_mgmts=best_mgmts,
-        #live_plot=True
+        live_plot=False
     )
 
     #----------- STEP 4: output results ---------------------------------------#,
