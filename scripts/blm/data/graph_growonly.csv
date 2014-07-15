@@ -1,0 +1,1081 @@
+year,district,climate,carbon
+2013,"Coos Bay District",CCSM4-rcp45,2298603.3702983
+2013,"Coos Bay District",CCSM4-rcp85,2298603.3702983
+2013,"Coos Bay District",Ensemble-rcp45,2298603.3702983
+2013,"Coos Bay District",Ensemble-rcp85,2298603.3702983
+2013,"Coos Bay District",GFDLCM3-rcp45,2298603.3702983
+2013,"Coos Bay District",GFDLCM3-rcp85,2298603.3702983
+2013,"Coos Bay District",HadGEM2ES-rcp45,2298603.3702983
+2013,"Coos Bay District",HadGEM2ES-rcp85,2298603.3702983
+2013,"Coos Bay District",NoClimate,2298603.3702983
+2013,"Eugene District",CCSM4-rcp45,1666146.7936775
+2013,"Eugene District",CCSM4-rcp85,1666146.7936775
+2013,"Eugene District",Ensemble-rcp45,1666146.7936775
+2013,"Eugene District",Ensemble-rcp85,1666146.7936775
+2013,"Eugene District",GFDLCM3-rcp45,1666146.7936775
+2013,"Eugene District",GFDLCM3-rcp85,1666146.7936775
+2013,"Eugene District",HadGEM2ES-rcp45,1666146.7936775
+2013,"Eugene District",HadGEM2ES-rcp85,1666146.7936775
+2013,"Eugene District",NoClimate,1666146.7936775
+2013,"Lakeview District",CCSM4-rcp45,117910.0065857
+2013,"Lakeview District",CCSM4-rcp85,117910.0065857
+2013,"Lakeview District",Ensemble-rcp45,117910.0065857
+2013,"Lakeview District",Ensemble-rcp85,117910.0065857
+2013,"Lakeview District",GFDLCM3-rcp45,117910.0065857
+2013,"Lakeview District",GFDLCM3-rcp85,117910.0065857
+2013,"Lakeview District",HadGEM2ES-rcp45,117910.0065857
+2013,"Lakeview District",HadGEM2ES-rcp85,117910.0065857
+2013,"Lakeview District",NoClimate,117910.0065857
+2013,"Medford District",CCSM4-rcp45,2960394.5921279
+2013,"Medford District",CCSM4-rcp85,2960394.5921279
+2013,"Medford District",Ensemble-rcp45,2960394.5921279
+2013,"Medford District",Ensemble-rcp85,2960394.5921279
+2013,"Medford District",GFDLCM3-rcp45,2960394.5921279
+2013,"Medford District",GFDLCM3-rcp85,2960394.5921279
+2013,"Medford District",HadGEM2ES-rcp45,2960394.5921279
+2013,"Medford District",HadGEM2ES-rcp85,2960394.5921279
+2013,"Medford District",NoClimate,2960394.5921279
+2013,"Roseburg District",CCSM4-rcp45,2139924.3108901
+2013,"Roseburg District",CCSM4-rcp85,2139924.3108901
+2013,"Roseburg District",Ensemble-rcp45,2139924.3108901
+2013,"Roseburg District",Ensemble-rcp85,2139924.3108901
+2013,"Roseburg District",GFDLCM3-rcp45,2139924.3108901
+2013,"Roseburg District",GFDLCM3-rcp85,2139924.3108901
+2013,"Roseburg District",HadGEM2ES-rcp45,2139924.3108901
+2013,"Roseburg District",HadGEM2ES-rcp85,2139924.3108901
+2013,"Roseburg District",NoClimate,2139924.3108901
+2013,"Salem District",CCSM4-rcp45,2290196.3813164
+2013,"Salem District",CCSM4-rcp85,2290196.3813164
+2013,"Salem District",Ensemble-rcp45,2290196.3813164
+2013,"Salem District",Ensemble-rcp85,2290196.3813164
+2013,"Salem District",GFDLCM3-rcp45,2290196.3813164
+2013,"Salem District",GFDLCM3-rcp85,2290196.3813164
+2013,"Salem District",HadGEM2ES-rcp45,2290196.3813164
+2013,"Salem District",HadGEM2ES-rcp85,2290196.3813164
+2013,"Salem District",NoClimate,2290196.3813164
+2018,"Coos Bay District",CCSM4-rcp45,2422754.0153859
+2018,"Coos Bay District",CCSM4-rcp85,2420161.4565492
+2018,"Coos Bay District",Ensemble-rcp45,2423764.9671493
+2018,"Coos Bay District",Ensemble-rcp85,2423253.6375178
+2018,"Coos Bay District",GFDLCM3-rcp45,2421393.0503623
+2018,"Coos Bay District",GFDLCM3-rcp85,2420670.6753664
+2018,"Coos Bay District",HadGEM2ES-rcp45,2422270.5378486
+2018,"Coos Bay District",HadGEM2ES-rcp85,2419122.7371543
+2018,"Coos Bay District",NoClimate,2430965.7568065
+2018,"Eugene District",CCSM4-rcp45,1790878.8367802
+2018,"Eugene District",CCSM4-rcp85,1792794.3177281
+2018,"Eugene District",Ensemble-rcp45,1793926.0816939
+2018,"Eugene District",Ensemble-rcp85,1793456.7669126
+2018,"Eugene District",GFDLCM3-rcp45,1793522.9574864
+2018,"Eugene District",GFDLCM3-rcp85,1792422.8885549
+2018,"Eugene District",HadGEM2ES-rcp45,1793402.7070227
+2018,"Eugene District",HadGEM2ES-rcp85,1790321.610708
+2018,"Eugene District",NoClimate,1797973.0237984
+2018,"Lakeview District",CCSM4-rcp45,124444.2425122
+2018,"Lakeview District",CCSM4-rcp85,127806.3345308
+2018,"Lakeview District",Ensemble-rcp45,124885.2831262
+2018,"Lakeview District",Ensemble-rcp85,125648.2226062
+2018,"Lakeview District",GFDLCM3-rcp45,127432.4883208
+2018,"Lakeview District",GFDLCM3-rcp85,127309.9829769
+2018,"Lakeview District",HadGEM2ES-rcp45,124094.9475313
+2018,"Lakeview District",HadGEM2ES-rcp85,124461.686547
+2018,"Lakeview District",NoClimate,124980.5188804
+2018,"Medford District",CCSM4-rcp45,3135787.384943
+2018,"Medford District",CCSM4-rcp85,3161585.450137
+2018,"Medford District",Ensemble-rcp45,3151932.5174985
+2018,"Medford District",Ensemble-rcp85,3152008.3896767
+2018,"Medford District",GFDLCM3-rcp45,3156828.1429388
+2018,"Medford District",GFDLCM3-rcp85,3155160.4787659
+2018,"Medford District",HadGEM2ES-rcp45,3143589.9911711
+2018,"Medford District",HadGEM2ES-rcp85,3147084.0853837
+2018,"Medford District",NoClimate,3156344.1968686
+2018,"Roseburg District",CCSM4-rcp45,2262923.3613266
+2018,"Roseburg District",CCSM4-rcp85,2264554.5537199
+2018,"Roseburg District",Ensemble-rcp45,2266805.9437797
+2018,"Roseburg District",Ensemble-rcp85,2266110.6863067
+2018,"Roseburg District",GFDLCM3-rcp45,2266108.816847
+2018,"Roseburg District",GFDLCM3-rcp85,2265463.4025115
+2018,"Roseburg District",HadGEM2ES-rcp45,2265618.7011753
+2018,"Roseburg District",HadGEM2ES-rcp85,2262486.6989602
+2018,"Roseburg District",NoClimate,2271469.4066724
+2018,"Salem District",CCSM4-rcp45,2446044.140554
+2018,"Salem District",CCSM4-rcp85,2448327.1513802
+2018,"Salem District",Ensemble-rcp45,2450389.8528191
+2018,"Salem District",Ensemble-rcp85,2449506.4652834
+2018,"Salem District",GFDLCM3-rcp45,2450937.0387834
+2018,"Salem District",GFDLCM3-rcp85,2449789.8555966
+2018,"Salem District",HadGEM2ES-rcp45,2448881.1892708
+2018,"Salem District",HadGEM2ES-rcp85,2445925.4703308
+2018,"Salem District",NoClimate,2452685.2781586
+2023,"Coos Bay District",CCSM4-rcp45,2570788.6248052
+2023,"Coos Bay District",CCSM4-rcp85,2563834.8549757
+2023,"Coos Bay District",Ensemble-rcp45,2573445.468177
+2023,"Coos Bay District",Ensemble-rcp85,2572382.5585617
+2023,"Coos Bay District",GFDLCM3-rcp45,2566239.2158409
+2023,"Coos Bay District",GFDLCM3-rcp85,2564116.0239037
+2023,"Coos Bay District",HadGEM2ES-rcp45,2569528.5858405
+2023,"Coos Bay District",HadGEM2ES-rcp85,2562138.8565703
+2023,"Coos Bay District",NoClimate,2592526.8982148
+2023,"Eugene District",CCSM4-rcp45,1942420.7095836
+2023,"Eugene District",CCSM4-rcp85,1944836.7764806
+2023,"Eugene District",Ensemble-rcp45,1949563.1375292
+2023,"Eugene District",Ensemble-rcp85,1948581.8953712
+2023,"Eugene District",GFDLCM3-rcp45,1946724.0118862
+2023,"Eugene District",GFDLCM3-rcp85,1942969.679688
+2023,"Eugene District",HadGEM2ES-rcp45,1947285.8953229
+2023,"Eugene District",HadGEM2ES-rcp85,1939205.49624
+2023,"Eugene District",NoClimate,1960132.0312919
+2023,"Lakeview District",CCSM4-rcp45,130155.6836393
+2023,"Lakeview District",CCSM4-rcp85,140019.6613156
+2023,"Lakeview District",Ensemble-rcp45,131232.4832658
+2023,"Lakeview District",Ensemble-rcp85,133239.0414981
+2023,"Lakeview District",GFDLCM3-rcp45,138553.3704045
+2023,"Lakeview District",GFDLCM3-rcp85,138291.3984408
+2023,"Lakeview District",HadGEM2ES-rcp45,129075.5449411
+2023,"Lakeview District",HadGEM2ES-rcp85,129633.6998568
+2023,"Lakeview District",NoClimate,132432.9088668
+2023,"Medford District",CCSM4-rcp45,3303566.6868603
+2023,"Medford District",CCSM4-rcp85,3380425.7080628
+2023,"Medford District",Ensemble-rcp45,3352192.1465921
+2023,"Medford District",Ensemble-rcp85,3353143.1853412
+2023,"Medford District",GFDLCM3-rcp45,3367282.40848029
+2023,"Medford District",GFDLCM3-rcp85,3361424.3014699
+2023,"Medford District",HadGEM2ES-rcp45,3325733.5186304
+2023,"Medford District",HadGEM2ES-rcp85,3337517.73865689
+2023,"Medford District",NoClimate,3367322.29914159
+2023,"Roseburg District",CCSM4-rcp45,2402846.6496558
+2023,"Roseburg District",CCSM4-rcp85,2406799.8785595
+2023,"Roseburg District",Ensemble-rcp45,2413029.91853
+2023,"Roseburg District",Ensemble-rcp85,2411737.0990842
+2023,"Roseburg District",GFDLCM3-rcp45,2410519.3296688
+2023,"Roseburg District",GFDLCM3-rcp85,2408467.1011563
+2023,"Roseburg District",HadGEM2ES-rcp45,2409706.3930635
+2023,"Roseburg District",HadGEM2ES-rcp85,2402451.4772198
+2023,"Roseburg District",NoClimate,2426071.7508117
+2023,"Salem District",CCSM4-rcp45,2625235.9652213
+2023,"Salem District",CCSM4-rcp85,2630076.6787908
+2023,"Salem District",Ensemble-rcp45,2636864.7209007
+2023,"Salem District",Ensemble-rcp85,2634666.0926184
+2023,"Salem District",GFDLCM3-rcp45,2637306.7008124
+2023,"Salem District",GFDLCM3-rcp85,2632917.0269517
+2023,"Salem District",HadGEM2ES-rcp45,2632732.527217
+2023,"Salem District",HadGEM2ES-rcp85,2623400.19290299
+2023,"Salem District",NoClimate,2644429.1553161
+2028,"Coos Bay District",CCSM4-rcp45,2716297.5005636
+2028,"Coos Bay District",CCSM4-rcp85,2703797.6362417
+2028,"Coos Bay District",Ensemble-rcp45,2723973.0302943
+2028,"Coos Bay District",Ensemble-rcp85,2721930.3038821
+2028,"Coos Bay District",GFDLCM3-rcp45,2708651.2520974
+2028,"Coos Bay District",GFDLCM3-rcp85,2703689.4259694
+2028,"Coos Bay District",HadGEM2ES-rcp45,2715674.7609764
+2028,"Coos Bay District",HadGEM2ES-rcp85,2701212.7158834
+2028,"Coos Bay District",NoClimate,2760005.7182736
+2028,"Eugene District",CCSM4-rcp45,2095073.7258923
+2028,"Eugene District",CCSM4-rcp85,2096241.5150051
+2028,"Eugene District",Ensemble-rcp45,2107280.0161707
+2028,"Eugene District",Ensemble-rcp85,2105474.8107011
+2028,"Eugene District",GFDLCM3-rcp45,2100173.6835614
+2028,"Eugene District",GFDLCM3-rcp85,2092315.5559558
+2028,"Eugene District",HadGEM2ES-rcp45,2102293.1590731
+2028,"Eugene District",HadGEM2ES-rcp85,2086082.9358836
+2028,"Eugene District",NoClimate,2127725.5071501
+2028,"Lakeview District",CCSM4-rcp45,144051.1452216
+2028,"Lakeview District",CCSM4-rcp85,159697.1083238
+2028,"Lakeview District",Ensemble-rcp45,145701.6368296
+2028,"Lakeview District",Ensemble-rcp85,148086.9145432
+2028,"Lakeview District",GFDLCM3-rcp45,156161.3927452
+2028,"Lakeview District",GFDLCM3-rcp85,155590.2068742
+2028,"Lakeview District",HadGEM2ES-rcp45,141042.5292237
+2028,"Lakeview District",HadGEM2ES-rcp85,141898.1598108
+2028,"Lakeview District",NoClimate,150110.5790551
+2028,"Medford District",CCSM4-rcp45,3446808.2331577
+2028,"Medford District",CCSM4-rcp85,3607467.506033
+2028,"Medford District",Ensemble-rcp45,3558465.4015205
+2028,"Medford District",Ensemble-rcp85,3558921.5784786
+2028,"Medford District",GFDLCM3-rcp45,3583766.6709747
+2028,"Medford District",GFDLCM3-rcp85,3569929.3839036
+2028,"Medford District",HadGEM2ES-rcp45,3496583.11237001
+2028,"Medford District",HadGEM2ES-rcp85,3524291.78565
+2028,"Medford District",NoClimate,3593592.1379764
+2028,"Roseburg District",CCSM4-rcp45,2540735.3518114
+2028,"Roseburg District",CCSM4-rcp85,2549300.1221679
+2028,"Roseburg District",Ensemble-rcp45,2561745.1542416
+2028,"Roseburg District",Ensemble-rcp85,2559290.7715675
+2028,"Roseburg District",GFDLCM3-rcp45,2556058.1901873
+2028,"Roseburg District",GFDLCM3-rcp85,2551749.4543704
+2028,"Roseburg District",HadGEM2ES-rcp45,2554764.8744552
+2028,"Roseburg District",HadGEM2ES-rcp85,2540728.9826037
+2028,"Roseburg District",NoClimate,2588320.2346848
+2028,"Salem District",CCSM4-rcp45,2801123.0488554
+2028,"Salem District",CCSM4-rcp85,2809792.987279
+2028,"Salem District",Ensemble-rcp45,2825879.5956225
+2028,"Salem District",Ensemble-rcp85,2821642.568585
+2028,"Salem District",GFDLCM3-rcp45,2825226.5613444
+2028,"Salem District",GFDLCM3-rcp85,2815501.2392132
+2028,"Salem District",HadGEM2ES-rcp45,2817108.6470836
+2028,"Salem District",HadGEM2ES-rcp85,2794700.5486683
+2028,"Salem District",NoClimate,2843255.3333703
+2033,"Coos Bay District",CCSM4-rcp45,2848948.1733105
+2033,"Coos Bay District",CCSM4-rcp85,2834657.5487631
+2033,"Coos Bay District",Ensemble-rcp45,2867099.9007292
+2033,"Coos Bay District",Ensemble-rcp85,2864005.7199001
+2033,"Coos Bay District",GFDLCM3-rcp45,2841346.0423838
+2033,"Coos Bay District",GFDLCM3-rcp85,2833206.5086934
+2033,"Coos Bay District",HadGEM2ES-rcp45,2853674.4713808
+2033,"Coos Bay District",HadGEM2ES-rcp85,2830891.5179181
+2033,"Coos Bay District",NoClimate,2924938.1653321
+2033,"Eugene District",CCSM4-rcp45,2241776.7942598
+2033,"Eugene District",CCSM4-rcp85,2239959.9288815
+2033,"Eugene District",Ensemble-rcp45,2259434.0500656
+2033,"Eugene District",Ensemble-rcp85,2256578.4423505
+2033,"Eugene District",GFDLCM3-rcp45,2246575.4343531
+2033,"Eugene District",GFDLCM3-rcp85,2233613.1181044
+2033,"Eugene District",HadGEM2ES-rcp45,2251219.7539246
+2033,"Eugene District",HadGEM2ES-rcp85,2225009.0972191
+2033,"Eugene District",NoClimate,2293054.8388897
+2033,"Lakeview District",CCSM4-rcp45,163072.0929891
+2033,"Lakeview District",CCSM4-rcp85,184607.3813384
+2033,"Lakeview District",Ensemble-rcp45,165952.7383662
+2033,"Lakeview District",Ensemble-rcp85,168257.9724263
+2033,"Lakeview District",GFDLCM3-rcp45,177955.6583279
+2033,"Lakeview District",GFDLCM3-rcp85,177087.9229661
+2033,"Lakeview District",HadGEM2ES-rcp45,157698.9615908
+2033,"Lakeview District",HadGEM2ES-rcp85,159686.331209
+2033,"Lakeview District",NoClimate,173819.8712991
+2033,"Medford District",CCSM4-rcp45,3563059.61710949
+2033,"Medford District",CCSM4-rcp85,3845114.4043196
+2033,"Medford District",Ensemble-rcp45,3770558.5485933
+2033,"Medford District",Ensemble-rcp85,3768695.4802677
+2033,"Medford District",GFDLCM3-rcp45,3807942.06804699
+2033,"Medford District",GFDLCM3-rcp85,3781592.9260994
+2033,"Medford District",HadGEM2ES-rcp45,3652147.2664943
+2033,"Medford District",HadGEM2ES-rcp85,3705562.7343086
+2033,"Medford District",NoClimate,3838321.4286842
+2033,"Roseburg District",CCSM4-rcp45,2672323.8560194
+2033,"Roseburg District",CCSM4-rcp85,2688806.173074
+2033,"Roseburg District",Ensemble-rcp45,2709408.40363501
+2033,"Roseburg District",Ensemble-rcp85,2705191.2981741
+2033,"Roseburg District",GFDLCM3-rcp45,2699086.8579262
+2033,"Roseburg District",GFDLCM3-rcp85,2691497.8584908
+2033,"Roseburg District",HadGEM2ES-rcp45,2697717.30664691
+2033,"Roseburg District",HadGEM2ES-rcp85,2675964.8276083
+2033,"Roseburg District",NoClimate,2755112.2060571
+2033,"Salem District",CCSM4-rcp45,2962313.1789486
+2033,"Salem District",CCSM4-rcp85,2978301.7704368
+2033,"Salem District",Ensemble-rcp45,3008424.8672924
+2033,"Salem District",Ensemble-rcp85,3000504.7399531
+2033,"Salem District",GFDLCM3-rcp45,3004902.9479508
+2033,"Salem District",GFDLCM3-rcp85,2987679.5986866
+2033,"Salem District",HadGEM2ES-rcp45,2992378.7565032
+2033,"Salem District",HadGEM2ES-rcp85,2952263.02227689
+2033,"Salem District",NoClimate,3040638.3330744
+2038,"Coos Bay District",CCSM4-rcp45,2973624.5599555
+2038,"Coos Bay District",CCSM4-rcp85,2961706.7151739
+2038,"Coos Bay District",Ensemble-rcp45,3001203.7429826
+2038,"Coos Bay District",Ensemble-rcp85,2995682.4057918
+2038,"Coos Bay District",GFDLCM3-rcp45,2965512.8418215
+2038,"Coos Bay District",GFDLCM3-rcp85,2954000.9224259
+2038,"Coos Bay District",HadGEM2ES-rcp45,2982701.5842924
+2038,"Coos Bay District",HadGEM2ES-rcp85,2952691.0888333
+2038,"Coos Bay District",NoClimate,3083439.5468765
+2038,"Eugene District",CCSM4-rcp45,2381605.1321698
+2038,"Eugene District",CCSM4-rcp85,2375980.2125878
+2038,"Eugene District",Ensemble-rcp45,2402988.7875127
+2038,"Eugene District",Ensemble-rcp85,2397961.1211745
+2038,"Eugene District",GFDLCM3-rcp45,2384313.2741864
+2038,"Eugene District",GFDLCM3-rcp85,2366282.1473958
+2038,"Eugene District",HadGEM2ES-rcp45,2390635.7426903
+2038,"Eugene District",HadGEM2ES-rcp85,2356471.9367214
+2038,"Eugene District",NoClimate,2451985.5627138
+2038,"Lakeview District",CCSM4-rcp45,186782.8579031
+2038,"Lakeview District",CCSM4-rcp85,212201.9044803
+2038,"Lakeview District",Ensemble-rcp45,190903.3755485
+2038,"Lakeview District",Ensemble-rcp85,192847.600755
+2038,"Lakeview District",GFDLCM3-rcp45,202737.1210941
+2038,"Lakeview District",GFDLCM3-rcp85,202378.4957984
+2038,"Lakeview District",HadGEM2ES-rcp45,178941.9533008
+2038,"Lakeview District",HadGEM2ES-rcp85,182623.0785873
+2038,"Lakeview District",NoClimate,203477.5143275
+2038,"Medford District",CCSM4-rcp45,3689628.4014893
+2038,"Medford District",CCSM4-rcp85,4092928.4504879
+2038,"Medford District",Ensemble-rcp45,3993604.63611181
+2038,"Medford District",Ensemble-rcp85,3984908.58179471
+2038,"Medford District",GFDLCM3-rcp45,4041308.60581099
+2038,"Medford District",GFDLCM3-rcp85,3999138.4601419
+2038,"Medford District",HadGEM2ES-rcp45,3813855.0292739
+2038,"Medford District",HadGEM2ES-rcp85,3887319.90716291
+2038,"Medford District",NoClimate,4101134.7088096
+2038,"Roseburg District",CCSM4-rcp45,2802807.1113682
+2038,"Roseburg District",CCSM4-rcp85,2826168.3731954
+2038,"Roseburg District",Ensemble-rcp45,2855161.9912334
+2038,"Roseburg District",Ensemble-rcp85,2847081.3589391
+2038,"Roseburg District",GFDLCM3-rcp45,2838867.833875
+2038,"Roseburg District",GFDLCM3-rcp85,2825835.4336359
+2038,"Roseburg District",HadGEM2ES-rcp45,2837291.459119
+2038,"Roseburg District",HadGEM2ES-rcp85,2809533.8049406
+2038,"Roseburg District",NoClimate,2922594.0932276
+2038,"Salem District",CCSM4-rcp45,3115817.9750907
+2038,"Salem District",CCSM4-rcp85,3137412.097111
+2038,"Salem District",Ensemble-rcp45,3181810.1239716
+2038,"Salem District",Ensemble-rcp85,3168475.8098621
+2038,"Salem District",GFDLCM3-rcp45,3173542.3280352
+2038,"Salem District",GFDLCM3-rcp85,3147122.7573008
+2038,"Salem District",HadGEM2ES-rcp45,3157695.3396312
+2038,"Salem District",HadGEM2ES-rcp85,3097276.7074804
+2038,"Salem District",NoClimate,3232688.6117216
+2043,"Coos Bay District",CCSM4-rcp45,3091319.34841571
+2043,"Coos Bay District",CCSM4-rcp85,3085313.83532319
+2043,"Coos Bay District",Ensemble-rcp45,3127690.1391914
+2043,"Coos Bay District",Ensemble-rcp85,3117833.137451
+2043,"Coos Bay District",GFDLCM3-rcp45,3083738.9863187
+2043,"Coos Bay District",GFDLCM3-rcp85,3067408.2102439
+2043,"Coos Bay District",HadGEM2ES-rcp45,3103578.7417039
+2043,"Coos Bay District",HadGEM2ES-rcp85,3065627.3054201
+2043,"Coos Bay District",NoClimate,3233751.9123961
+2043,"Eugene District",CCSM4-rcp45,2511908.9393352
+2043,"Eugene District",CCSM4-rcp85,2503990.2785006
+2043,"Eugene District",Ensemble-rcp45,2536613.8051589
+2043,"Eugene District",Ensemble-rcp85,2528494.7766736
+2043,"Eugene District",GFDLCM3-rcp45,2512875.0347088
+2043,"Eugene District",GFDLCM3-rcp85,2490037.0363365
+2043,"Eugene District",HadGEM2ES-rcp45,2520369.7953477
+2043,"Eugene District",HadGEM2ES-rcp85,2480723.5531358
+2043,"Eugene District",NoClimate,2601693.3553207
+2043,"Lakeview District",CCSM4-rcp45,213620.3286649
+2043,"Lakeview District",CCSM4-rcp85,240495.7003186
+2043,"Lakeview District",Ensemble-rcp45,218675.7102757
+2043,"Lakeview District",Ensemble-rcp85,219943.1881069
+2043,"Lakeview District",GFDLCM3-rcp45,229479.1773534
+2043,"Lakeview District",GFDLCM3-rcp85,230546.6687233
+2043,"Lakeview District",HadGEM2ES-rcp45,203413.9294351
+2043,"Lakeview District",HadGEM2ES-rcp85,207050.3019485
+2043,"Lakeview District",NoClimate,236169.8335892
+2043,"Medford District",CCSM4-rcp45,3832412.64425121
+2043,"Medford District",CCSM4-rcp85,4344196.64230909
+2043,"Medford District",Ensemble-rcp45,4225629.1389229
+2043,"Medford District",Ensemble-rcp85,4203141.7809078
+2043,"Medford District",GFDLCM3-rcp45,4279910.8705303
+2043,"Medford District",GFDLCM3-rcp85,4216305.7299039
+2043,"Medford District",HadGEM2ES-rcp45,3986656.21631221
+2043,"Medford District",HadGEM2ES-rcp85,4062137.3904789
+2043,"Medford District",NoClimate,4377524.833285
+2043,"Roseburg District",CCSM4-rcp45,2931246.8859481
+2043,"Roseburg District",CCSM4-rcp85,2961478.764352
+2043,"Roseburg District",Ensemble-rcp45,2997708.020522
+2043,"Roseburg District",Ensemble-rcp85,2982390.3834257
+2043,"Roseburg District",GFDLCM3-rcp45,2974344.0654064
+2043,"Roseburg District",GFDLCM3-rcp85,2950304.4584815
+2043,"Roseburg District",HadGEM2ES-rcp45,2972793.8953286
+2043,"Roseburg District",HadGEM2ES-rcp85,2938406.5689868
+2043,"Roseburg District",NoClimate,3088299.1674818
+2043,"Salem District",CCSM4-rcp45,3261375.6191027
+2043,"Salem District",CCSM4-rcp85,3286682.129476
+2043,"Salem District",Ensemble-rcp45,3343121.2548414
+2043,"Salem District",Ensemble-rcp85,3322413.7930323
+2043,"Salem District",GFDLCM3-rcp45,3328418.5233465
+2043,"Salem District",GFDLCM3-rcp85,3291463.3960131
+2043,"Salem District",HadGEM2ES-rcp45,3311238.1918228
+2043,"Salem District",HadGEM2ES-rcp85,3231483.4385975
+2043,"Salem District",NoClimate,3415341.4212508
+2048,"Coos Bay District",CCSM4-rcp45,3201028.1548168
+2048,"Coos Bay District",CCSM4-rcp85,3204023.9467479
+2048,"Coos Bay District",Ensemble-rcp45,3245446.8369337
+2048,"Coos Bay District",Ensemble-rcp85,3229207.2139278
+2048,"Coos Bay District",GFDLCM3-rcp45,3193456.4405839
+2048,"Coos Bay District",GFDLCM3-rcp85,3170030.2098825
+2048,"Coos Bay District",HadGEM2ES-rcp45,3214774.2851255
+2048,"Coos Bay District",HadGEM2ES-rcp85,3163936.0120347
+2048,"Coos Bay District",NoClimate,3374673.4589202
+2048,"Eugene District",CCSM4-rcp45,2631546.5103637
+2048,"Eugene District",CCSM4-rcp85,2622985.1357706
+2048,"Eugene District",Ensemble-rcp45,2660297.2352867
+2048,"Eugene District",Ensemble-rcp85,2647414.3325719
+2048,"Eugene District",GFDLCM3-rcp45,2631460.4596831
+2048,"Eugene District",GFDLCM3-rcp85,2603848.2177379
+2048,"Eugene District",HadGEM2ES-rcp45,2639602.1416735
+2048,"Eugene District",HadGEM2ES-rcp85,2594310.6433379
+2048,"Eugene District",NoClimate,2741959.8973463
+2048,"Lakeview District",CCSM4-rcp45,243018.6833584
+2048,"Lakeview District",CCSM4-rcp85,265818.3605802
+2048,"Lakeview District",Ensemble-rcp45,248143.1387595
+2048,"Lakeview District",Ensemble-rcp85,248297.7757443
+2048,"Lakeview District",GFDLCM3-rcp45,256791.8009655
+2048,"Lakeview District",GFDLCM3-rcp85,260530.4789093
+2048,"Lakeview District",HadGEM2ES-rcp45,229573.1409422
+2048,"Lakeview District",HadGEM2ES-rcp85,230078.4247271
+2048,"Lakeview District",NoClimate,270654.5378124
+2048,"Medford District",CCSM4-rcp45,3989929.6274681
+2048,"Medford District",CCSM4-rcp85,4589288.27668629
+2048,"Medford District",Ensemble-rcp45,4459356.07285721
+2048,"Medford District",Ensemble-rcp85,4412733.61718399
+2048,"Medford District",GFDLCM3-rcp45,4516843.4440643
+2048,"Medford District",GFDLCM3-rcp85,4421063.655583
+2048,"Medford District",HadGEM2ES-rcp45,4164686.0927115
+2048,"Medford District",HadGEM2ES-rcp85,4208695.5932282
+2048,"Medford District",NoClimate,4659395.04068019
+2048,"Roseburg District",CCSM4-rcp45,3056321.6524557
+2048,"Roseburg District",CCSM4-rcp85,3092142.2669721
+2048,"Roseburg District",Ensemble-rcp45,3135432.5228564
+2048,"Roseburg District",Ensemble-rcp85,3106876.0629661
+2048,"Roseburg District",GFDLCM3-rcp45,3102726.5710827
+2048,"Roseburg District",GFDLCM3-rcp85,3057548.1802307
+2048,"Roseburg District",HadGEM2ES-rcp45,3100732.143073
+2048,"Roseburg District",HadGEM2ES-rcp85,3045214.3116558
+2048,"Roseburg District",NoClimate,3250127.8699643
+2048,"Salem District",CCSM4-rcp45,3396498.8950637
+2048,"Salem District",CCSM4-rcp85,3424591.3611391
+2048,"Salem District",Ensemble-rcp45,3490475.36724559
+2048,"Salem District",Ensemble-rcp85,3460145.6327825
+2048,"Salem District",GFDLCM3-rcp45,3467755.444349
+2048,"Salem District",GFDLCM3-rcp85,3417790.13328849
+2048,"Salem District",HadGEM2ES-rcp45,3450425.0948008
+2048,"Salem District",HadGEM2ES-rcp85,3354252.8868307
+2048,"Salem District",NoClimate,3587573.6940188
+2053,"Coos Bay District",CCSM4-rcp45,3301181.979835
+2053,"Coos Bay District",CCSM4-rcp85,3315334.44706049
+2053,"Coos Bay District",Ensemble-rcp45,3353151.47678149
+2053,"Coos Bay District",Ensemble-rcp85,3325948.7547882
+2053,"Coos Bay District",GFDLCM3-rcp45,3290762.7388981
+2053,"Coos Bay District",GFDLCM3-rcp85,3256838.2897647
+2053,"Coos Bay District",HadGEM2ES-rcp45,3313259.26801381
+2053,"Coos Bay District",HadGEM2ES-rcp85,3228392.2428583
+2053,"Coos Bay District",NoClimate,3504912.9938666
+2053,"Eugene District",CCSM4-rcp45,2739570.1707085
+2053,"Eugene District",CCSM4-rcp85,2731349.7169843
+2053,"Eugene District",Ensemble-rcp45,2773516.0231798
+2053,"Eugene District",Ensemble-rcp85,2753970.8888532
+2053,"Eugene District",GFDLCM3-rcp45,2738369.3446488
+2053,"Eugene District",GFDLCM3-rcp85,2705894.6436121
+2053,"Eugene District",HadGEM2ES-rcp45,2747633.2717704
+2053,"Eugene District",HadGEM2ES-rcp85,2691798.5327962
+2053,"Eugene District",NoClimate,2872082.2477767
+2053,"Lakeview District",CCSM4-rcp45,273301.3998941
+2053,"Lakeview District",CCSM4-rcp85,285530.8678444
+2053,"Lakeview District",Ensemble-rcp45,278308.4616287
+2053,"Lakeview District",Ensemble-rcp85,276653.6119547
+2053,"Lakeview District",GFDLCM3-rcp45,284317.9557494
+2053,"Lakeview District",GFDLCM3-rcp85,292418.7495203
+2053,"Lakeview District",HadGEM2ES-rcp45,256074.0287605
+2053,"Lakeview District",HadGEM2ES-rcp85,249837.073303
+2053,"Lakeview District",NoClimate,306930.7440904
+2053,"Medford District",CCSM4-rcp45,4155911.205305
+2053,"Medford District",CCSM4-rcp85,4815446.1961009
+2053,"Medford District",Ensemble-rcp45,4687943.05358229
+2053,"Medford District",Ensemble-rcp85,4602424.6847856
+2053,"Medford District",GFDLCM3-rcp45,4742738.03606249
+2053,"Medford District",GFDLCM3-rcp85,4600060.0843511
+2053,"Medford District",HadGEM2ES-rcp45,4342009.8717538
+2053,"Medford District",HadGEM2ES-rcp85,4299945.0587659
+2053,"Medford District",NoClimate,4941403.279712
+2053,"Roseburg District",CCSM4-rcp45,3176570.3955185
+2053,"Roseburg District",CCSM4-rcp85,3214248.7974058
+2053,"Roseburg District",Ensemble-rcp45,3265948.74956349
+2053,"Roseburg District",Ensemble-rcp85,3215620.473652
+2053,"Roseburg District",GFDLCM3-rcp45,3220089.3162863
+2053,"Roseburg District",GFDLCM3-rcp85,3141244.0219818
+2053,"Roseburg District",HadGEM2ES-rcp45,3217165.3172913
+2053,"Roseburg District",HadGEM2ES-rcp85,3105038.4517074
+2053,"Roseburg District",NoClimate,3405132.6142556
+2053,"Salem District",CCSM4-rcp45,3520409.8417086
+2053,"Salem District",CCSM4-rcp85,3550162.3943901
+2053,"Salem District",Ensemble-rcp45,3622901.14773541
+2053,"Salem District",Ensemble-rcp85,3580804.8829652
+2053,"Salem District",GFDLCM3-rcp45,3590360.4522254
+2053,"Salem District",GFDLCM3-rcp85,3523045.7901284
+2053,"Salem District",HadGEM2ES-rcp45,3573426.9653504
+2053,"Salem District",HadGEM2ES-rcp85,3464606.0921522
+2053,"Salem District",NoClimate,3748634.0112437
+2058,"Coos Bay District",CCSM4-rcp45,3393233.7728914
+2058,"Coos Bay District",CCSM4-rcp85,3419105.0977363
+2058,"Coos Bay District",Ensemble-rcp45,3450159.5681681
+2058,"Coos Bay District",Ensemble-rcp85,3403734.9082318
+2058,"Coos Bay District",GFDLCM3-rcp45,3372431.185102
+2058,"Coos Bay District",GFDLCM3-rcp85,3316730.6094744
+2058,"Coos Bay District",HadGEM2ES-rcp45,3396852.3956703
+2058,"Coos Bay District",HadGEM2ES-rcp85,3233319.9193124
+2058,"Coos Bay District",NoClimate,3624225.1400672
+2058,"Eugene District",CCSM4-rcp45,2836800.785604
+2058,"Eugene District",CCSM4-rcp85,2826573.5828008
+2058,"Eugene District",Ensemble-rcp45,2876535.9091309
+2058,"Eugene District",Ensemble-rcp85,2847117.3774315
+2058,"Eugene District",GFDLCM3-rcp45,2832739.5639768
+2058,"Eugene District",GFDLCM3-rcp85,2794222.5531212
+2058,"Eugene District",HadGEM2ES-rcp45,2844240.1874279
+2058,"Eugene District",HadGEM2ES-rcp85,2760589.2972319
+2058,"Eugene District",NoClimate,2992616.8025833
+2058,"Lakeview District",CCSM4-rcp45,302954.4780705
+2058,"Lakeview District",CCSM4-rcp85,297521.6355027
+2058,"Lakeview District",Ensemble-rcp45,307481.5181455
+2058,"Lakeview District",Ensemble-rcp85,303869.4335016
+2058,"Lakeview District",GFDLCM3-rcp45,311278.0085827
+2058,"Lakeview District",GFDLCM3-rcp85,327016.8490025
+2058,"Lakeview District",HadGEM2ES-rcp45,282957.7407572
+2058,"Lakeview District",HadGEM2ES-rcp85,265394.4691258
+2058,"Lakeview District",NoClimate,344023.6311696
+2058,"Medford District",CCSM4-rcp45,4319421.8918193
+2058,"Medford District",CCSM4-rcp85,5012435.63771869
+2058,"Medford District",Ensemble-rcp45,4904840.8619548
+2058,"Medford District",Ensemble-rcp85,4763383.11050801
+2058,"Medford District",GFDLCM3-rcp45,4949094.6983374
+2058,"Medford District",GFDLCM3-rcp85,4744519.6351106
+2058,"Medford District",HadGEM2ES-rcp45,4508035.5561147
+2058,"Medford District",HadGEM2ES-rcp85,4321101.27694529
+2058,"Medford District",NoClimate,5217473.1788676
+2058,"Roseburg District",CCSM4-rcp45,3291491.2547182
+2058,"Roseburg District",CCSM4-rcp85,3322896.2724003
+2058,"Roseburg District",Ensemble-rcp45,3387055.1003211
+2058,"Roseburg District",Ensemble-rcp85,3305106.9583538
+2058,"Roseburg District",GFDLCM3-rcp45,3324431.730753
+2058,"Roseburg District",GFDLCM3-rcp85,3200078.7408186
+2058,"Roseburg District",HadGEM2ES-rcp45,3319196.8047533
+2058,"Roseburg District",HadGEM2ES-rcp85,3106035.8073667
+2058,"Roseburg District",NoClimate,3552279.3583422
+2058,"Salem District",CCSM4-rcp45,3632774.2843559
+2058,"Salem District",CCSM4-rcp85,3661859.2961549
+2058,"Salem District",Ensemble-rcp45,3739624.320368
+2058,"Salem District",Ensemble-rcp85,3683220.3538487
+2058,"Salem District",GFDLCM3-rcp45,3694008.7718968
+2058,"Salem District",GFDLCM3-rcp85,3605029.1461902
+2058,"Salem District",HadGEM2ES-rcp45,3677832.19107181
+2058,"Salem District",HadGEM2ES-rcp85,3561341.4667273
+2058,"Salem District",NoClimate,3897743.1832186
+2063,"Coos Bay District",CCSM4-rcp45,3478380.829495
+2063,"Coos Bay District",CCSM4-rcp85,3514695.0711116
+2063,"Coos Bay District",Ensemble-rcp45,3536351.1488758
+2063,"Coos Bay District",Ensemble-rcp85,3458173.8484066
+2063,"Coos Bay District",GFDLCM3-rcp45,3436153.0948254
+2063,"Coos Bay District",GFDLCM3-rcp85,3336958.9801497
+2063,"Coos Bay District",HadGEM2ES-rcp45,3459662.3454341
+2063,"Coos Bay District",HadGEM2ES-rcp85,3175831.9853163
+2063,"Coos Bay District",NoClimate,3734132.3605655
+2063,"Eugene District",CCSM4-rcp45,2924580.5906733
+2063,"Eugene District",CCSM4-rcp85,2904974.9900383
+2063,"Eugene District",Ensemble-rcp45,2969865.7489718
+2063,"Eugene District",Ensemble-rcp85,2926871.0976084
+2063,"Eugene District",GFDLCM3-rcp45,2913580.9422331
+2063,"Eugene District",GFDLCM3-rcp85,2866237.2068927
+2063,"Eugene District",HadGEM2ES-rcp45,2929208.1251346
+2063,"Eugene District",HadGEM2ES-rcp85,2793399.6375262
+2063,"Eugene District",NoClimate,3104331.0864437
+2063,"Lakeview District",CCSM4-rcp45,331102.5880233
+2063,"Lakeview District",CCSM4-rcp85,303756.7696953
+2063,"Lakeview District",Ensemble-rcp45,334804.5720556
+2063,"Lakeview District",Ensemble-rcp85,329036.5985267
+2063,"Lakeview District",GFDLCM3-rcp45,337223.919941
+2063,"Lakeview District",GFDLCM3-rcp85,364058.3882497
+2063,"Lakeview District",HadGEM2ES-rcp45,309789.3471178
+2063,"Lakeview District",HadGEM2ES-rcp85,281072.0075302
+2063,"Lakeview District",NoClimate,380863.5958787
+2063,"Medford District",CCSM4-rcp45,4469292.61796661
+2063,"Medford District",CCSM4-rcp85,5176114.92228801
+2063,"Medford District",Ensemble-rcp45,5106794.5659362
+2063,"Medford District",Ensemble-rcp85,4891574.70528032
+2063,"Medford District",GFDLCM3-rcp45,5130908.4327753
+2063,"Medford District",GFDLCM3-rcp85,4850441.83697109
+2063,"Medford District",HadGEM2ES-rcp45,4656706.53696511
+2063,"Medford District",HadGEM2ES-rcp85,4277812.5162676
+2063,"Medford District",NoClimate,5483245.588984
+2063,"Roseburg District",CCSM4-rcp45,3400733.7682828
+2063,"Roseburg District",CCSM4-rcp85,3412476.5773232
+2063,"Roseburg District",Ensemble-rcp45,3498201.5409503
+2063,"Roseburg District",Ensemble-rcp85,3373941.9349648
+2063,"Roseburg District",GFDLCM3-rcp45,3414311.0005594
+2063,"Roseburg District",GFDLCM3-rcp85,3235608.1541943
+2063,"Roseburg District",HadGEM2ES-rcp45,3405886.6821905
+2063,"Roseburg District",HadGEM2ES-rcp85,3052930.1711773
+2063,"Roseburg District",NoClimate,3690489.5076638
+2063,"Salem District",CCSM4-rcp45,3734443.3336201
+2063,"Salem District",CCSM4-rcp85,3758668.5044134
+2063,"Salem District",Ensemble-rcp45,3842223.0463763
+2063,"Salem District",Ensemble-rcp85,3767591.9936947
+2063,"Salem District",GFDLCM3-rcp45,3778314.6466513
+2063,"Salem District",GFDLCM3-rcp85,3664647.1527453
+2063,"Salem District",HadGEM2ES-rcp45,3764453.7658102
+2063,"Salem District",HadGEM2ES-rcp85,3641783.5810974
+2063,"Salem District",NoClimate,4035819.0478394
+2068,"Coos Bay District",CCSM4-rcp45,3560117.6964202
+2068,"Coos Bay District",CCSM4-rcp85,3598297.9747511
+2068,"Coos Bay District",Ensemble-rcp45,3614520.8216554
+2068,"Coos Bay District",Ensemble-rcp85,3494034.9166921
+2068,"Coos Bay District",GFDLCM3-rcp45,3490039.020924
+2068,"Coos Bay District",GFDLCM3-rcp85,3328728.4066532
+2068,"Coos Bay District",HadGEM2ES-rcp45,3509303.8617903
+2068,"Coos Bay District",HadGEM2ES-rcp85,3084598.46387051
+2068,"Coos Bay District",NoClimate,3835304.7044532
+2068,"Eugene District",CCSM4-rcp45,3007172.1367417
+2068,"Eugene District",CCSM4-rcp85,2966236.3087819
+2068,"Eugene District",Ensemble-rcp45,3056314.1459531
+2068,"Eugene District",Ensemble-rcp85,2994812.0562395
+2068,"Eugene District",GFDLCM3-rcp45,2985391.4348195
+2068,"Eugene District",GFDLCM3-rcp85,2923239.5080509
+2068,"Eugene District",HadGEM2ES-rcp45,3006907.8696226
+2068,"Eugene District",HadGEM2ES-rcp85,2800209.4452544
+2068,"Eugene District",NoClimate,3207680.9509292
+2068,"Lakeview District",CCSM4-rcp45,358889.6069762
+2068,"Lakeview District",CCSM4-rcp85,308557.4960707
+2068,"Lakeview District",Ensemble-rcp45,360672.8946363
+2068,"Lakeview District",Ensemble-rcp85,354691.8480434
+2068,"Lakeview District",GFDLCM3-rcp45,363421.1946274
+2068,"Lakeview District",GFDLCM3-rcp85,402686.4325765
+2068,"Lakeview District",HadGEM2ES-rcp45,335686.638579
+2068,"Lakeview District",HadGEM2ES-rcp85,300484.7941351
+2068,"Lakeview District",NoClimate,416685.565912
+2068,"Medford District",CCSM4-rcp45,4616268.1773984
+2068,"Medford District",CCSM4-rcp85,5304575.5336192
+2068,"Medford District",Ensemble-rcp45,5298067.47412841
+2068,"Medford District",Ensemble-rcp85,4989611.0698193
+2068,"Medford District",GFDLCM3-rcp45,5294603.52874439
+2068,"Medford District",GFDLCM3-rcp85,4925817.6949062
+2068,"Medford District",HadGEM2ES-rcp45,4792181.7419911
+2068,"Medford District",HadGEM2ES-rcp85,4190297.9969783
+2068,"Medford District",NoClimate,5735889.9685006
+2068,"Roseburg District",CCSM4-rcp45,3506032.6340991
+2068,"Roseburg District",CCSM4-rcp85,3473131.9718039
+2068,"Roseburg District",Ensemble-rcp45,3601429.6638041
+2068,"Roseburg District",Ensemble-rcp85,3420766.9549346
+2068,"Roseburg District",GFDLCM3-rcp45,3494405.6856043
+2068,"Roseburg District",GFDLCM3-rcp85,3251408.5412805
+2068,"Roseburg District",HadGEM2ES-rcp45,3480173.2307458
+2068,"Roseburg District",HadGEM2ES-rcp85,2976779.9323529
+2068,"Roseburg District",NoClimate,3819845.6368971
+2068,"Salem District",CCSM4-rcp45,3831195.2612996
+2068,"Salem District",CCSM4-rcp85,3839502.55136049
+2068,"Salem District",Ensemble-rcp45,3934294.9445767
+2068,"Salem District",Ensemble-rcp85,3836455.5047223
+2068,"Salem District",GFDLCM3-rcp45,3849909.5598363
+2068,"Salem District",GFDLCM3-rcp85,3708475.2622327
+2068,"Salem District",HadGEM2ES-rcp45,3839486.3544443
+2068,"Salem District",HadGEM2ES-rcp85,3709135.6419133
+2068,"Salem District",NoClimate,4163269.051654
+2073,"Coos Bay District",CCSM4-rcp45,3638404.6313891
+2073,"Coos Bay District",CCSM4-rcp85,3663898.3440648
+2073,"Coos Bay District",Ensemble-rcp45,3684983.11436161
+2073,"Coos Bay District",Ensemble-rcp85,3511588.6868704
+2073,"Coos Bay District",GFDLCM3-rcp45,3536980.2915011
+2073,"Coos Bay District",GFDLCM3-rcp85,3301214.1637669
+2073,"Coos Bay District",HadGEM2ES-rcp45,3548882.7552516
+2073,"Coos Bay District",HadGEM2ES-rcp85,2985924.5065815
+2073,"Coos Bay District",NoClimate,3928092.96726019
+2073,"Eugene District",CCSM4-rcp45,3085020.9758312
+2073,"Eugene District",CCSM4-rcp85,3008051.0171911
+2073,"Eugene District",Ensemble-rcp45,3136417.8917699
+2073,"Eugene District",Ensemble-rcp85,3047771.6774655
+2073,"Eugene District",GFDLCM3-rcp45,3050247.7601849
+2073,"Eugene District",GFDLCM3-rcp85,2964572.3252335
+2073,"Eugene District",HadGEM2ES-rcp45,3077363.7853423
+2073,"Eugene District",HadGEM2ES-rcp85,2789019.5294113
+2073,"Eugene District",NoClimate,3302833.9861924
+2073,"Lakeview District",CCSM4-rcp45,386548.4580639
+2073,"Lakeview District",CCSM4-rcp85,313931.3075261
+2073,"Lakeview District",Ensemble-rcp45,385177.9765299
+2073,"Lakeview District",Ensemble-rcp85,381462.1356773
+2073,"Lakeview District",GFDLCM3-rcp45,389934.1132948
+2073,"Lakeview District",GFDLCM3-rcp85,440496.2055384
+2073,"Lakeview District",HadGEM2ES-rcp45,360372.6276172
+2073,"Lakeview District",HadGEM2ES-rcp85,322487.8706116
+2073,"Lakeview District",NoClimate,450893.892455
+2073,"Medford District",CCSM4-rcp45,4762267.1578107
+2073,"Medford District",CCSM4-rcp85,5391751.82555361
+2073,"Medford District",Ensemble-rcp45,5479813.6252922
+2073,"Medford District",Ensemble-rcp85,5057090.4809831
+2073,"Medford District",GFDLCM3-rcp45,5443640.9440959
+2073,"Medford District",GFDLCM3-rcp85,4971824.5042267
+2073,"Medford District",HadGEM2ES-rcp45,4916206.0083076
+2073,"Medford District",HadGEM2ES-rcp85,4080733.7184153
+2073,"Medford District",NoClimate,5974862.67116051
+2073,"Roseburg District",CCSM4-rcp45,3606048.8442687
+2073,"Roseburg District",CCSM4-rcp85,3494587.4658317
+2073,"Roseburg District",Ensemble-rcp45,3696747.4339385
+2073,"Roseburg District",Ensemble-rcp85,3441651.1116412
+2073,"Roseburg District",GFDLCM3-rcp45,3567887.8163227
+2073,"Roseburg District",GFDLCM3-rcp85,3247941.3984203
+2073,"Roseburg District",HadGEM2ES-rcp45,3543106.4953126
+2073,"Roseburg District",HadGEM2ES-rcp85,2889434.3279019
+2073,"Roseburg District",NoClimate,3940071.9169033
+2073,"Salem District",CCSM4-rcp45,3923700.35954991
+2073,"Salem District",CCSM4-rcp85,3906373.5741553
+2073,"Salem District",Ensemble-rcp45,4017149.7607696
+2073,"Salem District",Ensemble-rcp85,3890894.696556
+2073,"Salem District",GFDLCM3-rcp45,3911547.1354064
+2073,"Salem District",GFDLCM3-rcp85,3739389.2492784
+2073,"Salem District",HadGEM2ES-rcp45,3906455.4348436
+2073,"Salem District",HadGEM2ES-rcp85,3762416.6780775
+2073,"Salem District",NoClimate,4280735.9023393
+2078,"Coos Bay District",CCSM4-rcp45,3713471.6126397
+2078,"Coos Bay District",CCSM4-rcp85,3701758.3006331
+2078,"Coos Bay District",Ensemble-rcp45,3748503.3568725
+2078,"Coos Bay District",Ensemble-rcp85,3508926.8565388
+2078,"Coos Bay District",GFDLCM3-rcp45,3577064.1023256
+2078,"Coos Bay District",GFDLCM3-rcp85,3258599.2111466
+2078,"Coos Bay District",HadGEM2ES-rcp45,3578952.2166922
+2078,"Coos Bay District",HadGEM2ES-rcp85,2883190.0461279
+2078,"Coos Bay District",NoClimate,4013630.2131701
+2078,"Eugene District",CCSM4-rcp45,3158572.6899694
+2078,"Eugene District",CCSM4-rcp85,3027246.9677037
+2078,"Eugene District",Ensemble-rcp45,3210061.3730224
+2078,"Eugene District",Ensemble-rcp85,3082121.7632962
+2078,"Eugene District",GFDLCM3-rcp45,3109324.1727783
+2078,"Eugene District",GFDLCM3-rcp85,2988622.3164901
+2078,"Eugene District",HadGEM2ES-rcp45,3140853.1536097
+2078,"Eugene District",HadGEM2ES-rcp85,2761056.8268455
+2078,"Eugene District",NoClimate,3391014.3904504
+2078,"Lakeview District",CCSM4-rcp45,413821.7957287
+2078,"Lakeview District",CCSM4-rcp85,320254.1741517
+2078,"Lakeview District",Ensemble-rcp45,408379.2021013
+2078,"Lakeview District",Ensemble-rcp85,409243.5542144
+2078,"Lakeview District",GFDLCM3-rcp45,416959.4655737
+2078,"Lakeview District",GFDLCM3-rcp85,474459.7113373
+2078,"Lakeview District",HadGEM2ES-rcp45,383988.6518562
+2078,"Lakeview District",HadGEM2ES-rcp85,345344.1867221
+2078,"Lakeview District",NoClimate,483753.3884608
+2078,"Medford District",CCSM4-rcp45,4905565.6711369
+2078,"Medford District",CCSM4-rcp85,5429582.9615866
+2078,"Medford District",Ensemble-rcp45,5650824.3805868
+2078,"Medford District",Ensemble-rcp85,5085471.3857111
+2078,"Medford District",GFDLCM3-rcp45,5577944.5717388
+2078,"Medford District",GFDLCM3-rcp85,4983275.8742005
+2078,"Medford District",HadGEM2ES-rcp45,5028647.44803231
+2078,"Medford District",HadGEM2ES-rcp85,3953097.3486366
+2078,"Medford District",NoClimate,6198803.9950351
+2078,"Roseburg District",CCSM4-rcp45,3699471.751448
+2078,"Roseburg District",CCSM4-rcp85,3471683.4328406
+2078,"Roseburg District",Ensemble-rcp45,3784085.5416964
+2078,"Roseburg District",Ensemble-rcp85,3432500.8245075
+2078,"Roseburg District",GFDLCM3-rcp45,3635920.5167309
+2078,"Roseburg District",GFDLCM3-rcp85,3225073.0676768
+2078,"Roseburg District",HadGEM2ES-rcp45,3594078.9848846
+2078,"Roseburg District",HadGEM2ES-rcp85,2794024.4987392
+2078,"Roseburg District",NoClimate,4051565.0320312
+2078,"Salem District",CCSM4-rcp45,4013187.3610032
+2078,"Salem District",CCSM4-rcp85,3958820.4783738
+2078,"Salem District",Ensemble-rcp45,4091937.6068141
+2078,"Salem District",Ensemble-rcp85,3931322.6428449
+2078,"Salem District",GFDLCM3-rcp45,3965991.7611283
+2078,"Salem District",GFDLCM3-rcp85,3758840.3913818
+2078,"Salem District",HadGEM2ES-rcp45,3965520.5628045
+2078,"Salem District",HadGEM2ES-rcp85,3800126.3861023
+2078,"Salem District",NoClimate,4389527.8438537
+2083,"Coos Bay District",CCSM4-rcp45,3783261.8268433
+2083,"Coos Bay District",CCSM4-rcp85,3700915.4297928
+2083,"Coos Bay District",Ensemble-rcp45,3804893.4175368
+2083,"Coos Bay District",Ensemble-rcp85,3482807.0791043
+2083,"Coos Bay District",GFDLCM3-rcp45,3611023.03905109
+2083,"Coos Bay District",GFDLCM3-rcp85,3203700.493548
+2083,"Coos Bay District",HadGEM2ES-rcp45,3599955.6774402
+2083,"Coos Bay District",HadGEM2ES-rcp85,2781575.1401617
+2083,"Coos Bay District",NoClimate,4092614.0149268
+2083,"Eugene District",CCSM4-rcp45,3228188.5989454
+2083,"Eugene District",CCSM4-rcp85,3022212.6392358
+2083,"Eugene District",Ensemble-rcp45,3277793.7180678
+2083,"Eugene District",Ensemble-rcp85,3095408.0703319
+2083,"Eugene District",GFDLCM3-rcp45,3163405.134869
+2083,"Eugene District",GFDLCM3-rcp85,2991564.5656858
+2083,"Eugene District",HadGEM2ES-rcp45,3197547.2878693
+2083,"Eugene District",HadGEM2ES-rcp85,2716695.6535346
+2083,"Eugene District",NoClimate,3472757.2027158
+2083,"Lakeview District",CCSM4-rcp45,440866.864926
+2083,"Lakeview District",CCSM4-rcp85,327537.3558833
+2083,"Lakeview District",Ensemble-rcp45,430526.234716
+2083,"Lakeview District",Ensemble-rcp85,437787.7304661
+2083,"Lakeview District",GFDLCM3-rcp45,444803.2898799
+2083,"Lakeview District",GFDLCM3-rcp85,500009.7328259
+2083,"Lakeview District",HadGEM2ES-rcp45,407737.6159468
+2083,"Lakeview District",HadGEM2ES-rcp85,367206.972656
+2083,"Lakeview District",NoClimate,515063.3672126
+2083,"Medford District",CCSM4-rcp45,5043107.4303924
+2083,"Medford District",CCSM4-rcp85,5409490.1470868
+2083,"Medford District",Ensemble-rcp45,5808832.6037669
+2083,"Medford District",Ensemble-rcp85,5068117.85888201
+2083,"Medford District",GFDLCM3-rcp45,5697406.16149421
+2083,"Medford District",GFDLCM3-rcp85,4955632.2846502
+2083,"Medford District",HadGEM2ES-rcp45,5126339.60936599
+2083,"Medford District",HadGEM2ES-rcp85,3810041.82371411
+2083,"Medford District",NoClimate,6408026.06354051
+2083,"Roseburg District",CCSM4-rcp45,3784823.3327236
+2083,"Roseburg District",CCSM4-rcp85,3405383.09014041
+2083,"Roseburg District",Ensemble-rcp45,3863047.11432421
+2083,"Roseburg District",Ensemble-rcp85,3391061.8809209
+2083,"Roseburg District",GFDLCM3-rcp45,3698603.2813045
+2083,"Roseburg District",GFDLCM3-rcp85,3181214.9468837
+2083,"Roseburg District",HadGEM2ES-rcp45,3632082.3445912
+2083,"Roseburg District",HadGEM2ES-rcp85,2694109.4596384
+2083,"Roseburg District",NoClimate,4155034.7075263
+2083,"Salem District",CCSM4-rcp45,4097920.5449662
+2083,"Salem District",CCSM4-rcp85,3996305.2185096
+2083,"Salem District",Ensemble-rcp45,4159996.8390476
+2083,"Salem District",Ensemble-rcp85,3958134.4484997
+2083,"Salem District",GFDLCM3-rcp45,4013730.5753332
+2083,"Salem District",GFDLCM3-rcp85,3767162.00772389
+2083,"Salem District",HadGEM2ES-rcp45,4017443.417682
+2083,"Salem District",HadGEM2ES-rcp85,3819227.0537788
+2083,"Salem District",NoClimate,4490106.5624165
+2088,"Coos Bay District",CCSM4-rcp45,3845307.7712783
+2088,"Coos Bay District",CCSM4-rcp85,3653621.1147983
+2088,"Coos Bay District",Ensemble-rcp45,3855049.2970789
+2088,"Coos Bay District",Ensemble-rcp85,3428536.6678387
+2088,"Coos Bay District",GFDLCM3-rcp45,3639224.2570654
+2088,"Coos Bay District",GFDLCM3-rcp85,3138284.6363099
+2088,"Coos Bay District",HadGEM2ES-rcp45,3612206.212285
+2088,"Coos Bay District",HadGEM2ES-rcp85,2684106.3706056
+2088,"Coos Bay District",NoClimate,4165579.4811642
+2088,"Eugene District",CCSM4-rcp45,3293281.2526533
+2088,"Eugene District",CCSM4-rcp85,2992725.2395073
+2088,"Eugene District",Ensemble-rcp45,3339977.90227999
+2088,"Eugene District",Ensemble-rcp85,3085441.452968
+2088,"Eugene District",GFDLCM3-rcp45,3213419.3579331
+2088,"Eugene District",GFDLCM3-rcp85,2970242.745654
+2088,"Eugene District",HadGEM2ES-rcp45,3247060.8900902
+2088,"Eugene District",HadGEM2ES-rcp85,2655665.4384442
+2088,"Eugene District",NoClimate,3549149.7399479
+2088,"Lakeview District",CCSM4-rcp45,466952.705902
+2088,"Lakeview District",CCSM4-rcp85,335475.236708
+2088,"Lakeview District",Ensemble-rcp45,451840.6723093
+2088,"Lakeview District",Ensemble-rcp85,466502.6017399
+2088,"Lakeview District",GFDLCM3-rcp45,473225.7251318
+2088,"Lakeview District",GFDLCM3-rcp85,514374.494319
+2088,"Lakeview District",HadGEM2ES-rcp45,430813.0001811
+2088,"Lakeview District",HadGEM2ES-rcp85,387008.7362984
+2088,"Lakeview District",NoClimate,544724.7458327
+2088,"Medford District",CCSM4-rcp45,5174351.1930834
+2088,"Medford District",CCSM4-rcp85,5327028.6796659
+2088,"Medford District",Ensemble-rcp45,5953972.63274909
+2088,"Medford District",Ensemble-rcp85,5004798.80647631
+2088,"Medford District",GFDLCM3-rcp45,5804131.2474035
+2088,"Medford District",GFDLCM3-rcp85,4886725.7340318
+2088,"Medford District",HadGEM2ES-rcp45,5208048.22796541
+2088,"Medford District",HadGEM2ES-rcp85,3653233.8732022
+2088,"Medford District",NoClimate,6602998.066573
+2088,"Roseburg District",CCSM4-rcp45,3860799.2566748
+2088,"Roseburg District",CCSM4-rcp85,3306655.1170029
+2088,"Roseburg District",Ensemble-rcp45,3933516.5474835
+2088,"Roseburg District",Ensemble-rcp85,3319895.3816307
+2088,"Roseburg District",GFDLCM3-rcp45,3756420.3793506
+2088,"Roseburg District",GFDLCM3-rcp85,3117291.4271547
+2088,"Roseburg District",HadGEM2ES-rcp45,3657266.1980985
+2088,"Roseburg District",HadGEM2ES-rcp85,2592455.1120883
+2088,"Roseburg District",NoClimate,4251572.0902856
+2088,"Salem District",CCSM4-rcp45,4176493.3687736
+2088,"Salem District",CCSM4-rcp85,4019289.23749109
+2088,"Salem District",Ensemble-rcp45,4221251.8526182
+2088,"Salem District",Ensemble-rcp85,3969443.1688458
+2088,"Salem District",GFDLCM3-rcp45,4055408.3163675
+2088,"Salem District",GFDLCM3-rcp85,3762527.3285682
+2088,"Salem District",HadGEM2ES-rcp45,4062980.6264859
+2088,"Salem District",HadGEM2ES-rcp85,3811326.3365376
+2088,"Salem District",NoClimate,4583489.0163005
+2093,"Coos Bay District",CCSM4-rcp45,3896724.5934614
+2093,"Coos Bay District",CCSM4-rcp85,3561883.965223
+2093,"Coos Bay District",Ensemble-rcp45,3898408.969329
+2093,"Coos Bay District",Ensemble-rcp85,3344954.3783171
+2093,"Coos Bay District",GFDLCM3-rcp45,3661210.1054762
+2093,"Coos Bay District",GFDLCM3-rcp85,3064451.5656556
+2093,"Coos Bay District",HadGEM2ES-rcp45,3616164.9983526
+2093,"Coos Bay District",HadGEM2ES-rcp85,2592486.9079093
+2093,"Coos Bay District",NoClimate,4233081.23702971
+2093,"Eugene District",CCSM4-rcp45,3353838.9150429
+2093,"Eugene District",CCSM4-rcp85,2942583.5738002
+2093,"Eugene District",Ensemble-rcp45,3396888.2990563
+2093,"Eugene District",Ensemble-rcp85,3051645.6335247
+2093,"Eugene District",GFDLCM3-rcp45,3259654.8502413
+2093,"Eugene District",GFDLCM3-rcp85,2926470.7372487
+2093,"Eugene District",HadGEM2ES-rcp45,3289612.0193502
+2093,"Eugene District",HadGEM2ES-rcp85,2581211.9895359
+2093,"Eugene District",NoClimate,3620502.9963909
+2093,"Lakeview District",CCSM4-rcp45,491606.3661394
+2093,"Lakeview District",CCSM4-rcp85,344455.8484567
+2093,"Lakeview District",Ensemble-rcp45,471835.4352685
+2093,"Lakeview District",Ensemble-rcp85,494844.5935236
+2093,"Lakeview District",GFDLCM3-rcp45,501454.3749029
+2093,"Lakeview District",GFDLCM3-rcp85,518614.784055
+2093,"Lakeview District",HadGEM2ES-rcp45,452906.8324342
+2093,"Lakeview District",HadGEM2ES-rcp85,404102.6982336
+2093,"Lakeview District",NoClimate,573052.7866972
+2093,"Medford District",CCSM4-rcp45,5297252.44291631
+2093,"Medford District",CCSM4-rcp85,5187536.17534219
+2093,"Medford District",Ensemble-rcp45,6085427.1653092
+2093,"Medford District",Ensemble-rcp85,4899926.1214594
+2093,"Medford District",GFDLCM3-rcp45,5898829.0774298
+2093,"Medford District",GFDLCM3-rcp85,4781494.7035131
+2093,"Medford District",HadGEM2ES-rcp45,5273092.75005839
+2093,"Medford District",HadGEM2ES-rcp85,3485858.8072546
+2093,"Medford District",NoClimate,6785509.8000068
+2093,"Roseburg District",CCSM4-rcp45,3926355.30178301
+2093,"Roseburg District",CCSM4-rcp85,3194233.0432766
+2093,"Roseburg District",Ensemble-rcp45,3995250.2642999
+2093,"Roseburg District",Ensemble-rcp85,3228359.106592
+2093,"Roseburg District",GFDLCM3-rcp45,3810015.1109377
+2093,"Roseburg District",GFDLCM3-rcp85,3037405.949953
+2093,"Roseburg District",HadGEM2ES-rcp45,3670090.3363667
+2093,"Roseburg District",HadGEM2ES-rcp85,2491962.3524608
+2093,"Roseburg District",NoClimate,4341528.8327385
+2093,"Salem District",CCSM4-rcp45,4246964.8886376
+2093,"Salem District",CCSM4-rcp85,4028012.295669
+2093,"Salem District",Ensemble-rcp45,4276061.6394189
+2093,"Salem District",Ensemble-rcp85,3962622.8952464
+2093,"Salem District",GFDLCM3-rcp45,4091313.8351274
+2093,"Salem District",GFDLCM3-rcp85,3739634.1998496
+2093,"Salem District",HadGEM2ES-rcp45,4102476.2500994
+2093,"Salem District",HadGEM2ES-rcp85,3766416.691455
+2093,"Salem District",NoClimate,4670409.7282724
+2098,"Coos Bay District",CCSM4-rcp45,3941300.970127
+2098,"Coos Bay District",CCSM4-rcp85,3450138.5162939
+2098,"Coos Bay District",Ensemble-rcp45,3937513.8366305
+2098,"Coos Bay District",Ensemble-rcp85,3248229.7004254
+2098,"Coos Bay District",GFDLCM3-rcp45,3680239.701536
+2098,"Coos Bay District",GFDLCM3-rcp85,2989157.6618658
+2098,"Coos Bay District",HadGEM2ES-rcp45,3616033.21309231
+2098,"Coos Bay District",HadGEM2ES-rcp85,2509593.2539688
+2098,"Coos Bay District",NoClimate,4295285.115065
+2098,"Eugene District",CCSM4-rcp45,3410720.2774277
+2098,"Eugene District",CCSM4-rcp85,2884672.1772832
+2098,"Eugene District",Ensemble-rcp45,3449929.2665513
+2098,"Eugene District",Ensemble-rcp85,3006604.6241165
+2098,"Eugene District",GFDLCM3-rcp45,3303448.8461722
+2098,"Eugene District",GFDLCM3-rcp85,2870688.227493
+2098,"Eugene District",HadGEM2ES-rcp45,3327420.1354668
+2098,"Eugene District",HadGEM2ES-rcp85,2503401.9024797
+2098,"Eugene District",NoClimate,3687056.183038
+2098,"Lakeview District",CCSM4-rcp45,515554.8595091
+2098,"Lakeview District",CCSM4-rcp85,354629.4687586
+2098,"Lakeview District",Ensemble-rcp45,490972.1587376
+2098,"Lakeview District",Ensemble-rcp85,523030.8075879
+2098,"Lakeview District",GFDLCM3-rcp45,529223.5471122
+2098,"Lakeview District",GFDLCM3-rcp85,519743.7437537
+2098,"Lakeview District",HadGEM2ES-rcp45,474654.502155
+2098,"Lakeview District",HadGEM2ES-rcp85,419750.4761713
+2098,"Lakeview District",NoClimate,599733.6031141
+2098,"Medford District",CCSM4-rcp45,5415033.72204999
+2098,"Medford District",CCSM4-rcp85,5024199.02563161
+2098,"Medford District",Ensemble-rcp45,6206998.76147308
+2098,"Medford District",Ensemble-rcp85,4781220.1408552
+2098,"Medford District",GFDLCM3-rcp45,5987420.8376388
+2098,"Medford District",GFDLCM3-rcp85,4663682.9625827
+2098,"Medford District",HadGEM2ES-rcp45,5329548.70903399
+2098,"Medford District",HadGEM2ES-rcp85,3319137.5490795
+2098,"Medford District",NoClimate,6955717.4470495
+2098,"Roseburg District",CCSM4-rcp45,3983726.5154341
+2098,"Roseburg District",CCSM4-rcp85,3082149.1340327
+2098,"Roseburg District",Ensemble-rcp45,4051077.7350575
+2098,"Roseburg District",Ensemble-rcp85,3131439.3027857
+2098,"Roseburg District",GFDLCM3-rcp45,3860376.02064589
+2098,"Roseburg District",GFDLCM3-rcp85,2951502.89041599
+2098,"Roseburg District",HadGEM2ES-rcp45,3676310.8952995
+2098,"Roseburg District",HadGEM2ES-rcp85,2399835.790707
+2098,"Roseburg District",NoClimate,4425076.8885171
+2098,"Salem District",CCSM4-rcp45,4311223.7805296
+2098,"Salem District",CCSM4-rcp85,4030434.6171942
+2098,"Salem District",Ensemble-rcp45,4326074.5764115
+2098,"Salem District",Ensemble-rcp85,3945083.4500261
+2098,"Salem District",GFDLCM3-rcp45,4123167.7865907
+2098,"Salem District",GFDLCM3-rcp85,3707027.7198057
+2098,"Salem District",HadGEM2ES-rcp45,4138910.56941491
+2098,"Salem District",HadGEM2ES-rcp85,3700358.2848942
+2098,"Salem District",NoClimate,4751301.48803
+2103,"Coos Bay District",CCSM4-rcp45,3980909.9157777
+2103,"Coos Bay District",CCSM4-rcp85,3339084.8054522
+2103,"Coos Bay District",Ensemble-rcp45,3973185.839282
+2103,"Coos Bay District",Ensemble-rcp85,3151173.2159158
+2103,"Coos Bay District",GFDLCM3-rcp45,3698070.8019832
+2103,"Coos Bay District",GFDLCM3-rcp85,2917475.2593104
+2103,"Coos Bay District",HadGEM2ES-rcp45,3614233.7134579
+2103,"Coos Bay District",HadGEM2ES-rcp85,2438996.2115725
+2103,"Coos Bay District",NoClimate,4353019.8287474
+2103,"Eugene District",CCSM4-rcp45,3464224.3833848
+2103,"Eugene District",CCSM4-rcp85,2827313.2927234
+2103,"Eugene District",Ensemble-rcp45,3499970.2664015
+2103,"Eugene District",Ensemble-rcp85,2958192.0971215
+2103,"Eugene District",GFDLCM3-rcp45,3345242.3587641
+2103,"Eugene District",GFDLCM3-rcp85,2809595.1828912
+2103,"Eugene District",HadGEM2ES-rcp45,3362036.8989732
+2103,"Eugene District",HadGEM2ES-rcp85,2429080.8145165
+2103,"Eugene District",NoClimate,3749546.2131318
+2103,"Lakeview District",CCSM4-rcp45,539162.1607181
+2103,"Lakeview District",CCSM4-rcp85,365850.0044139
+2103,"Lakeview District",Ensemble-rcp45,509481.678417
+2103,"Lakeview District",Ensemble-rcp85,550904.0554868
+2103,"Lakeview District",GFDLCM3-rcp45,556447.5359808
+2103,"Lakeview District",GFDLCM3-rcp85,520881.2557494
+2103,"Lakeview District",HadGEM2ES-rcp45,496257.0051392
+2103,"Lakeview District",HadGEM2ES-rcp85,434755.1272565
+2103,"Lakeview District",NoClimate,625089.0005711
+2103,"Medford District",CCSM4-rcp45,5530554.59261019
+2103,"Medford District",CCSM4-rcp85,4856630.69426581
+2103,"Medford District",Ensemble-rcp45,6320206.9878588
+2103,"Medford District",Ensemble-rcp85,4662322.74204499
+2103,"Medford District",GFDLCM3-rcp45,6071972.7927575
+2103,"Medford District",GFDLCM3-rcp85,4546820.67144411
+2103,"Medford District",HadGEM2ES-rcp45,5380200.04705331
+2103,"Medford District",HadGEM2ES-rcp85,3165065.0998435
+2103,"Medford District",NoClimate,7114811.955557
+2103,"Roseburg District",CCSM4-rcp45,4035426.5662098
+2103,"Roseburg District",CCSM4-rcp85,2979721.4922019
+2103,"Roseburg District",Ensemble-rcp45,4102067.9930047
+2103,"Roseburg District",Ensemble-rcp85,3039490.176215
+2103,"Roseburg District",GFDLCM3-rcp45,3908339.2232676
+2103,"Roseburg District",GFDLCM3-rcp85,2867983.6872177
+2103,"Roseburg District",HadGEM2ES-rcp45,3679232.8168218
+2103,"Roseburg District",HadGEM2ES-rcp85,2320624.0524085
+2103,"Roseburg District",NoClimate,4502854.4475056
+2103,"Salem District",CCSM4-rcp45,4371078.8061317
+2103,"Salem District",CCSM4-rcp85,4032208.1586463
+2103,"Salem District",Ensemble-rcp45,4372122.0080741
+2103,"Salem District",Ensemble-rcp85,3924643.4431154
+2103,"Salem District",GFDLCM3-rcp45,4152732.9266164
+2103,"Salem District",GFDLCM3-rcp85,3671810.6407415
+2103,"Salem District",HadGEM2ES-rcp45,4173369.7775043
+2103,"Salem District",HadGEM2ES-rcp85,3625343.8319016
+2103,"Salem District",NoClimate,4827115.9242204
+2108,"Coos Bay District",CCSM4-rcp45,4016587.6892653
+2108,"Coos Bay District",CCSM4-rcp85,3235284.2561845
+2108,"Coos Bay District",Ensemble-rcp45,4006136.9541838
+2108,"Coos Bay District",Ensemble-rcp85,3058935.8656624
+2108,"Coos Bay District",GFDLCM3-rcp45,3715714.3928034
+2108,"Coos Bay District",GFDLCM3-rcp85,2851702.6646954
+2108,"Coos Bay District",HadGEM2ES-rcp45,3612512.20698031
+2108,"Coos Bay District",HadGEM2ES-rcp85,2380737.2211924
+2108,"Coos Bay District",NoClimate,4406814.5371477
+2108,"Eugene District",CCSM4-rcp45,3514613.0158844
+2108,"Eugene District",CCSM4-rcp85,2773352.1286507
+2108,"Eugene District",Ensemble-rcp45,3546856.8981162
+2108,"Eugene District",Ensemble-rcp85,2909973.545029
+2108,"Eugene District",GFDLCM3-rcp45,3385467.8357766
+2108,"Eugene District",GFDLCM3-rcp85,2746720.040589
+2108,"Eugene District",HadGEM2ES-rcp45,3394116.8734398
+2108,"Eugene District",HadGEM2ES-rcp85,2361197.4058729
+2108,"Eugene District",NoClimate,3807972.6146475
+2108,"Lakeview District",CCSM4-rcp45,562247.703691
+2108,"Lakeview District",CCSM4-rcp85,377667.8681753
+2108,"Lakeview District",Ensemble-rcp45,527854.7806234
+2108,"Lakeview District",Ensemble-rcp85,578041.1110745
+2108,"Lakeview District",GFDLCM3-rcp45,583087.9283181
+2108,"Lakeview District",GFDLCM3-rcp85,521879.9198571
+2108,"Lakeview District",HadGEM2ES-rcp45,517707.8163669
+2108,"Lakeview District",HadGEM2ES-rcp85,449164.5320093
+2108,"Lakeview District",NoClimate,649010.1264336
+2108,"Medford District",CCSM4-rcp45,5644375.90376101
+2108,"Medford District",CCSM4-rcp85,4697460.8558831
+2108,"Medford District",Ensemble-rcp45,6427602.6976173
+2108,"Medford District",Ensemble-rcp85,4551961.01542319
+2108,"Medford District",GFDLCM3-rcp45,6154536.94146961
+2108,"Medford District",GFDLCM3-rcp85,4439703.8541671
+2108,"Medford District",HadGEM2ES-rcp45,5428523.33785252
+2108,"Medford District",HadGEM2ES-rcp85,3028319.8371288
+2108,"Medford District",NoClimate,7263816.61235179
+2108,"Roseburg District",CCSM4-rcp45,4082610.4929962
+2108,"Roseburg District",CCSM4-rcp85,2888056.0652958
+2108,"Roseburg District",Ensemble-rcp45,4149252.5967971
+2108,"Roseburg District",Ensemble-rcp85,2956562.7450763
+2108,"Roseburg District",GFDLCM3-rcp45,3954213.6197241
+2108,"Roseburg District",GFDLCM3-rcp85,2790214.4482363
+2108,"Roseburg District",HadGEM2ES-rcp45,3681361.9287019
+2108,"Roseburg District",HadGEM2ES-rcp85,2254153.8898957
+2108,"Roseburg District",NoClimate,4575363.908181
+2108,"Salem District",CCSM4-rcp45,4426319.9408867
+2108,"Salem District",CCSM4-rcp85,4035137.25251521
+2108,"Salem District",Ensemble-rcp45,4414954.7151344
+2108,"Salem District",Ensemble-rcp85,3903219.1941189
+2108,"Salem District",GFDLCM3-rcp45,4181031.5971054
+2108,"Salem District",GFDLCM3-rcp85,3635223.6952856
+2108,"Salem District",HadGEM2ES-rcp45,4206843.4910505
+2108,"Salem District",HadGEM2ES-rcp85,3547242.6500333
+2108,"Salem District",NoClimate,4897918.1634722
