@@ -4,17 +4,7 @@ theme_set(theme_bw())
 source("/home/mperry/src/growth-yield-batch/scripts/blm/graphs/utils.r", chdir=T)
 
 # See https://github.com/Ecotrust/growth-yield-batch/wiki/Prepping-data-for-blm-project#preprocess-using-sql-query
-d <- runsql("SELECT s.year, s.climate as climate,
-                sum(carbon) as carbon, sum(timber) as timber, 
-                sum(standing) as standing, sum(fire) as fire,
-                sum(owl) as owl, sum(cost) as cost
-    FROM fvs_stands as s
-    JOIN optimalrx as o
-    ON s.standid = o.stand
-    AND s.rx = o.rx
-    AND s.offset = o.offset
-    AND s.climate = o.climate
-    GROUP BY s.year, s.climate;")
+d <- read.csv("../data/graph_scheduled.csv")
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 
 clim <- subset(d, climate != "NoClimate")

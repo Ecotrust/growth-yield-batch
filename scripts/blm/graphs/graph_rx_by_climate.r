@@ -4,16 +4,7 @@ theme_set(theme_bw())
 
 source("/home/mperry/src/growth-yield-batch/scripts/blm/graphs/utils.r", chdir=T)
 
-d <- runsql("
-  SELECT 'rx' || o.rx as rx, o.rx as rxnum, s.climate as climate, sum(s.acres) as acres, count(s.acres) as num
-    FROM fvs_stands as s
-    JOIN optimalrx as o
-    ON s.standid = o.stand
-    AND s.rx = o.rx
-    AND s.offset = o.offset
-    AND s.climate = o.climate
-    WHERE s.year = 2013
-    GROUP BY o.rx, s.climate;")
+d <- read.csv("../data/graph_rx_by_climate.csv")
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 d$circ = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 1))
 d[d$climate == "NoClimate", ]$rcp <- "rcp45"

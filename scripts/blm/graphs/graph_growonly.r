@@ -3,12 +3,7 @@ theme_set(theme_bw())
 
 source("/home/mperry/src/growth-yield-batch/scripts/blm/graphs/utils.r", chdir=T)
 
-# see wiki 
-d <- runsql("SELECT year, district, climate, sum(carbon) as carbon
-             FROM fvs_stands 
-             WHERE rx = 1 
-             GROUP BY year, district, climate
-             ORDER BY year, district, climate")
+d <- read.csv("../data/graph_growonly.csv")
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 
 

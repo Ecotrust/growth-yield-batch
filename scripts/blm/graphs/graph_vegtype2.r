@@ -3,15 +3,7 @@ theme_set(theme_bw())
 
 source("/home/mperry/src/growth-yield-batch/scripts/blm/graphs/utils.r", chdir=T)
 
-d <- runsql("
-	SELECT s.year as year, s.climate as climate, s.fortype as fortype, sum(s.acres) as acres
-    FROM fvs_stands as s
-    JOIN optimalrx as o
-    ON s.standid = o.stand
-    AND s.rx = o.rx
-    AND s.offset = o.offset
-    AND s.climate = o.climate
-    GROUP BY s.year, s.climate, s.fortype;")
+d <- read.csv("../data/graph_vegtype.csv")
 
 # TODO, aggregate into more general forest types
 
