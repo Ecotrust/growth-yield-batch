@@ -67,7 +67,7 @@ SELECT year, district, climate, sum(carbon) as carbon
 SELECT s.year as year, s.climate as climate, s.fortype as fortype, 
        sum(s.acres) as acres, s.district as district
     FROM fvs_stands as s
-    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85')
+    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85', 'NoClimate')
     AND s.rx = 1
     GROUP BY s.year, s.climate, s.fortype, s.district;
 
@@ -78,7 +78,7 @@ SELECT sum(s.start_vol) as start_vol, sum(s.accretion_vol) as accretion_vol,
        s.year as year, s.climate as climate, sum(s.acres) as acres, 
        s.district as district
     FROM fvs_stands as s
-    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85')
+    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85', 'NoClimate')
     AND s.rx = 1
     GROUP BY s.year, s.climate, s.district;
 
@@ -92,7 +92,7 @@ SELECT s.year as year, s.climate as climate, s.fortype as fortype,
     AND s.rx = o.rx
     AND s.offset = o.offset
     AND s.climate = o.climate
-    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85')
+    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85', 'NoClimate')
     GROUP BY s.year, s.climate, s.fortype, s.district;
 
 
@@ -106,5 +106,5 @@ SELECT sum(s.start_vol) as start_vol, sum(s.accretion_vol) as accretion_vol,
     AND s.rx = o.rx
     AND s.offset = o.offset
     AND s.climate = o.climate
-    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85')
+    WHERE s.climate in ('Ensemble-rcp45', 'Ensemble-rcp85', 'NoClimate')
     GROUP BY s.year, s.climate, s.district;
