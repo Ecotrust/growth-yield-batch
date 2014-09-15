@@ -13,6 +13,9 @@ d[d$rcp == "rcp85" & !is.na(d$rcp),]$rcp <- highem
 
 d$districtf <- factor(d$district, levels=c('Salem District', 'Eugene District', 'Coos Bay District',
                                            'Medford District', 'Roseburg District', 'Lakeview District'))
+
+d <- subset(d, districtf %in% c('Medford District', 'Roseburg District', 'Lakeview District'))
+
 mult <- 1/0.0477  # 4.77% sample
 d$carbon_millionmetrictonnes = mult * d$carbon / 1000000
 d$standing_millioncubicft = mult * d$standing / 1000000
@@ -20,8 +23,8 @@ d$timber_mmbf = (mult * d$timber / 1000) / 5  # timber is per period, convert to
 d$fire_thousandacres = mult * d$fire / 1000
 
 
-cairo_pdf(filename = "/home/mperry/src/growth-yield-batch/scripts/blm/graphs/output/graph_scheduled_bydistrict.pdf",
-          width = 17, height = 11, family = "Georgia")
+cairo_pdf(filename = "/home/mperry/src/growth-yield-batch/scripts/blm/graphs/output/graph_scheduled_bydistrict_South.pdf",
+          width = 8.5, height = 11, family = "Georgia")
 
 clim <- subset(d, climate != "NoClimate")
 noclim <- subset(d, climate == "NoClimate")
@@ -36,7 +39,10 @@ noclim <- rbind(noclim45, noclim85)
 
 cp <- ggplot(data=clim, aes(x=year, y=carbon_millionmetrictonnes)) +
       ggtitle("Total Carbon") +
-      facet_grid(districtf ~ rcp) +
+      # facet_grid(districtf ~ rcp) +
+      facet_grid(rcp ~ districtf) +
+      # facet_wrap(rcp ~ districtf, nrow=1) +
+      # facet_wrap(districtf ~ rcp, nrow=1) +
       stat_summary(geom="ribbon", fun.ymin="min", fun.ymax="max", alpha=0.25) +
       geom_smooth(data=noclim, aes(x=year, y=carbon_millionmetrictonnes), se=FALSE, span=0.3) +
       ylab("Million Metric Tonnes") +
@@ -45,7 +51,8 @@ cp <- ggplot(data=clim, aes(x=year, y=carbon_millionmetrictonnes)) +
       theme(#axis.text.x=element_blank(),
             #axis.text.y=element_blank(),
             axis.ticks=element_blank(),
-            strip.text.y=element_blank(),
+            # strip.text.y=element_blank(),
+            # strip.text.x=element_blank(),
             strip.background=element_rect(fill="white", colour="white"),
             plot.background = element_rect(color="white"),
             plot.margin = unit(c(0.5,1.0,0,0), "cm"),
@@ -56,7 +63,10 @@ cp <- ggplot(data=clim, aes(x=year, y=carbon_millionmetrictonnes)) +
 
 vp <- ggplot(data=clim, aes(x=year, y=standing_millioncubicft)) +
       ggtitle("Volume of Standing Timber") +
-      facet_grid(districtf ~ rcp) +
+      # facet_grid(districtf ~ rcp) +
+      facet_grid(rcp ~ districtf) +
+      # facet_wrap(rcp ~ districtf, nrow=1) +
+      # facet_wrap(districtf ~ rcp, nrow=1) +
       stat_summary(geom="ribbon", fun.ymin="min", fun.ymax="max", alpha=0.25) +
       geom_smooth(data=noclim, aes(x=year, y=standing_millioncubicft), se=FALSE, span=0.3) +
       ylab("Million Cubic Feet") +
@@ -66,7 +76,8 @@ vp <- ggplot(data=clim, aes(x=year, y=standing_millioncubicft)) +
             #axis.text.y=element_blank(),
             axis.ticks=element_blank(),
             strip.background=element_blank(),
-            #strip.text.y=element_blank(),
+            strip.text.x=element_blank(),
+            strip.text.y=element_blank(),
             plot.background = element_rect(color="white"),
             plot.margin = unit(c(0.5,1.0,0,0), "cm"),
             panel.border=element_blank()
@@ -76,7 +87,10 @@ vp <- ggplot(data=clim, aes(x=year, y=standing_millioncubicft)) +
 
 tp <- ggplot(data=clim, aes(x=year, y=timber_mmbf)) +
       ggtitle("Annual Timber Harvested") +
-      facet_grid(districtf ~ rcp) +
+      # facet_grid(districtf ~ rcp) +
+      facet_grid(rcp ~ districtf) +
+      # facet_wrap(rcp ~ districtf, nrow=1) +
+      # facet_wrap(districtf ~ rcp, nrow=1) +
       stat_summary(geom="ribbon", fun.ymin="min", fun.ymax="max", alpha=0.25) +
       geom_smooth(data=noclim, aes(x=year, y=timber_mmbf), se=FALSE, span=0.3) +
       ylab("Million Boardfeet (mmbf)") +
@@ -86,6 +100,7 @@ tp <- ggplot(data=clim, aes(x=year, y=timber_mmbf)) +
             #axis.text.y=element_blank(),
             axis.ticks=element_blank(),
             strip.background=element_blank(),
+            strip.text.x=element_blank(),
             strip.text.y=element_blank(),
             plot.margin = unit(c(0.5,1.0,0,0), "cm"),
             panel.border=element_blank()
@@ -96,17 +111,21 @@ tp <- ggplot(data=clim, aes(x=year, y=timber_mmbf)) +
 
 fp <- ggplot(data=clim, aes(x=year, y=fire_thousandacres)) +
       ggtitle("Area of High Fire Risk") +
-      facet_grid(districtf ~ rcp) +
+      # facet_grid(districtf ~ rcp) +
+      facet_grid(rcp ~ districtf) +
+      # facet_wrap(rcp ~ districtf, nrow=1) +
+      # facet_wrap(districtf ~ rcp, nrow=1) +
       stat_summary(geom="ribbon", fun.ymin="min", fun.ymax="max", alpha=0.25) +
       geom_smooth(data=noclim, aes(x=year, y=fire_thousandacres), se=FALSE, span=0.3) + 
       ylab("Thousand Acres") +
       scale_x_continuous(limits=c(2015, 2108), breaks=c(2020, 2060, 2100)) +
       theme(#axis.text.y=element_blank(),
             strip.background=element_blank(),
-            #strip.text=element_blank(),
+            strip.text.x=element_blank(),
+            strip.text.y=element_blank(),
             plot.margin = unit(c(0.5,1.0,0,0), "cm"),
             panel.border=element_blank(),
             axis.ticks=element_blank())
 
 
-multiplot(cp, vp, tp, fp, cols=4)
+multiplot(cp, vp, tp, fp)
