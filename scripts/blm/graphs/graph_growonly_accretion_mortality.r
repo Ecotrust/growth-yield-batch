@@ -1,6 +1,11 @@
 library(ggplot2)
 theme_set(theme_bw())
 
+#########################
+#side <- "North"
+side <- "South"
+#########################
+
 source("/home/mperry/src/growth-yield-batch/scripts/blm/graphs/utils.r", chdir=T)
 
 # See https://github.com/Ecotrust/growth-yield-batch/wiki/Prepping-data-for-blm-project#preprocess-using-sql-query
@@ -13,8 +18,11 @@ d$acc <- d$accretion_vol / (d$acres * 5)  # 5 year period > annual
 d$districtf <- factor(d$district, levels=c('Salem District', 'Eugene District', 'Coos Bay District',
                                            'Medford District', 'Roseburg District', 'Lakeview District'))
 
-d <- subset(d, districtf %in% c('Salem District', 'Eugene District', 'Coos Bay District'))
-#d <- subset(d, districtf %in% c('Medford District', 'Roseburg District', 'Lakeview District'))
+if (side == 'North') {
+    d <- subset(d, districtf %in% c('Salem District', 'Eugene District', 'Coos Bay District'))
+} else {
+    d <- subset(d, districtf %in% c('Medford District', 'Roseburg District', 'Lakeview District'))
+}
 
 
 clim <- subset(d, climate != "NoClimate")
@@ -27,9 +35,10 @@ noclim45$rcp <- "rcp45"
 noclim85$rcp <- "rcp85"
 noclim <- rbind(noclim45, noclim85)
 
-cairo_pdf(
-    filename = "/home/mperry/src/growth-yield-batch/scripts/blm/graphs/output/graph_growonly_accretion_mortality_North.pdf",
-    width = 11, height = 8.5, family = "Georgia")
+outdir <- "/home/mperry/src/growth-yield-batch/scripts/blm/graphs/output/"
+outpath <- paste(outdir, "graph_growonly_accretion_mortality_", side, ".pdf", sep="")
+
+cairo_pdf(filename = outpath, width = 11, height = 8.5, family = "Georgia")
 
 # start_vol,accretion_vol,mortality_vol,removed_vol,year,climate,acres,district
 
