@@ -3,13 +3,13 @@ theme_set(theme_bw())
 
 #########################
 side <- "North"
-side <- "South"
+#side <- "South"
 #########################
 
 source("/home/mperry/src/growth-yield-batch/scripts/blm/graphs/utils.r", chdir=T)
 
 # See https://github.com/Ecotrust/growth-yield-batch/wiki/Prepping-data-for-blm-project#preprocess-using-sql-query
-d <- read.csv("../data/growonly_vols_district_year_rcp.csv")
+d <- read.csv("../data/scheduled_vols_district_year_rcp.csv")
 
 d$rcp = as.character(lapply(strsplit(as.character(d$climate), split="-"), "[", 2))
 d$rcp <- gsub("5", ".5", d$rcp)
@@ -39,7 +39,7 @@ noclim85$rcp <- "RCP 8.5"
 noclim <- rbind(noclim45, noclim85)
 
 outdir <- "/home/mperry/src/growth-yield-batch/scripts/blm/graphs/output/"
-outpath <- paste(outdir, "graph_growonly_accretion_mortality_", side, ".pdf", sep="")
+outpath <- paste(outdir, "graph_scheduled_accretion_mortality_", side, ".pdf", sep="")
 
 cairo_pdf(filename = outpath, width = 11, height = 8.5, family = "Georgia")
 
