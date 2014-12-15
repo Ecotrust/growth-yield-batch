@@ -6,14 +6,17 @@ is created using the sql query in scripts/prep_scheduler.sql
 """
 import sys
 import os
-sys.path.insert(0, '/usr/local/apps/harvest-scheduler')
-from scheduler.scheduler_graph import schedule
-from scheduler.utils import print_results, write_stand_mgmt_csv
+from harvestscheduler import schedule
+from harvestscheduler.utils import print_results, write_stand_mgmt_csv
 import sqlite3
 import numpy as np
 import json
  
-def prep_db2(db="../../master.sqlite", climate="Ensemble-rcp60", cache=None, verbose=False):
+
+MASTERDB = "/home/mperry/projects/BLM_climate/Batch1/master.sqlite"
+
+
+def prep_db2(db, climate="Ensemble-rcp60", cache=None, verbose=False):
     conn = sqlite3.connect(db)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -95,8 +98,6 @@ def prep_db2(db="../../master.sqlite", climate="Ensemble-rcp60", cache=None, ver
 
     return arr, axis_map, valid_mgmts
 
-
-
 climates = [
     "CCSM4-rcp45",
     "CCSM4-rcp85",
@@ -122,8 +123,7 @@ for climate in climates:
 
     #----------- STEP 1: Read source data -------------------------------------#
     # 4D: stands, rxs, time periods, variables
-    stand_data, axis_map, valid_mgmts = prep_db2(db="../../master.sqlite", 
-                                                 climate=climate, cache=climate)
+    stand_data, axis_map, valid_mgmts = prep_db2(db=MASTERDB, climate=climate, cache=climate)
 
     #----------- STEP 2: Identify and configure variables ---------------------#
     # THIS MUST MATCH THE DATA COMING FROM prep_data!!!
@@ -198,7 +198,7 @@ for climate in climates:
         temp_min=0.00005,
         temp_max=20.0,
         starting_mgmts=best_mgmts,
-        live_plot=False
+        live_plot=True
     )
 
     #----------- STEP 4: output results ---------------------------------------#,
