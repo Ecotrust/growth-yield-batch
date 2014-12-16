@@ -13,7 +13,7 @@ import numpy as np
 import json
  
 
-MASTERDB = "/home/mperry/projects/BLM_climate/Batch1/master.sqlite"
+MASTERDB = "/usr/local/apps/growth-yield-batch/scripts/blm/data/master.sqlite"
 
 
 def prep_db2(db, climate="Ensemble-rcp60", cache=None, verbose=False):

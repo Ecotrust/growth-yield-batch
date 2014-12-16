@@ -136,3 +136,15 @@ SELECT 'rx' || o.rx as rx, o.rx as rxnum, s.climate as climate,
     AND s.climate = o.climate
     WHERE s.year = 2013 -- rx doesn't change over time
     GROUP BY o.rx, s.climate, s.mgmtgrp;
+
+.output climate_change_by_district.csv
+SELECT
+    c.Scenario as Scenario,
+    AVG(c.mat) as MeanTemp,
+    AVG(c.map) as MeanPrecip,
+    c.Year as Year,
+    s.district as District
+FROM climate as c
+JOIN stands as s
+ON s.standid = c.StandID
+GROUP BY s.district, c.scenario, c.Year;
