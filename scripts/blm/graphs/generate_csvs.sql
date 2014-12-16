@@ -142,9 +142,32 @@ SELECT
     c.Scenario as Scenario,
     AVG(c.mat) as MeanTemp,
     AVG(c.map) as MeanPrecip,
+
     c.Year as Year,
     s.district as District
 FROM climate as c
 JOIN stands as s
 ON s.standid = c.StandID
 GROUP BY s.district, c.scenario, c.Year;
+
+.output forest_type_climate_change_sankey.csv
+SELECT 
+    standid, fortype, year, climate, rx
+FROM 
+    fvs_stands
+WHERE
+    rx = 1 AND Year IN (2013, 2063, 2108)
+GROUP BY 
+    standid, climate, year;
+
+.output pSite_change_by_stand.csv
+SELECT
+    c.Scenario as Scenario,
+    c.pSite as pSite,
+    c.Year as Year,
+    s.district as District
+FROM climate as c
+JOIN stands as s
+ON s.standid = c.StandID
+GROUP BY s.district, c.scenario, c.Year;
+
