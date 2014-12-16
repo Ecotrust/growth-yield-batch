@@ -20,8 +20,8 @@ d[d$rcp == "rcp85" & !is.na(d$rcp),]$rcp <- highem
 
 mult <- 1/0.0477  # 4.77% sample
 d$carbon_millionmetrictonnes = mult * d$carbon / 1000000
-d$standing_millioncubicft = mult * d$standing / 1000000
-d$timber_mmbf = (mult * d$timber / 1000 ) / 5  # timber is per period, convert to annual
+d$standing_millioncubicft = mult * d$standing / 1000  # covert mbf to mmbf
+d$timber_mmbf = (mult * d$timber / 1000 ) / 5  # covert mbf to mmbf, timber is per period, convert to annual
 d$fire_thousandacres = mult * d$fire / 1000
 
 cairo_pdf(filename = "/home/mperry/src/growth-yield-batch/scripts/blm/graphs/output/graph_scheduled_byside.pdf",
