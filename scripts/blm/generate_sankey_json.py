@@ -6,11 +6,9 @@ import json
 climates = []
 years = []
 types = []
-
 data = {}
-
 links = {}
-
+stands = {}
 sankey_data = {
     'nodes':[],
     'links':[]
@@ -19,8 +17,8 @@ sankey_data = {
 with open('data/forest_type_climate_change_sankey.csv', 'rb') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
+        climate = row['climate']
         if not row['climate'] in climates:
-            climate = row['climate']
             climates.append(climate)
             data[climate] = {}
         if not int(row['year']) in years:
@@ -29,10 +27,13 @@ with open('data/forest_type_climate_change_sankey.csv', 'rb') as csvfile:
         if not row['fortype'] in types:
             types.append(row['fortype'])
 
-        if not data[climate].has_key(row['standid']):
-            data[climate][row['standid']] = {}
+        if not data[climate].has_key(str(row['standid'])):
+            data[climate][str(row['standid'])] = {}
 
-        data[climate][row['standid']][row['year']] = row['fortype']
+        data[climate][str(row['standid'])][str(row['year'])] = row['fortype']
+
+        if not stands.has_key(str(row['standid'])):
+            stands[str(row['standid'])] = {'acres': float(row['acres'])}
 
 for climate_key in data.keys():
     climate = data[climate_key]
@@ -52,9 +53,7 @@ for climate_key in data.keys():
                     if not climate['links'][str(year)][str(from_type)].has_key(str(to_type)):
                         climate['links'][str(year)][str(from_type)][str(to_type)] = 0
 
-                    climate['links'][str(year)][str(from_type)][str(to_type)] += 1
-
-
+                    climate['links'][str(year)][str(from_type)][str(to_type)] += stands[stand_key]['acres']
 
     year_types = []
     for type in types:
@@ -66,10 +65,6 @@ for climate_key in data.keys():
     }
     for idx, from_year_type in enumerate(year_types):
         from_year, from_type = from_year_type.split('-')
-        if not climate['sankey_data']['nodes'][idx]['name'] == str(from_year_type):
-            print "ALERT!!! BUSTED!!!"
-            print "idx: %s, type: %s" % (str(idx), str(from_year_type))
-            quit()
 
         for to_year_type in year_types:
             to_year, to_type = to_year_type.split('-')
@@ -83,5 +78,8 @@ for climate_key in data.keys():
                 )
 
     with open('results/%s-fortype.json' % climate_key, 'w') as outfile:
+        json.dump(climate['sankey_data'], outfile)
+
+    with open('/usr/local/apps/d3test/%s-fortype.json' % climate_key, 'w') as outfile:
         json.dump(climate['sankey_data'], outfile)
 

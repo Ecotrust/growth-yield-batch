@@ -184,7 +184,7 @@ GROUP BY s.district, c.scenario, c.Year;
 
 .output forest_type_climate_change_sankey.csv
 SELECT 
-    standid, fortype, year, climate, rx
+    standid, acres, fortype, year, climate, rx
 FROM 
     fvs_stands
 WHERE
