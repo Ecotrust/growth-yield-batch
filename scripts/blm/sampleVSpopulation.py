@@ -9,10 +9,10 @@ with sqlite3.connect('master.sqlite') as con:
 
     query = """SELECT
         s.batch,
-        AVG(QMDA_DOM), stdev(QMDA_DOM),
-        AVG(SDI), stdev(SDI),
-        AVG(QMDA_DOM), stdev(QMDA_DOM),
-        AVG(AGE_DOM), stdev(AGE_DOM)
+        AVG(QMDA_DOM) as avg_qmda_dom, stdev(QMDA_DOM) as stdev_qmda_dom,
+        AVG(SDI) as avg_sdi, stdev(SDI) as stdev_sdi,
+        AVG(BAA_GE_3) as avg_baa_ge_3, stdev(BAA_GE_3) as stdev_baa_ge_3,
+        AVG(AGE_DOM) as avg_age_dom, stdev(AGE_DOM) as stdev_age_dom
     FROM gnn_standattrs as gnn
     JOIN stands as s
     ON s.gnnfcid = gnn.fcid
@@ -28,10 +28,10 @@ with sqlite3.connect('master.sqlite') as con:
 
     query = """SELECT
         s.batch, s.district,
-        AVG(QMDA_DOM), stdev(QMDA_DOM),
-        AVG(SDI), stdev(SDI),
-        AVG(QMDA_DOM), stdev(QMDA_DOM),
-        AVG(AGE_DOM), stdev(AGE_DOM)
+        AVG(QMDA_DOM) as avg_qmda_dom, stdev(QMDA_DOM) as stdev_qmda_dom,
+        AVG(SDI) as avg_sdi, stdev(SDI) as stdev_sdi,
+        AVG(BAA_GE_3) as avg_baa_ge_3, stdev(BAA_GE_3) as stdev_baa_ge_3,
+        AVG(AGE_DOM) as avg_age_dom, stdev(AGE_DOM) as stdev_age_dom
     FROM gnn_standattrs as gnn
     JOIN stands as s
     ON s.gnnfcid = gnn.fcid
