@@ -56,9 +56,16 @@ for climate_key in data.keys():
                     climate['links'][str(year)][str(from_type)][str(to_type)] += stands[stand_key]['acres']
 
     year_types = []
-    for type in types:
-        for year in years:
-            year_types.append("%s-%s" % (str(year), str(type)))
+    for index, to_year in enumerate(years[1:]): #initial year not captured in links as a key
+        for from_type in climate['links'][str(to_year)].keys():
+            from_year = years[years.index(to_year)-1]
+            from_year_type = "%s-%s" % (str(from_year), str(from_type))
+            if from_year_type not in year_types:
+                year_types.append("%s-%s" % (str(from_year), str(from_type)))
+            for to_type in climate['links'][str(to_year)][from_type].keys():
+                to_year_type = "%s-%s" % (str(to_year), str(to_type))
+                if to_year_type not in year_types:
+                    year_types.append("%s-%s" % (str(to_year), str(to_type)))
     climate['sankey_data'] = {
         "nodes": [{"name":str(x)} for x in year_types],
         "links": []
