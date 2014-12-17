@@ -2,6 +2,36 @@
 .headers on
 
 
+-- create table fvs_stands as 
+    select  
+        total_stand_carbon * acres as carbon,
+        removed_merch_bdft * acres / 1000.0 as timber, -- mbf
+        after_merch_bdft * acres / 1000.0 as standing, --mbf
+        NSONEST * acres as owl,
+        (CASE WHEN FIREHZD > 3 THEN acres ELSE 0 END) as fire,
+        removed_merch_bdft * slope * acres / 1000.0 as cost, -- OK as proxy
+        removed_total_ft3 * acres as removed_vol, -- per period
+        accretion * acres * 5 as accretion_vol, -- annual
+        mortality * acres * 5 as mortality_vol, -- annual
+        start_total_ft3 * acres as start_vol, -- per period
+        fortype,
+        year,
+        standid,
+        variant,
+        district,
+        mgmtgrp,
+        fvs.rx as rx,
+        "offset",
+        climate,
+        acres
+    from fvsaggregate fvs
+    join stands as s
+    on s.standid = fvs.cond
+    where fvs.total_stand_carbon is not null -- should remove any blanks
+    ORDER BY standid, year;
+
+
+
 .output graph_vegtype.csv
 SELECT s.year as year, s.climate as climate, s.fortype as fortype, 
        sum(s.acres) as acres
@@ -30,7 +60,9 @@ SELECT s.year, s.district, s.climate as climate,
 
 .output graph_scheduled_byside.csv
 SELECT s.year,  
-        (CASE WHEN s.district IN ('Medford District', 'Roseburg District', 'Lakeview District') THEN 'South/Dry' ELSE 'North/Moist' END) as side,
+        (CASE WHEN s.district 
+            IN ('Medford District', 'Roseburg District', 'Lakeview District') 
+            THEN 'South/Dry' ELSE 'North/Moist' END) as side,
         s.climate as climate,
         sum(carbon) as carbon, sum(timber) as timber, 
         sum(standing) as standing, sum(fire) as fire,
@@ -170,4 +202,3 @@ FROM climate as c
 JOIN stands as s
 ON s.standid = c.StandID
 GROUP BY s.district, c.scenario, c.Year;
-
