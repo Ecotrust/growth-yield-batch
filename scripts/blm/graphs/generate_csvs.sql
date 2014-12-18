@@ -198,7 +198,8 @@ JOIN optimalrx as o
     AND s.offset = o.offset
     AND s.climate = o.climate
 WHERE
-    s.Year IN (2013, 2063, 2108)
+    s.Year IN (2013, 2063, 2108) AND
+    s.climate IN ('NoClimate', 'Ensemble-rcp45', 'Ensemble-rcp85')
 GROUP BY 
     s.standid,
     s.climate,
