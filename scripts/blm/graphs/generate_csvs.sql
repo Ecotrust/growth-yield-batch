@@ -172,11 +172,26 @@ SELECT 'rx' || o.rx as rx, o.rx as rxnum, s.climate as climate,
 .output climate_change_by_district.csv
 SELECT
     c.Scenario as Scenario,
-    AVG(c.mat) as MeanTemp,
-    AVG(c.map) as MeanPrecip,
-
     c.Year as Year,
-    s.district as District
+    s.district as District,
+    AVG(c.mat) as AVG_MAT,
+    AVG(c.map) as AVG_MAP,
+    AVG(c.gsp) as AVG_GSP,
+    AVG(c.mtcm) as AVG_MTCM,
+    AVG(c.mmin) as AVG_MMIN,
+    AVG(c.mtwm) as AVG_MTWM,
+    AVG(c.mmax) as AVG_MMAX,
+    AVG(c.sday) as AVG_SDAY,
+    AVG(c.ffp) as AVG_FFP,
+    AVG(c.dd5) as AVG_DD5,
+    AVG(c.gsdd5) as AVG_GSDD5,
+    AVG(c.d100) as AVG_D100,
+    AVG(c.dd0) as AVG_DD0,
+    AVG(c.smrpb) as AVG_SMRPB,
+    AVG(c.smrsprpb) as AVG_SMRSPRPB,
+    AVG(c.sprp) as AVG_SPRP,
+    AVG(c.smrp) as AVG_SMRP,
+    AVG(c.winp) as AVG_WINP
 FROM climate as c
 JOIN stands as s
 ON s.standid = c.StandID
