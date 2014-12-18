@@ -184,13 +184,25 @@ GROUP BY s.district, c.scenario, c.Year;
 
 .output forest_type_climate_change_sankey.csv
 SELECT 
-    standid, acres, fortype, year, climate, rx
+    s.standid,   
+    s.fortype,
+    s.year,
+    s.climate,
+    s.rx, 
+    s.acres
 FROM 
-    fvs_stands
+    fvs_stands as s
+JOIN optimalrx as o
+    ON s.standid = o.stand
+    AND s.rx = o.rx
+    AND s.offset = o.offset
+    AND s.climate = o.climate
 WHERE
-    rx = 1 AND Year IN (2013, 2063, 2108)
+    s.Year IN (2013, 2063, 2108)
 GROUP BY 
-    standid, climate, year;
+    s.standid,
+    s.climate,
+    s.year;
 
 .output pSite_change_by_stand.csv
 SELECT
