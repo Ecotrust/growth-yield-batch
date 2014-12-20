@@ -221,12 +221,24 @@ GROUP BY
     s.year;
 
 .output pSite_change_by_stand.csv
-SELECT
-    c.Scenario as Scenario,
-    c.pSite as pSite,
-    c.Year as Year,
-    s.district as District
+SELECT 
+    f.standid,
+    c.Scenario,
+    c.Year,
+    c.pSite,
+    s.district
 FROM climate as c
+JOIN fvs_stands as f
+ON c.StandID = f.standid AND (
+    (c.Scenario = 'CCSM4_rcp45' AND f.climate='CCSM4-rcp45') OR
+    (c.Scenario = 'CCSM4_rcp85' AND f.climate='CCSM4-rcp85') OR
+    (c.Scenario = 'Ensemble_rcp45' AND f.climate='Ensemble-rcp45') OR
+    (c.Scenario = 'Ensemble_rcp85' AND f.climate='Ensemble-rcp85') OR
+    (c.Scenario = 'GFDLCM3_rcp45' AND f.climate='GFDLCM3-rcp45') OR
+    (c.Scenario = 'GFDLCM3_rcp85' AND f.climate='GFDLCM3-rcp85') OR
+    (c.Scenario = 'HadGEM2ES_rcp45' AND f.climate='HadGEM2ES-rcp45') OR
+    (c.Scenario = 'HadGEM2ES_rcp85' AND f.climate='HadGEM2ES-rcp85')
+)
 JOIN stands as s
-ON s.standid = c.StandID
-GROUP BY s.district, c.scenario, c.Year;
+ON s.standid = f.standid
+GROUP BY f.standid, c.scenario, c.year, c.pSite, s.district;
