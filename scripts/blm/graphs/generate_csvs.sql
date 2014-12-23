@@ -242,3 +242,11 @@ ON c.StandID = f.standid AND (
 JOIN stands as s
 ON s.standid = f.standid
 GROUP BY f.standid, c.scenario, c.year, c.pSite, s.district;
+
+.output stand_site_class.csv
+SELECT
+    DISTINCT(s.standid),
+    s.sitecls
+FROM stands as s
+JOIN fvs_stands as f
+ON f.standid = s.standid;
