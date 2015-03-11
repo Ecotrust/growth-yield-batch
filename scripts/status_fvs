@@ -1,29 +1,25 @@
 #!/bin/bash
-echo
-good=`find final -maxdepth 1 -type f -name 'var*csv' | wc -l`
-#if [ ! -f final/data.db ]; then
-#    echo "final/data.db not found!"
-#    exit 1
-#fi
-#good=`ls final/data.db && sqlite3 final/data.db "select var, rx, cond, site, climate from trees_fvsaggregate group by var, rx, cond, site, climate;" | wc -l`
-echo "Complete" $good
 
+# Note: you could also find $good using a sql query instead of csv count
+good=`find final -maxdepth 1 -type f -name 'var*csv' | wc -l`
 bad=`find final -maxdepth 1 -type f -name 'var*err' | wc -l`
-echo "Failures" $bad
 
 if [ -f plots/.count ]; then
     total=`cat plots/.count`    
 else
-    #total=`find plots -type d -print | grep var | wc -l`
     total=`find plots -maxdepth 1 -type d -name 'var*' | wc -l`
     echo $total > plots/.count
 fi
-todo=`echo "$total - $good - $bad" | bc`
-echo "To do   " $todo
-echo "-------------------"
-echo "Total   " $total
+
+todo=`echo "$total - $good - $bad" | bc`       
+pctgood=$(echo "scale=1;100.0*$good/$total" | bc)
+pctbad=$(echo "scale=1;100.0*$bad/$total" | bc)
+pcttodo=$(echo "scale=1;100.0*$todo/$total" | bc)
 
 echo
-echo $(echo "scale=2;100.0 - (100.0*$todo/$total)" | bc) "% done"
-echo $(echo "scale=2;100.0*$bad/$total" | bc) "% failure"
+echo "Complete " $good " " $pctgood "%"
+echo "Failures " $bad  " " $pctbad "%"
+echo "To do    " $todo " " $pcttodo "%"
+echo "---------------------------"
+echo "Total    " $total " 100.0 %"
 echo
