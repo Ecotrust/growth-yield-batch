@@ -247,8 +247,9 @@ def execute_fvs(key):
     returncode = proc.returncode
     
     # Assume STOP 10 is OK if there are no errors in the .out file
-    if fvserr == 'STOP 10\n':
+    if 'STOP 10' in fvserr:
         fvserr = ''
+        fvswarn = fvserr
     if returncode not in [0, 10]:
         fvserr += "PROCESS RETURNED CODE %d" % returncode
 
