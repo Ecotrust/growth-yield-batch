@@ -25,5 +25,5 @@ echo "Total   " $total
 
 echo
 echo $(echo "scale=2;100.0 - (100.0*$todo/$total)" | bc) "% done"
-echo $(echo "scale=2;100.0*$bad/$good" | bc) "% failure rate"
+echo $(echo "scale=2;100.0*$bad/$total" | bc) "% failure"
 echo
