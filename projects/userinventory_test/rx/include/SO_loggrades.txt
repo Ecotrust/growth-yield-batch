@@ -1,0 +1,21 @@
+COMMENT
+ECON extension used to calculate total boardfoot and cubic foot
+volumes harvested for each merchantable species.  Suitable for 
+calculating pulp and "camp run" sawlog revenues.
+END
+ECON
+STRTECON           1  
+HRVRVN             0         2
+HRVRVN             0         3
+END
+
+COMMENT
+ECON extension used to break PP harvest volumes into diameter classes.
+Based on OSU Extension Oregon Log Market Report diameter classes.
+END
+ECON
+HRVRVN             0         4         6        PP
+HRVRVN             0         4        12        PP
+HRVRVN             0         4        18        PP
+HRVRVN             0         4        24        PP
+END

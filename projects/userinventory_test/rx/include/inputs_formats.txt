@@ -1,0 +1,6 @@
+DESIGN            -1         1
+INVYEAR         2013
+TIMEINT                      5
+NUMCYCLE          20
+TREEFMT
+(I6,I3,F6.0,I1,A3,F5.1,F3.1,F3.0,F3.0,F4.1,I1,6I2,I1,I1,I2,I3,I3,I1,I1,F4.0)

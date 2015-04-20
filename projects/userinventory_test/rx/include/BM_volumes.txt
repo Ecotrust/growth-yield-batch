@@ -1,0 +1,49 @@
+COMMENT
+Define hardwood and softwood species groups.  BM variant.
+END
+SPGROUP       CONSPP
+AF DF ES GF LM LP MH OS PP PY WB WJ WL WP YC
+SPGROUP        HWSPP
+AS CW OH
+
+COMMENT
+Define merchantable species and sizes for Blue Mountains (BM) variant.
+VOLUME for cubic foot (pulp), BFVOLUME for boardfoot (sawlogs).  
+END
+VOLUME             0       All       3.2         2
+BFVOLUME           0    CONSPP       6.2         5
+BFVOLUME           0     HWSPP       5.7         5
+BFVOLUME           0        PP       7.2         6
+BFVOLUME           0        WJ        10         6
+
+COMMENT
+Compute harvested boardfoot volumes by species groups.
+END
+COMPUTE            0
+CEDR_HRV = 0
+DF_HRV = 0+SPMCDBH(4,DF,0,0,999,0,999,2)+SPMCDBH(4,WL,0,0,999,0,999,2)
+MNCONHRV = 0+SPMCDBH(4,AF,0,0,999,0,999,2)+SPMCDBH(4,PY,0,0,999,0,999,2)&
++SPMCDBH(4,WP,0,0,999,0,999,2)
+HW_HRV = 0
+MNHW_HRV = 0
+PINE_HRV = 0+SPMCDBH(4,PP,0,0,999,0,999,2)+SPMCDBH(4,LP,0,0,999,0,999,2)
+SPRC_HRV = 0+SPMCDBH(4,ES,0,0,999,0,999,2)
+WJ_HRV = 0+SPMCDBH(4,WJ,0,0,999,0,999,2)
+WW_HRV = 0+SPMCDBH(4,GF,0,0,999,0,999,2)
+END
+
+COMMENT
+Compute standing boardfoot volumes by species groups.
+END
+COMPUTE            0
+CEDR_BF = 0
+DF_BF = 0+SPMCDBH(4,DF,0,0,999,0,999,3)+SPMCDBH(4,WL,0,0,999,0,999,3)
+MNCONBF = 0+SPMCDBH(4,AF,0,0,999,0,999,3)+SPMCDBH(4,PY,0,0,999,0,999,3)&
++SPMCDBH(4,WP,0,0,999,0,999,3)
+HW_BF = 0
+MNHW_BF = 0
+PINE_BF = 0+SPMCDBH(4,PP,0,0,999,0,999,3)+SPMCDBH(4,LP,0,0,999,0,999,3)
+SPRC_BF = 0+SPMCDBH(4,ES,0,0,999,0,999,3)
+WJ_BF = 0+SPMCDBH(4,WJ,0,0,999,0,999,3)
+WW_BF = 0+SPMCDBH(4,GF,0,0,999,0,999,3)
+END

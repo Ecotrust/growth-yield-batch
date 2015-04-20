@@ -1,0 +1,18 @@
+COMMENT
+Set Maximum Stand Density Index across all species.  WC variant.
+Where >100 GNN plots in the variant had single dominant species, 
+95th percentile of observed SDI assumed to represent 55% of 
+theoretical maximum SDI (full stocking vs. theoretical maximum).
+END
+SDIMAX          All       657
+SDIMAX           SF       823
+SDIMAX           GF       545
+SDIMAX           NF       655
+SDIMAX           RA       510
+SDIMAX           WA       619
+SDIMAX           LP       679
+SDIMAX           PP       446
+SDIMAX           DF       622
+SDIMAX           WO       345
+SDIMAX           WH       769
+SDIMAX           MH       796

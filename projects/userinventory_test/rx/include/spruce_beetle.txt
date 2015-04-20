@@ -1,0 +1,20 @@
+COMMENT
+Ratings for spruce beetle hazard (ES_BTL).
+Based on Randall et al. (2011), re-scaled to factor of 10:
+0.0 - 2.5 = Lowest
+2.5 - 5.0 = Low
+5.0 - 7.5 = Moderate
+7.5 - 10.0 = High
+END
+IF
+EVPHASE EQ 2
+THEN
+AGPLABEL
+All
+COMPUTE            0
+ES_BTL = LININT(LININT(SPMCDBH(5,ES,0,10,999),0.1,0.1,12,12,16,16,0,0.5,0.5,2,2&
+,3)*LININT(ABA,0.1,0.1,100,100,150,150,0,0.5,0.5,2,2,3)*LININT(SPMCDBH(2,ES,0,&
+10,999)/MAX(ABA,1),0.01,0.01,0.5,0.5,0.65,0.65,0,0.5,0.5,2,2,3),0,1,2,18,27,0,&
+2.5,5,7.5,10)
+END
+ENDIF

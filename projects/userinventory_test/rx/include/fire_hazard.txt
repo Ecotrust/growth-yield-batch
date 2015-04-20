@@ -1,0 +1,19 @@
+COMMENT
+Fire hazard rating based on Hugget, Abt, and Shepperd (2008), re-scaled to
+factor of 10:
+0 = very low risk
+2.5 = low risk
+5 = medium risk
+7.5 = medium-high risk
+10 = high risk
+END
+IF
+EVPHASE EQ 2
+THEN
+AGPLABEL
+All
+COMPUTE            0
+FIREHZD = LININT((BOUND(0,LININT(TORCHIDX,25,25,2,0)+LININT(CROWNIDX,25,25,40,&
+40,3,0,0,-1),4)),0,1,2,3,4,0,2.5,5,7.5,10)
+END
+ENDIF

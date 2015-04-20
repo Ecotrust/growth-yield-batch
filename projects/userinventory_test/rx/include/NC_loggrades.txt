@@ -1,0 +1,38 @@
+COMMENT
+ECON extension used to calculate total boardfoot and cubic foot
+volumes harvested for each merchantable species.  Suitable for 
+calculating pulp and "camp run" sawlog revenues.
+END
+ECON
+STRTECON           1  
+HRVRVN             0         2
+HRVRVN             0         3
+END
+
+COMMENT
+ECON extension used to break harvest volumes into sawlog grades.
+Uses sawlog grades defined in Official Log Scaling Rules (Jan 2011).
+END
+SPGROUP       PPTYPE
+PP SP IC
+SPGROUP       RATYPE
+MA TO BO
+ECON
+HRVRVN             0         4         5        DF
+HRVRVN             0         4         6        DF
+HRVRVN             0         4        12        DF
+HRVRVN             0         4        30        DF
+HRVRVN             0         4         5        WF
+HRVRVN             0         4         6        WF
+HRVRVN             0         4        12        WF
+HRVRVN             0         4        24        WF
+HRVRVN             0         4         5    PPTYPE
+HRVRVN             0         4         6    PPTYPE
+HRVRVN             0         4        12    PPTYPE
+HRVRVN             0         4        24    PPTYPE
+HRVRVN             0         4        30    PPTYPE
+HRVRVN             0         4         5    RATYPE
+HRVRVN             0         4        10    RATYPE
+HRVRVN             0         4        12    RATYPE
+HRVRVN             0         4        16    RATYPE
+END
