@@ -1,13 +1,14 @@
 from fabric.api import *
-from fab_vars import *
+#from fab_vars import *
 
 env.forward_agent = True
-env.key_filename = KEY_FILENAME
+#env.key_filename = KEY_FILENAME
 
 servers = ['vagrant@127.0.0.1:2222']
 #servers = ['ubuntu@ford.ecotrust.org']
 env.hosts = servers
 #env.key_filename = AWS_KEY_FILENAME_PROD
+
 
 def restart_services():
     """
