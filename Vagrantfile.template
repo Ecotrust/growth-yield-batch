@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "precise32"
+  config.vm.box = "hashicorp/precise32"
   
   #config.vm.synced_folder "./", "/vagrant", disabled: true
   config.vm.synced_folder "./", "/usr/local/apps/growth-yield-batch"
@@ -14,22 +14,22 @@ Vagrant.configure("2") do |config|
     puppet.options = ["--templatedir","/vagrant/puppet/manifests/files", "--verbose", "--debug"]
   end
     
-  config.vm.provider :aws do |aws, override|
-    aws.access_key_id = "{YOUR ACCESS KEY}"
-    aws.secret_access_key = "{YOUR SECRET ACCESS KEY}"
-    aws.keypair_name = "{YOUR KEYPAIR NAME}"
-    
-    aws.instance_type = "t1.micro"
-    aws.region = "us-west-2"
-    aws.availability_zone = "us-west-2b"
-    aws.security_groups = ["{YOUR SECURITY GROUP"]
-    
-    aws.ami = "ami-72e76f42"
+  # config.vm.provider :aws do |aws, override|
+  #   aws.access_key_id = "{YOUR ACCESS KEY}"
+  #   aws.secret_access_key = "{YOUR SECRET ACCESS KEY}"
+  #   aws.keypair_name = "{YOUR KEYPAIR NAME}"
+  #  
+  #   aws.instance_type = "t1.micro"
+  #   aws.region = "us-west-2"
+  #   aws.availability_zone = "us-west-2b"
+  #   aws.security_groups = ["{YOUR SECURITY GROUP"]
+  #  
+  #   aws.ami = "ami-72e76f42"
+  #
+  #   override.ssh.username = "ubuntu"
+  #   override.ssh.private_key_path = "{LOCATION OF YOUR PRIVATE KEY}"
+  # end
 
-    override.ssh.username = "ubuntu"
-    override.ssh.private_key_path = "{LOCATION OF YOUR PRIVATE KEY}"
-  end
-  
   config.vm.provider :virtualbox do |virtualbox, override|
       
     config.vm.network :forwarded_port, guest:80, host:8080
