@@ -269,6 +269,11 @@ $ cd project_directory
 $ build_keys.py
 $ batch_fvs_celery.py
 ```
+5. During the run, if workers goes down, to restart:
+```
+$ # restarts workers w1, w2, w3, and w4
+$ celery multi restart w1 w2 w3 w4
+```
 
 ## Outputs 
 All working data is written to `work`. The FVS .out files are parsed and 
