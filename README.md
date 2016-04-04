@@ -263,17 +263,12 @@ instance. First you may need to confirm that celery is up and running
 2. Restart celery `sudo service celeryd restart`
 3. Check status `cd /var/celery && celery status`
 4. Go...
-
 ```
 $ cd project_directory
 $ build_keys.py
 $ batch_fvs_celery.py
 ```
-5. During the run, if workers goes down, to restart:
-```
-$ # restarts workers w1, w2, w3, and w4
-$ celery multi restart w1 w2 w3 w4
-```
+If workers go down during run, to restart, e.g., workers w1, w2, w3, and w4 `celery multi restart w1 w2 w3 w4`
 
 ## Outputs 
 All working data is written to `work`. The FVS .out files are parsed and 
